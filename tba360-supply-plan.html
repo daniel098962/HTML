@@ -609,6 +609,32 @@ section.s{scroll-margin-top:82px;}
   background:var(--bg-card); border:1px solid var(--rule); border-radius:6px; padding:7px 12px;}
 .paceband b{color:var(--accent); font-weight:700;}
 
+
+/* ═══════════ ELEVATION PROFILE ═══════════ */
+.elevwrap{margin-top:22px;}
+.elevstage{position:relative; border:1.5px solid var(--rule); border-radius:12px;
+  background:var(--bg-card); padding:14px 16px 8px; overflow:hidden;}
+.elevstage svg{display:block; width:100%; height:auto;}
+.el-area{fill:var(--accent); fill-opacity:.16;}
+.el-line{fill:none; stroke:var(--accent); stroke-width:2; stroke-linejoin:round; vector-effect:non-scaling-stroke;}
+.el-grid{stroke:var(--rule-2); stroke-width:1; vector-effect:non-scaling-stroke;}
+.el-base{stroke:var(--rule); stroke-width:1.5; vector-effect:non-scaling-stroke;}
+.el-ylab{font-family:var(--font-mono); font-size:9px; fill:var(--ink-5);}
+.el-tick{stroke:var(--ink-4); stroke-width:1; vector-effect:non-scaling-stroke;}
+.el-tick.is-pass{stroke-dasharray:3 3; stroke:var(--ink-5);}
+.el-tlab{font-family:var(--font-mono); font-size:8.5px; fill:var(--ink-4); text-anchor:middle;}
+.el-cursor{stroke:var(--accent); stroke-width:1.5; vector-effect:non-scaling-stroke; opacity:0;}
+.el-me{fill:var(--info); stroke:#fff; stroke-width:1.5; opacity:0;}
+.el-read{position:absolute; top:12px; right:16px; font-family:var(--font-mono); font-size:11px;
+  color:var(--ink-3); background:color-mix(in srgb, var(--bg-card) 90%, transparent);
+  border:1px solid var(--rule); border-radius:6px; padding:5px 10px; pointer-events:none;}
+.elevsum{display:flex; flex-wrap:wrap; gap:8px 10px; margin-top:10px;}
+.elevsum span{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3);
+  background:var(--bg-card); border:1px solid var(--rule); border-radius:6px; padding:6px 11px;}
+.elevsum b{color:var(--accent); font-weight:700;}
+.elevsum .warn{border-color:color-mix(in srgb, var(--accent) 40%, var(--rule));}
+.insight-table .c.leg .legc{display:block; font-size:9.5px; color:var(--accent); margin-top:1px; letter-spacing:0;}
+
 /* FIG. label — 工程繪圖標籤 */
 .fig{
   display:flex; align-items:center; gap:12px;
@@ -963,6 +989,27 @@ section.s{scroll-margin-top:82px;}
         <div class="locnote" data-i18n="loc.note">定位只在你的裝置上運算，不會傳到任何伺服器。點地圖上任一個點可直接開 Google Maps 導航。</div>
       </aside>
     </div>
+
+    <div class="elevwrap">
+      <div class="fig"><span class="no">FIG. 02</span><span>Elevation Profile · 0–363 KM</span></div>
+      <div class="elevstage" id="elevStage">
+        <svg id="elevSvg" viewBox="0 0 1000 170" preserveAspectRatio="none" role="img"
+             aria-label="全線海拔剖面圖，固定 0 至 120 公尺刻度">
+          <g id="elGrid"></g>
+          <path id="elArea" class="el-area"/>
+          <polyline id="elLine" class="el-line"/>
+          <g id="elTicks"></g>
+          <line id="elCursor" class="el-cursor" y1="0" y2="140"/>
+          <circle id="elMe" class="el-me" r="4"/>
+        </svg>
+        <div class="el-read" id="elRead" data-i18n="el.hint">滑過看各點海拔</div>
+      </div>
+      <div class="elevsum">
+        <span><b>Google 實測</b> 起→口湖 261K ↑291 / ↓302 m</span>
+        <span><b>最高</b> 約 90 m @ 102K</span>
+        <span class="warn" data-i18n="el.src">曲線為地形模型估算，只用來看形狀；實測 ↑↓ 見表格</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1002,7 +1049,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S1</div>
           <div class="c num">54</div>
-          <div class="c num leg">54<span class="legt">2h10</span></div>
+          <div class="c num leg">54<span class="legc">↑32 ↓38</span><span class="legt">2h10</span></div>
           <div class="c">新豐休息站</div>
           <div class="c addr">新竹縣新豐鄉新豐村295之1號<br><span class="amet">公路局官方休息站 · 台61-58K 高架橋下 · 24h · ★4.5(918)</span></div>
           <div class="c num">01:10</div>
@@ -1024,7 +1071,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S2</div>
           <div class="c num">105</div>
-          <div class="c num leg">34<span class="legt">1h22</span></div>
+          <div class="c num leg">34<span class="legc">↑109 ↓101</span><span class="legt">1h22</span></div>
           <div class="c">7-11 白沙屯門市</div>
           <div class="c addr">苗栗縣通霄鎮白東里白東100號<br><span class="amet">24h · ★4.1 · 在台1線 · 距台61 約300m</span><br><a class="telline" href="tel:037791746">037-791746</a></div>
           <div class="c num">03:23</div>
@@ -1046,7 +1093,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S4</div>
           <div class="c num">177</div>
-          <div class="c num leg">46<span class="legt">1h50</span></div>
+          <div class="c num leg">46<span class="legc">↑39 ↓38</span><span class="legt">1h50</span></div>
           <div class="c">7-11 管興門市</div>
           <div class="c addr">彰化縣福興鄉廈粘村沿海路三段286號<br><span class="amet">24h · ★4.3 · 沿海路＝台17 ✓ · 王功打卡前 13K</span><br><a class="telline" href="tel:047707293">04-770-7293</a></div>
           <div class="c num">06:50</div>
@@ -1304,6 +1351,8 @@ window.I18N = {
     "s3.th3": "官方關門",
     "s3.th4": "預計抵達",
     "s3.th5": "餘裕",
+    "el.hint": "滑過看各點海拔",
+    "el.src": "曲線為地形模型估算，只用來看形狀；實測 ↑↓ 見表格",
     "scroll.h1": "← 表格可左右捲動 →",
     "scroll.h2": "← 表格可左右捲動 →",
     "n1.t": "台61 本線禁行自行車",
@@ -1363,6 +1412,8 @@ window.I18N = {
     "s3.th3": "Cutoff",
     "s3.th4": "ETA",
     "s3.th5": "Margin",
+    "el.hint": "Hover to read elevation",
+    "el.src": "Curve is a terrain-model estimate, shape only; measured ↑↓ are in the table",
     "scroll.h1": "← scroll table horizontally →",
     "scroll.h2": "← scroll table horizontally →",
     "n1.t": "Bicycles banned from the Hwy 61 mainline",
@@ -1771,6 +1822,7 @@ const ROUTE = [{"lat": 25.1436734, "lon": 121.3965608, "km": 0}, {"lat": 25.09, 
       live('nextInfo','屏山國小 '+TOTAL+'K');
     }
     el('progFill').style.width = clamp(n.km/TOTAL*100,0,100).toFixed(1)+'%';
+    if(window.__elevMark) window.__elevMark(onRoute? n.km : null);
 
     const nowMin=(Date.now()-START.getTime())/60000;
     if(nowMin < -60){
@@ -1818,6 +1870,60 @@ const ROUTE = [{"lat": 25.1436734, "lon": 121.3965608, "km": 0}, {"lat": 25.09, 
 
   fitRoute();
   let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(fitRoute,150); });
+})();
+</script>
+
+<script>
+
+/* ═══════════════ ELEVATION PROFILE ═══════════════ */
+(function(){
+  const svg=document.getElementById('elevSvg'); if(!svg) return;
+  const ELEV=[[0.0, 12], [2.0, 22], [4.0, 45], [6.0, 10], [8.0, 59], [10.0, 39], [12.0, 70], [14.0, 24], [16.0, 15], [18.0, 19], [20.0, 9], [22.0, 18], [24.0, 9], [26.0, 29], [28.0, 44], [30.0, 47], [32.0, 31], [34.0, 35], [36.0, 28], [38.0, 27], [40.0, 25], [42.0, 18], [44.0, 6], [46.0, 0], [48.0, 0], [50.0, 3], [52.0, 8], [54.0, 5], [56.0, 0], [58.0, 0], [60.0, 0], [62.0, 0], [64.0, 5], [66.0, 3], [68.0, 6], [70.0, 4], [72.0, 0], [74.0, 0], [76.0, 0], [78.0, 61], [80.0, 25], [82.0, 14], [84.0, 4], [86.0, 2], [88.0, 55], [90.0, 31], [92.0, 33], [94.0, 13], [96.0, 5], [98.0, 69], [100.0, 4], [102.0, 90], [104.0, 15], [106.0, 7], [108.0, 20], [110.0, 5], [112.0, 4], [114.0, 0], [116.0, -4], [118.0, 6], [120.0, 13], [122.0, 18], [124.0, 13], [126.0, 14], [128.0, 11], [130.0, 9], [132.0, 5], [134.0, 5], [136.0, 9], [138.0, 5], [140.0, 0], [142.0, 12], [144.0, 0], [146.0, 10], [148.0, 0], [150.0, 0], [152.0, 14], [154.0, 8], [156.0, 0], [158.0, 4], [160.0, 3], [162.0, 5], [164.0, 8], [166.0, 7], [168.0, 6], [170.0, 5], [172.0, 7], [174.0, 4], [176.0, 5], [178.0, 10], [180.0, 8], [182.0, 9], [184.0, 5], [186.0, 4], [188.0, 5], [190.0, 6], [192.0, 4], [194.0, 0], [196.0, 0], [198.0, 0], [200.0, 0], [202.0, 0], [204.0, 2], [206.0, 0], [208.0, 6], [210.0, 13], [212.0, 4], [214.0, 3], [216.0, 8], [218.0, 6], [220.0, 6], [222.0, 6], [224.0, 6], [226.0, 5], [228.0, 3], [230.0, 3], [232.0, 4], [234.0, 4], [236.0, 1], [238.0, 2], [240.0, -1], [242.0, 0], [244.0, 0], [246.0, -1], [248.0, 5], [250.0, 0], [252.0, 0], [254.0, 3], [256.0, 2], [258.0, 0], [260.0, 0], [262.0, 0], [264.0, 0], [266.0, 0], [268.0, 3], [270.0, 0], [272.0, 4], [274.0, 2], [276.0, 0], [278.0, 2], [280.0, 1], [282.0, 1], [284.0, 2], [286.0, 5], [288.0, 4], [290.0, 1], [292.0, -2], [294.0, 1], [296.0, -2], [298.0, 0], [300.0, 1], [302.0, 3], [304.0, 7], [306.0, 5], [308.0, 4], [310.0, -2], [312.0, -2], [314.0, 0], [316.0, -2], [318.0, 2], [320.0, 2], [322.0, 8], [324.0, 3], [326.0, 6], [328.0, 5], [330.0, 3], [332.0, 5], [334.0, 2], [336.0, 2], [338.0, -1], [340.0, 1], [342.0, 1], [344.0, 1], [346.0, 3], [348.0, 4], [350.0, 7], [352.0, 15], [354.0, 11], [356.0, 1], [358.0, 0], [360.0, 10], [362.0, 20]], TICKS=[{"id": "起", "km": 0, "pass": false}, {"id": "S1", "km": 54, "pass": false}, {"id": "CP1", "km": 71, "pass": true}, {"id": "S2", "km": 105, "pass": false}, {"id": "S3", "km": 131, "pass": false}, {"id": "S4", "km": 177, "pass": false}, {"id": "CP2", "km": 190, "pass": true}, {"id": "S5", "km": 217, "pass": false}, {"id": "S6", "km": 242, "pass": false}, {"id": "S7", "km": 277, "pass": false}, {"id": "CP3", "km": 287, "pass": true}, {"id": "餐", "km": 317, "pass": false}, {"id": "S8", "km": 349, "pass": false}, {"id": "終", "km": 363, "pass": false}];
+  const W=1000, H=170, PLOT=140, MAXM=120, TOTAL=363;
+  const X=k=>k/TOTAL*W, Y=m=>PLOT-Math.max(0,Math.min(MAXM,m))/MAXM*PLOT;
+  /* y 軸固定 0–120m。刻意不 auto-scale：這條路最高 90m，
+     自動縮放會把幾公尺的地形雜訊放大成假山峰，看圖的人會以為有坡。 */
+  let g='';
+  [0,40,80,120].forEach(m=>{ g+='<line class="el-grid" x1="0" y1="'+Y(m)+'" x2="'+W+'" y2="'+Y(m)+'"/>'
+      +'<text class="el-ylab" x="3" y="'+(Y(m)-3)+'">'+m+'m</text>'; });
+  g+='<line class="el-base" x1="0" y1="'+PLOT+'" x2="'+W+'" y2="'+PLOT+'"/>';
+  document.getElementById('elGrid').innerHTML=g;
+  const pts=ELEV.map(p=>X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ');
+  document.getElementById('elLine').setAttribute('points',pts);
+  document.getElementById('elArea').setAttribute('d','M0,'+PLOT+' L'+pts.replace(/ /g,' L')+' L'+W+','+PLOT+' Z');
+  let t='';
+  TICKS.forEach(k=>{ const x=X(k.km);
+    t+='<line class="el-tick'+(k.pass?' is-pass':'')+'" x1="'+x+'" y1="'+(Y(120))+'" x2="'+x+'" y2="'+PLOT+'"/>'
+      +'<text class="el-tlab" x="'+x+'" y="'+(PLOT+14)+'">'+k.id+'</text>'; });
+  document.getElementById('elTicks').innerHTML=t;
+
+  const read=document.getElementById('elRead'), cur=document.getElementById('elCursor'), me=document.getElementById('elMe');
+  function elevAt(km){
+    if(km<=ELEV[0][0]) return ELEV[0][1];
+    for(let i=1;i<ELEV.length;i++){ if(km<=ELEV[i][0]){
+      const a=ELEV[i-1],b=ELEV[i], f=(km-a[0])/(b[0]-a[0]||1);
+      return a[1]+(b[1]-a[1])*f; } }
+    return ELEV[ELEV.length-1][1];
+  }
+  window.__elevAt=elevAt;
+  function show(km){
+    const x=X(km), m=elevAt(km);
+    cur.setAttribute('x1',x); cur.setAttribute('x2',x); cur.style.opacity=1;
+    read.removeAttribute('data-i18n');
+    read.textContent=km.toFixed(0)+' K · 海拔 '+Math.round(m)+' m';
+  }
+  const stage=document.getElementById('elevStage');
+  function fromEvent(e){
+    const r=svg.getBoundingClientRect();
+    return Math.max(0,Math.min(TOTAL,(e.clientX-r.left)/r.width*TOTAL));
+  }
+  stage.addEventListener('pointermove',e=>show(fromEvent(e)));
+  stage.addEventListener('pointerleave',()=>{cur.style.opacity=0;});
+  /* 定位開啟後，剖面圖上同步顯示所在位置 */
+  window.__elevMark=function(km){
+    if(km==null){ me.style.opacity=0; return; }
+    me.setAttribute('cx',X(km)); me.setAttribute('cy',Y(elevAt(km))); me.style.opacity=1;
+  };
 })();
 </script>
 

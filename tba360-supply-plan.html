@@ -604,6 +604,11 @@ footer .meta { padding: 18px 0 0; margin-top: 18px; display: flex; justify-conte
 /* sticky topbar 會蓋住錨點跳轉的標題 */
 section.s{scroll-margin-top:82px;}
 
+.paceband{display:flex; flex-wrap:wrap; gap:8px 10px; margin-bottom:16px;}
+.paceband span{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3);
+  background:var(--bg-card); border:1px solid var(--rule); border-radius:6px; padding:7px 12px;}
+.paceband b{color:var(--accent); font-weight:700;}
+
 /* FIG. label — 工程繪圖標籤 */
 .fig{
   display:flex; align-items:center; gap:12px;
@@ -626,9 +631,10 @@ section.s{scroll-margin-top:82px;}
 /* 各表格的欄寬 */
 .insight-table.t-cp{min-width:820px;}
 .insight-table.t-cp .r{grid-template-columns:210px 132px 78px 128px 122px 110px;}
-.insight-table.t-sup{min-width:1265px;}
-.insight-table.t-sup .r{grid-template-columns:56px 70px 72px 200px 1fr 80px 102px 94px 70px;}
-.insight-table .c.leg{color:var(--ink-4);}
+.insight-table.t-sup{min-width:1290px;}
+.insight-table.t-sup .r{grid-template-columns:54px 66px 86px 196px 1fr 78px 108px 92px 68px;}
+.insight-table .c.leg{color:var(--ink-2); display:block; padding-top:12px;}
+.insight-table .c.leg .legt{display:block; font-size:10px; color:var(--ink-5); margin-top:1px; letter-spacing:0;}
 .insight-table .c.leg::before{content:'+'; opacity:.55; margin-right:1px;}
 .insight-table .c.leg[data-none]::before{content:'';}
 .insight-table.t-sup .c.num{white-space:nowrap;}
@@ -656,7 +662,8 @@ section.s{scroll-margin-top:82px;}
 .insight-table .r.r-cp .c.feature{background:var(--accent-soft); color:var(--accent);}
 .insight-table .r.r-meal .c{background:color-mix(in srgb, var(--accent) 15%, transparent);}
 .insight-table .r.r-meal .c.feature{background:var(--accent); color:#fff;}
-.insight-table .r.r-pass .c{opacity:.62; font-style:italic;}
+.insight-table .r.r-pass .c{background:var(--paper-2);}
+.insight-table .r.r-pass .c.feature{background:var(--paper-3); color:var(--ink-3);}
 .insight-table .r.r-plan{outline:2px solid var(--accent); outline-offset:-2px;}
 
 /* Google Maps 連結 */
@@ -755,6 +762,8 @@ section.s{scroll-margin-top:82px;}
 .mk circle{stroke:var(--bg-card); stroke-width:2.5; fill:var(--ink);}
 .mk.k-cp circle{fill:var(--accent);}
 .mk.k-eat circle{fill:var(--ok);}
+.mk.k-pass circle{fill:var(--sea); stroke:var(--accent); stroke-width:3;}
+.mk.k-pass .mkl{font-size:10px; font-weight:500; fill:var(--ink-3);}
 .mk.k-end circle{fill:var(--ink);}
 .mk .mkt{font-family:var(--font-mono); font-size:10px; font-weight:700; fill:var(--bg-card); text-anchor:middle; dominant-baseline:central; pointer-events:none;}
 .mk .mkl{font-family:var(--font-sans); font-size:11px; font-weight:600; fill:var(--ink); paint-order:stroke; stroke:var(--sea); stroke-width:3.5px; stroke-linejoin:round; pointer-events:none;}
@@ -919,8 +928,9 @@ section.s{scroll-margin-top:82px;}
 
         <div class="maphint" data-i18n="map.hint">滑鼠：拖曳平移 · Ctrl＋滾輪縮放　　手機：兩指縮放平移</div>
         <div class="maplegend">
-          <span><i style="background:var(--accent)"></i><span data-i18n="lg.cp">官方檢查站</span></span>
+          <span><i style="background:var(--accent)"></i><span data-i18n="lg.cp">起點／終點</span></span>
           <span><i style="background:var(--ink)"></i><span data-i18n="lg.sup">補給點</span></span>
+          <span><i style="background:transparent;border:2px solid var(--accent)"></i><span data-i18n="lg.pass">打卡通過</span></span>
           <span><i style="background:var(--ok)"></i><span data-i18n="lg.eat">正餐</span></span>
           <span><i style="background:var(--info)"></i><span data-i18n="lg.me">我的位置</span></span>
         </div>
@@ -964,12 +974,13 @@ section.s{scroll-margin-top:82px;}
       <h2 data-i18n="s2.title">補給點時刻表</h2>
       <div class="meta" data-i18n="s2.meta">Schedule · 25 km/h</div>
     </div>
+    <div class="paceband"><span><b>移動均速</b> 25 km/h</span><span><b>總停留</b> 3h00</span><span><b>整體均速</b>（含休息）20.7 km/h</span><span><b>全程</b> 17h32</span></div>
     <div class="table-scroll">
       <div class="insight-table t-sup">
         <div class="r head">
           <div class="c feature" data-i18n="s2.th1">#</div>
           <div class="c" data-i18n="s2.th2">累計</div>
-          <div class="c" data-i18n="s2.th2b">距上站</div>
+          <div class="c" data-i18n="s2.th2b">距上站 · 騎程</div>
           <div class="c" data-i18n="s2.th3">地點</div>
           <div class="c" data-i18n="s2.th4">地址／電話</div>
           <div class="c" data-i18n="s2.th5">抵達</div>
@@ -980,7 +991,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r r-cp">
           <div class="c feature">起</div>
           <div class="c num">0</div>
-          <div class="c num leg" data-none>—</div>
+          <div class="c num leg" data-none>—<span class="legt">@25 km/h</span></div>
           <div class="c">八里 廖添丁廟</div>
           <div class="c addr">新北市八里區訊塘里中華路三段2號<br><span class="amet">大會起點 · 台15-11.0K</span></div>
           <div class="c num">—</div>
@@ -991,120 +1002,131 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S1</div>
           <div class="c num">44</div>
-          <div class="c num leg">44</div>
+          <div class="c num leg">44<span class="legt">1h46</span></div>
           <div class="c">7-11 永安港門市</div>
-          <div class="c addr">桃園市新屋區中山西路三段1148號<br><span class="amet">24h · ★4.3(177) · 有廁所座位 · 距台61 約 320m</span><br><a class="telline" href="tel:034864411">03-486-4411</a></div>
+          <div class="c addr">桃園市新屋區中山西路三段1148號<br><span class="amet">24h · ★4.3 · 距台61 約300m</span><br><a class="telline" href="tel:034864411">03-486-4411</a></div>
           <div class="c num">00:46</div>
-          <div class="c num">10</div>
+          <div class="c num">10 · 補給</div>
           <div class="c num">00:56</div>
           <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN+永安港門市" target="_blank" rel="noopener noreferrer">MAP</a></div>
         </div>
-        <div class="r r-cp">
+        <div class="r r-pass">
           <div class="c feature">CP1</div>
           <div class="c num">71</div>
-          <div class="c num leg">27</div>
+          <div class="c num leg">27<span class="legt">1h05</span></div>
           <div class="c">新竹 風情海岸</div>
-          <div class="c addr">新竹市香山區美山里美山連絡道<br><span class="amet">大會檢查站 · 台61-79.0K</span></div>
+          <div class="c addr">新竹市香山區美山里美山連絡道<br><span class="amet">大會檢查站 · 台61-79.0K · 只打卡補水</span></div>
           <div class="c num">02:01</div>
-          <div class="c num">25 · 早餐</div>
-          <div class="c num">02:26</div>
+          <div class="c num">5 · 打卡通過</div>
+          <div class="c num">02:06</div>
           <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=風情海岸+美山連絡道" target="_blank" rel="noopener noreferrer">MAP</a></div>
         </div>
         <div class="r">
           <div class="c feature">S2</div>
           <div class="c num">105</div>
-          <div class="c num leg">34</div>
+          <div class="c num leg">34<span class="legt">1h22</span></div>
           <div class="c">7-11 白沙屯門市</div>
-          <div class="c addr">苗栗縣通霄鎮白東里白東100號<br><span class="amet">24h · ★4.1(456) · 在台1線上 · 距台61 約 300m</span><br><a class="telline" href="tel:037791746">037-791746</a></div>
-          <div class="c num">03:48</div>
-          <div class="c num">20</div>
-          <div class="c num">04:08</div>
+          <div class="c addr">苗栗縣通霄鎮白東里白東100號<br><span class="amet">24h · ★4.1 · 在台1線 · 距台61 約300m</span><br><a class="telline" href="tel:037791746">037-791746</a></div>
+          <div class="c num">03:28</div>
+          <div class="c num">25 · 補給 · 早餐</div>
+          <div class="c num">03:53</div>
           <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN+白沙屯門市" target="_blank" rel="noopener noreferrer">MAP</a></div>
         </div>
         <div class="r">
           <div class="c feature">S3</div>
           <div class="c num">144</div>
-          <div class="c num leg">39</div>
+          <div class="c num leg">39<span class="legt">1h34</span></div>
           <div class="c">中油 台中港站</div>
-          <div class="c addr">臺中市清水區海濱里臨港路六段1號<br><span class="amet">24h · ★4.0(429) · 臨港路六段＝台17 ✓</span><br><a class="telline" href="tel:0426562247">04-2656-2247</a></div>
+          <div class="c addr">臺中市清水區海濱里臨港路六段1號<br><span class="amet">24h · ★4.0 · 臨港路六段＝台17 ✓</span><br><a class="telline" href="tel:0426562247">04-2656-2247</a></div>
+          <div class="c num">05:27</div>
+          <div class="c num">15 · 補給</div>
           <div class="c num">05:42</div>
-          <div class="c num">15</div>
-          <div class="c num">05:57</div>
           <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=台灣中油+台中港站" target="_blank" rel="noopener noreferrer">MAP</a></div>
-        </div>
-        <div class="r r-cp">
-          <div class="c feature">CP2</div>
-          <div class="c num">190</div>
-          <div class="c num leg">46</div>
-          <div class="c">彰化 王功福海宮</div>
-          <div class="c addr">彰化縣芳苑鄉民生村芳漢路王功段2號<br><span class="amet">大會檢查站 · 台17-54.3K</span></div>
-          <div class="c num">07:47</div>
-          <div class="c num">30 · 大休</div>
-          <div class="c num">08:17</div>
-          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=王功福海宮" target="_blank" rel="noopener noreferrer">MAP</a></div>
         </div>
         <div class="r">
           <div class="c feature">S4</div>
-          <div class="c num">236</div>
-          <div class="c num leg">46</div>
-          <div class="c">全家 口湖下崙店</div>
-          <div class="c addr">雲林縣口湖鄉崙中村中山路71號<br><span class="amet">24h · ★4.5(135) · 中山路＝台17 ✓</span><br><a class="telline" href="tel:057990369">05-799-0369</a></div>
-          <div class="c num">10:07</div>
-          <div class="c num">15</div>
-          <div class="c num">10:22</div>
-          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=全家便利商店+口湖下崙店" target="_blank" rel="noopener noreferrer">MAP</a></div>
+          <div class="c num">188</div>
+          <div class="c num leg">44<span class="legt">1h46</span></div>
+          <div class="c">7-11 王功門市</div>
+          <div class="c addr">彰化縣芳苑鄉王功村芳漢路王功段544號<br><span class="amet">24h · ★4.2 · 芳漢路＝台17 ✓ · 福海宮北 1.5K</span><br><a class="telline" href="tel:048933711">04-893-3711</a></div>
+          <div class="c num">07:28</div>
+          <div class="c num">30 · 補給 · 大休</div>
+          <div class="c num">07:58</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN+王功門市+芳漢路" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r r-pass">
+          <div class="c feature">CP2</div>
+          <div class="c num">190</div>
+          <div class="c num leg">2<span class="legt">5 分</span></div>
+          <div class="c">彰化 王功福海宮</div>
+          <div class="c addr">彰化縣芳苑鄉民生村芳漢路王功段2號<br><span class="amet">大會檢查站 · 台17-54.3K · 只打卡</span></div>
+          <div class="c num">08:03</div>
+          <div class="c num">5 · 打卡通過</div>
+          <div class="c num">08:08</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=王功福海宮" target="_blank" rel="noopener noreferrer">MAP</a></div>
         </div>
         <div class="r">
           <div class="c feature">S5</div>
+          <div class="c num">236</div>
+          <div class="c num leg">46<span class="legt">1h50</span></div>
+          <div class="c">全家 口湖下崙店</div>
+          <div class="c addr">雲林縣口湖鄉崙中村中山路71號<br><span class="amet">24h · ★4.5 · 中山路＝台17 ✓</span><br><a class="telline" href="tel:057990369">05-799-0369</a></div>
+          <div class="c num">09:58</div>
+          <div class="c num">15 · 補給</div>
+          <div class="c num">10:13</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=全家便利商店+口湖下崙店" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r">
+          <div class="c feature">S6</div>
           <div class="c num">277</div>
-          <div class="c num leg">41</div>
+          <div class="c num leg">41<span class="legt">1h38</span></div>
           <div class="c">7-11 南鯤鯓門市</div>
-          <div class="c addr">臺南市北門區蚵寮里841-1號<br><span class="amet">24h · ★4.2(81) · 就在台17 路邊 ✓</span><br><a class="telline" href="tel:067864853">06-786-4853</a></div>
-          <div class="c num">12:00</div>
-          <div class="c num">15</div>
-          <div class="c num">12:15</div>
+          <div class="c addr">臺南市北門區蚵寮里841-1號<br><span class="amet">24h · ★4.2 · 就在台17 路邊 ✓</span><br><a class="telline" href="tel:067864853">06-786-4853</a></div>
+          <div class="c num">11:51</div>
+          <div class="c num">15 · 補給</div>
+          <div class="c num">12:06</div>
           <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN+南鯤鯓門市" target="_blank" rel="noopener noreferrer">MAP</a></div>
         </div>
-        <div class="r r-cp">
+        <div class="r r-pass">
           <div class="c feature">CP3</div>
           <div class="c num">287</div>
-          <div class="c num leg">10</div>
+          <div class="c num leg">10<span class="legt">24 分</span></div>
           <div class="c">將軍 吉安宮</div>
-          <div class="c addr">臺南市將軍區將軍里三吉36號<br><span class="amet">大會檢查站 · 台17-150.5K</span><br><a class="telline" href="tel:067944683">06-794-4683</a></div>
-          <div class="c num">12:39</div>
-          <div class="c num">5 · 打卡</div>
-          <div class="c num">12:44</div>
+          <div class="c addr">臺南市將軍區將軍里三吉36號<br><span class="amet">大會檢查站 · 台17-150.5K · 只打卡</span><br><a class="telline" href="tel:067944683">06-794-4683</a></div>
+          <div class="c num">12:30</div>
+          <div class="c num">5 · 打卡通過</div>
+          <div class="c num">12:35</div>
           <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=口寮吉安宮+將軍" target="_blank" rel="noopener noreferrer">MAP</a></div>
         </div>
         <div class="r r-meal">
           <div class="c feature">餐</div>
           <div class="c num">317</div>
-          <div class="c num leg">30</div>
+          <div class="c num leg">30<span class="legt">1h12</span></div>
           <div class="c">二牛牛肉湯</div>
-          <div class="c addr">臺南市安平區平安里安平路570號<br><span class="amet">週六 07:00–01:00 · ★4.1(5,859) · 安平路 · 刻意繞道</span><br><a class="telline" href="tel:062226292">06-222-6292</a></div>
-          <div class="c num">13:56</div>
+          <div class="c addr">臺南市安平區平安里安平路570號<br><span class="amet">週六 07:00–01:00 · ★4.1(5,859)</span><br><a class="telline" href="tel:062226292">06-222-6292</a></div>
+          <div class="c num">13:47</div>
           <div class="c num">45 · 正餐</div>
-          <div class="c num">14:41</div>
+          <div class="c num">14:32</div>
           <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=二牛牛肉湯+安平" target="_blank" rel="noopener noreferrer">MAP</a></div>
         </div>
         <div class="r">
-          <div class="c feature">S6</div>
+          <div class="c feature">S7</div>
           <div class="c num">332</div>
-          <div class="c num leg">15</div>
+          <div class="c num leg">15<span class="legt">36 分</span></div>
           <div class="c">7-11 興達門市</div>
-          <div class="c addr">高雄市茄萣區茄萣路一段350號<br><span class="amet">24h · ★4.0(83) · 距台17 約 300m</span><br><a class="telline" href="tel:076908629">07-690-8629</a></div>
-          <div class="c num">15:17</div>
-          <div class="c num">10</div>
-          <div class="c num">15:27</div>
+          <div class="c addr">高雄市茄萣區茄萣路一段350號<br><span class="amet">24h · ★4.0 · 距台17 約300m</span><br><a class="telline" href="tel:076908629">07-690-8629</a></div>
+          <div class="c num">15:08</div>
+          <div class="c num">10 · 補給</div>
+          <div class="c num">15:18</div>
           <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN+興達門市+茄萣" target="_blank" rel="noopener noreferrer">MAP</a></div>
         </div>
         <div class="r r-cp">
           <div class="c feature">終</div>
           <div class="c num">363</div>
-          <div class="c num leg">31</div>
+          <div class="c num leg">31<span class="legt">1h14</span></div>
           <div class="c">高雄 屏山國小</div>
           <div class="c addr">高雄市左營區屏山里海功東路2號<br><span class="amet">大會終點 · 台17-218.0K</span></div>
-          <div class="c num">16:41</div>
+          <div class="c num">16:32</div>
           <div class="c num">—</div>
           <div class="c num">—</div>
           <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=高雄市左營區屏山國民小學" target="_blank" rel="noopener noreferrer">MAP</a></div>
@@ -1150,22 +1172,22 @@ section.s{scroll-margin-top:82px;}
           <div class="c feature">CP2 · 彰化 王功福海宮</div>
           <div class="c num">190</div>
           <div class="c num">09:50</div>
-          <div class="c num">07:47</div>
-          <div class="c num is-best">2h03</div>
+          <div class="c num">08:03</div>
+          <div class="c num is-best">1h47</div>
         </div>
         <div class="r">
           <div class="c feature">CP3 · 將軍 吉安宮</div>
           <div class="c num">287</div>
           <div class="c num">15:00</div>
-          <div class="c num">12:39</div>
-          <div class="c num is-best">2h21</div>
+          <div class="c num">12:30</div>
+          <div class="c num is-best">2h30</div>
         </div>
         <div class="r">
           <div class="c feature">終 · 高雄 屏山國小</div>
           <div class="c num">363</div>
           <div class="c num">19:00</div>
-          <div class="c num">16:41</div>
-          <div class="c num is-best">2h19</div>
+          <div class="c num">16:32</div>
+          <div class="c num is-best">2h28</div>
         </div>
       </div>
     </div>
@@ -1192,7 +1214,7 @@ section.s{scroll-margin-top:82px;}
           <dt data-i18n="s4.dt.tel">TEL</dt><dd>06-222-6292</dd>
           <dt data-i18n="s4.dt.hours">HOURS</dt><dd data-i18n="s4.a.hours">週六 07:00–01:00（週一至五 07:30–00:30）</dd>
           <dt data-i18n="s4.dt.park">PARK</dt><dd data-i18n="s4.a.park">店旁有付費停車場，室內有冷氣</dd>
-          <dt data-i18n="s4.dt.eta">ETA</dt><dd>13:56</dd>
+          <dt data-i18n="s4.dt.eta">ETA</dt><dd>13:47</dd>
         </dl>
         <div class="verdict" data-i18n="s4.a.verdict">週六從早上七點開到隔天凌晨一點，中間不休息。不管你早到還是晚到三小時都吃得到 —— 這一站沒有時間壓力。</div>
         <div class="acts">
@@ -1209,7 +1231,7 @@ section.s{scroll-margin-top:82px;}
           <dt data-i18n="s4.dt.addr">ADDR</dt><dd>台南市安平區安平路300號</dd>
           <dt data-i18n="s4.dt.hours">HOURS</dt><dd data-i18n="s4.b.hours">24 小時，但每日 14:00–17:00 備料休息</dd>
           <dt data-i18n="s4.dt.park">PARK</dt><dd data-i18n="s4.b.park">距二牛約 270 公尺，同一條安平路</dd>
-          <dt data-i18n="s4.dt.eta">ETA</dt><dd>13:56</dd>
+          <dt data-i18n="s4.dt.eta">ETA</dt><dd>13:47</dd>
         </dl>
         <div class="verdict" data-i18n="s4.b.verdict">預計抵達時間剛好卡在 14:00 備料休息的門口。除非你比計畫快 30 分鐘、13:30 前到，否則直接去二牛，不要賭。</div>
         <div class="acts">
@@ -1235,8 +1257,8 @@ section.s{scroll-margin-top:82px;}
         <span data-i18n="n2.b">西濱這時段砂石車最多。前後燈、反光背心必備。</span>
       </div>
       <div class="note">
-        <b data-i18n="n3.t">六個補給點全部 24 小時</b>
-        <span data-i18n="n3.b">已逐一用 Google 地圖查證存在。S3／S4／S5 就在台17 線邊；S1／S2／S6 距路線約 300m —— 那幾段公路旁本來就沒有店家。表上電話可直接點擊撥號。</span>
+        <b data-i18n="n3.t">CP 只打卡，不是補給站</b>
+        <span data-i18n="n3.b">三個大會檢查站只停 5 分鐘打卡就走（表上灰底那幾列）。真正的補給與休息全部排在 7-11／全家／中油，七家都是 24 小時、都用 Google 地圖查證過。</span>
       </div>
     </div>
   </div>
@@ -1259,7 +1281,7 @@ section.s{scroll-margin-top:82px;}
       <div class="col-title">CONTACT</div>
       <ul>
         <li data-i18n="footer.k1">二牛牛肉湯 06-222-6292</li>
-        <li data-i18n="footer.k2">預計完賽 16:41</li>
+        <li data-i18n="footer.k2">預計完賽 16:32</li>
       </ul>
     </div>
   </div>
@@ -1290,8 +1312,9 @@ window.I18N = {
     "s1.title": "路線圖",
     "s1.meta": "Route Map · 363 KM",
     "map.hint": "滑鼠：拖曳平移 · Ctrl＋滾輪縮放　　手機：兩指縮放平移",
-    "lg.cp": "官方檢查站",
+    "lg.cp": "起點／終點",
     "lg.sup": "補給點",
+    "lg.pass": "打卡通過",
     "lg.eat": "正餐",
     "lg.me": "我的位置",
     "loc.btn": "開啟定位",
@@ -1306,7 +1329,7 @@ window.I18N = {
     "s2.meta": "Schedule · 25 km/h",
     "s2.th1": "#",
     "s2.th2": "累計",
-    "s2.th2b": "距上站",
+    "s2.th2b": "距上站 · 騎程",
     "s2.th3": "地點",
     "s2.th4": "地址／電話",
     "s2.th5": "抵達",
@@ -1344,14 +1367,14 @@ window.I18N = {
     "n1.b": "走並行的台15 或機慢車道。支援車也別停在本線路肩。",
     "n2.t": "23:00–06:00 夜騎 7 小時",
     "n2.b": "西濱這時段砂石車最多。前後燈、反光背心必備。",
-    "n3.t": "六個補給點全部 24 小時",
-    "n3.b": "已逐一用 Google 地圖查證存在。S3／S4／S5 就在台17 線邊；S1／S2／S6 距路線約 300m —— 那幾段公路旁本來就沒有店家。表上電話可直接點擊撥號。",
+    "n3.t": "CP 只打卡，不是補給站",
+    "n3.b": "三個大會檢查站只停 5 分鐘打卡就走（表上灰底那幾列）。真正的補給與休息全部排在 7-11／全家／中油，七家都是 24 小時、都用 Google 地圖查證過。",
     "footer.title": "北高 360 補給作戰圖",
     "footer.sub": "11/13 23:00 八里廖添丁廟 → 11/14 屏山國小 · 363 KM · 全程台61／台17",
     "footer.c1": "CP1 新竹 11/14 03:00",
     "footer.c2": "終點 屏山國小 19:00",
     "footer.k1": "二牛牛肉湯 06-222-6292",
-    "footer.k2": "預計完賽 16:41",
+    "footer.k2": "預計完賽 16:32",
     "footer.ml": "DRAWING-NO. TBA360-2026-11 · REV.B · NOT TO SCALE",
     "footer.mr": "ISSUED 2026-08-22"
 },
@@ -1367,8 +1390,9 @@ window.I18N = {
     "s1.title": "Route Map",
     "s1.meta": "Route Map · 363 KM",
     "map.hint": "Mouse: drag to pan · Ctrl+wheel to zoom    Phone: two fingers to pan and zoom",
-    "lg.cp": "Checkpoint",
+    "lg.cp": "Start / Finish",
     "lg.sup": "Supply stop",
+    "lg.pass": "Punch and go",
     "lg.eat": "Meal",
     "lg.me": "My position",
     "loc.btn": "Enable location",
@@ -1383,7 +1407,7 @@ window.I18N = {
     "s2.meta": "Schedule · 25 km/h",
     "s2.th1": "#",
     "s2.th2": "Cum.",
-    "s2.th2b": "Leg",
+    "s2.th2b": "Leg · time",
     "s2.th3": "Location",
     "s2.th4": "Address / Tel",
     "s2.th5": "Arrive",
@@ -1421,14 +1445,14 @@ window.I18N = {
     "n1.b": "Use the parallel Hwy 15 or the slow lane. The support car must not stop on the mainline shoulder.",
     "n2.t": "Seven hours of night riding, 23:00–06:00",
     "n2.b": "Peak gravel-truck hours on the west coast. Lights front and rear plus a reflective vest.",
-    "n3.t": "All six stops open 24 h",
-    "n3.b": "Each was verified on Google Maps. S3, S4 and S5 sit on Highway 17 itself; S1, S2 and S6 are about 300 m off it — there is simply nothing roadside on those stretches. Phone numbers are tap-to-call.",
+    "n3.t": "Checkpoints are punch-and-go",
+    "n3.b": "The three official checkpoints get a 5-minute punch and nothing more (the grey rows). Every real supply and rest stop is a 7-Eleven, FamilyMart or CPC station — all seven open 24 h and all verified on Google Maps.",
     "footer.title": "TBA 360 Supply Plan",
     "footer.sub": "23:00 on 11/13 from Bali → Pingshan Elementary on 11/14 · 363 KM · Hwy 61/17 throughout",
     "footer.c1": "CP1 Hsinchu 11/14 03:00",
     "footer.c2": "Finish Pingshan Elementary 19:00",
     "footer.k1": "Erniu Beef Soup 06-222-6292",
-    "footer.k2": "Projected finish 16:41",
+    "footer.k2": "Projected finish 16:32",
     "footer.ml": "DRAWING-NO. TBA360-2026-11 · REV.B · NOT TO SCALE",
     "footer.mr": "ISSUED 2026-08-22"
 }
@@ -1574,8 +1598,8 @@ window.I18N = {
 </script>
 <script>
 const TW_PATH = "M 405.1,36.7 L 434.3,43.9 L 456.5,79.6 L 481.1,105.1 L 496.3,115.3 L 490.4,143.4 L 474.1,179.1 L 479.9,214.8 L 474.1,255.7 L 453.0,306.7 L 434.3,339.9 L 425.0,375.6 L 410.9,431.7 L 398.1,495.5 L 380.5,551.7 L 367.7,597.6 L 347.8,643.5 L 316.2,684.3 L 284.7,720.1 L 261.3,760.9 L 253.1,801.7 L 248.4,852.8 L 246.1,902.5 L 232.1,891.0 L 213.4,873.2 L 208.7,832.3 L 193.5,789.0 L 165.4,760.9 L 138.5,743.0 L 114.0,717.5 L 90.6,671.6 L 73.1,615.4 L 68.4,556.8 L 76.6,503.2 L 77.7,462.3 L 94.1,416.4 L 114.0,378.1 L 124.5,339.9 L 145.5,309.2 L 170.1,288.8 L 187.6,263.3 L 200.5,237.8 L 218.0,212.3 L 239.1,191.9 L 257.8,163.8 L 269.5,133.2 L 285.8,107.7 L 306.9,92.3 L 335.0,78.3 L 361.8,70.7 L 382.9,64.3 L 394.6,50.2 Z";
-const STOPS = [{"id": "起", "km": 0, "name": "八里 廖添丁廟", "mark": "新北市八里區訊塘里中華路三段2號", "tel": "", "arr": "—", "dep": "11/13 23:00", "lat": 25.1436734, "lon": 121.3965608, "kind": "cp", "q": "廖添丁廟 八里", "am": null, "dm": 0, "short": "八里"}, {"id": "S1", "km": 44, "name": "7-11 永安港門市", "mark": "桃園市新屋區中山西路三段1148號", "tel": "03-486-4411", "arr": "00:46", "dep": "00:56", "lat": 24.9882131, "lon": 121.0185329, "kind": "sup", "q": "7-ELEVEN 永安港門市", "am": 106, "dm": 116, "short": "永安港"}, {"id": "CP1", "km": 71, "name": "新竹 風情海岸", "mark": "新竹市香山區美山里美山連絡道", "tel": "", "arr": "02:01", "dep": "02:26", "lat": 24.7787535, "lon": 120.9144783, "kind": "cp", "q": "風情海岸 美山連絡道", "am": 181, "dm": 206, "short": "風情海岸"}, {"id": "S2", "km": 105, "name": "7-11 白沙屯門市", "mark": "苗栗縣通霄鎮白東里白東100號", "tel": "037-791746", "arr": "03:48", "dep": "04:08", "lat": 24.5692224, "lon": 120.7118692, "kind": "sup", "q": "7-ELEVEN 白沙屯門市", "am": 288, "dm": 308, "short": "白沙屯"}, {"id": "S3", "km": 144, "name": "中油 台中港站", "mark": "臺中市清水區海濱里臨港路六段1號", "tel": "04-2656-2247", "arr": "05:42", "dep": "05:57", "lat": 24.2896509, "lon": 120.5401129, "kind": "sup", "q": "台灣中油 台中港站", "am": 402, "dm": 417, "short": "台中港"}, {"id": "CP2", "km": 190, "name": "彰化 王功福海宮", "mark": "彰化縣芳苑鄉民生村芳漢路王功段2號", "tel": "", "arr": "07:47", "dep": "08:17", "lat": 23.9530027, "lon": 120.3347976, "kind": "cp", "q": "王功福海宮", "am": 527, "dm": 557, "short": "王功"}, {"id": "S4", "km": 236, "name": "全家 口湖下崙店", "mark": "雲林縣口湖鄉崙中村中山路71號", "tel": "05-799-0369", "arr": "10:07", "dep": "10:22", "lat": 23.6186561, "lon": 120.1649812, "kind": "sup", "q": "全家便利商店 口湖下崙店", "am": 667, "dm": 682, "short": "下崙"}, {"id": "S5", "km": 277, "name": "7-11 南鯤鯓門市", "mark": "臺南市北門區蚵寮里841-1號", "tel": "06-786-4853", "arr": "12:00", "dep": "12:15", "lat": 23.284442, "lon": 120.1370712, "kind": "sup", "q": "7-ELEVEN 南鯤鯓門市", "am": 780, "dm": 795, "short": "南鯤鯓"}, {"id": "CP3", "km": 287, "name": "將軍 吉安宮", "mark": "臺南市將軍區將軍里三吉36號", "tel": "06-794-4683", "arr": "12:39", "dep": "12:44", "lat": 23.2063431, "lon": 120.1341053, "kind": "cp", "q": "口寮吉安宮 將軍", "am": 819, "dm": 824, "short": "將軍"}, {"id": "餐", "km": 317, "name": "二牛牛肉湯", "mark": "臺南市安平區平安里安平路570號", "tel": "06-222-6292", "arr": "13:56", "dep": "14:41", "lat": 22.9986486, "lon": 120.1701949, "kind": "eat", "q": "二牛牛肉湯 安平", "am": 896, "dm": 941, "short": "安平"}, {"id": "S6", "km": 332, "name": "7-11 興達門市", "mark": "高雄市茄萣區茄萣路一段350號", "tel": "07-690-8629", "arr": "15:17", "dep": "15:27", "lat": 22.8955522, "lon": 120.1843016, "kind": "sup", "q": "7-ELEVEN 興達門市 茄萣", "am": 977, "dm": 987, "short": "興達"}, {"id": "終", "km": 363, "name": "高雄 屏山國小", "mark": "高雄市左營區屏山里海功東路2號", "tel": "", "arr": "16:41", "dep": "—", "lat": 22.6937433, "lon": 120.3014988, "kind": "cp", "q": "高雄市左營區屏山國民小學", "am": 1061, "dm": null, "short": "左營"}];
-const ROUTE = [{"lat": 25.1436734, "lon": 121.3965608, "km": 0}, {"lat": 25.09, "lon": 121.23}, {"lat": 25.03, "lon": 121.09}, {"lat": 24.9882131, "lon": 121.0185329, "km": 44}, {"lat": 24.9, "lon": 120.975}, {"lat": 24.85, "lon": 120.93}, {"lat": 24.7787535, "lon": 120.9144783, "km": 71}, {"lat": 24.7, "lon": 120.87}, {"lat": 24.61, "lon": 120.775}, {"lat": 24.5692224, "lon": 120.7118692, "km": 105}, {"lat": 24.44, "lon": 120.645}, {"lat": 24.35, "lon": 120.598}, {"lat": 24.2896509, "lon": 120.5401129, "km": 144}, {"lat": 24.15, "lon": 120.468}, {"lat": 24.05, "lon": 120.418}, {"lat": 23.9530027, "lon": 120.3347976, "km": 190}, {"lat": 23.85, "lon": 120.248}, {"lat": 23.72, "lon": 120.196}, {"lat": 23.6186561, "lon": 120.1649812, "km": 236}, {"lat": 23.46, "lon": 120.148}, {"lat": 23.38, "lon": 120.14}, {"lat": 23.284442, "lon": 120.1370712, "km": 277}, {"lat": 23.2063431, "lon": 120.1341053, "km": 287}, {"lat": 23.128, "lon": 120.113}, {"lat": 23.06, "lon": 120.145}, {"lat": 22.9986486, "lon": 120.1701949, "km": 317}, {"lat": 22.947, "lon": 120.183}, {"lat": 22.8955522, "lon": 120.1843016, "km": 332}, {"lat": 22.81, "lon": 120.225}, {"lat": 22.6937433, "lon": 120.3014988, "km": 363}];
+const STOPS = [{"id": "起", "km": 0, "name": "八里 廖添丁廟", "mark": "新北市八里區訊塘里中華路三段2號", "tel": "", "arr": "—", "dep": "11/13 23:00", "lat": 25.1436734, "lon": 121.3965608, "kind": "cp", "q": "廖添丁廟 八里", "am": null, "dm": 0, "short": "八里"}, {"id": "S1", "km": 44, "name": "7-11 永安港門市", "mark": "桃園市新屋區中山西路三段1148號", "tel": "03-486-4411", "arr": "00:46", "dep": "00:56", "lat": 24.9882131, "lon": 121.0185329, "kind": "sup", "q": "7-ELEVEN 永安港門市", "am": 106, "dm": 116, "short": "永安港"}, {"id": "CP1", "km": 71, "name": "新竹 風情海岸", "mark": "新竹市香山區美山里美山連絡道", "tel": "", "arr": "02:01", "dep": "02:06", "lat": 24.7787535, "lon": 120.9144783, "kind": "pass", "q": "風情海岸 美山連絡道", "am": 181, "dm": 186, "short": "風情海岸"}, {"id": "S2", "km": 105, "name": "7-11 白沙屯門市", "mark": "苗栗縣通霄鎮白東里白東100號", "tel": "037-791746", "arr": "03:28", "dep": "03:53", "lat": 24.5692224, "lon": 120.7118692, "kind": "sup", "q": "7-ELEVEN 白沙屯門市", "am": 268, "dm": 293, "short": "白沙屯"}, {"id": "S3", "km": 144, "name": "中油 台中港站", "mark": "臺中市清水區海濱里臨港路六段1號", "tel": "04-2656-2247", "arr": "05:27", "dep": "05:42", "lat": 24.2896509, "lon": 120.5401129, "kind": "sup", "q": "台灣中油 台中港站", "am": 387, "dm": 402, "short": "台中港"}, {"id": "S4", "km": 188, "name": "7-11 王功門市", "mark": "彰化縣芳苑鄉王功村芳漢路王功段544號", "tel": "04-893-3711", "arr": "07:28", "dep": "07:58", "lat": 23.965555, "lon": 120.340988, "kind": "sup", "q": "7-ELEVEN 王功門市 芳漢路", "am": 508, "dm": 538, "short": "王功"}, {"id": "CP2", "km": 190, "name": "彰化 王功福海宮", "mark": "彰化縣芳苑鄉民生村芳漢路王功段2號", "tel": "", "arr": "08:03", "dep": "08:08", "lat": 23.9530027, "lon": 120.3347976, "kind": "pass", "q": "王功福海宮", "am": 543, "dm": 548, "short": "福海宮"}, {"id": "S5", "km": 236, "name": "全家 口湖下崙店", "mark": "雲林縣口湖鄉崙中村中山路71號", "tel": "05-799-0369", "arr": "09:58", "dep": "10:13", "lat": 23.6186561, "lon": 120.1649812, "kind": "sup", "q": "全家便利商店 口湖下崙店", "am": 658, "dm": 673, "short": "下崙"}, {"id": "S6", "km": 277, "name": "7-11 南鯤鯓門市", "mark": "臺南市北門區蚵寮里841-1號", "tel": "06-786-4853", "arr": "11:51", "dep": "12:06", "lat": 23.284442, "lon": 120.1370712, "kind": "sup", "q": "7-ELEVEN 南鯤鯓門市", "am": 771, "dm": 786, "short": "南鯤鯓"}, {"id": "CP3", "km": 287, "name": "將軍 吉安宮", "mark": "臺南市將軍區將軍里三吉36號", "tel": "06-794-4683", "arr": "12:30", "dep": "12:35", "lat": 23.2063431, "lon": 120.1341053, "kind": "pass", "q": "口寮吉安宮 將軍", "am": 810, "dm": 815, "short": "將軍"}, {"id": "餐", "km": 317, "name": "二牛牛肉湯", "mark": "臺南市安平區平安里安平路570號", "tel": "06-222-6292", "arr": "13:47", "dep": "14:32", "lat": 22.9986486, "lon": 120.1701949, "kind": "eat", "q": "二牛牛肉湯 安平", "am": 887, "dm": 932, "short": "安平"}, {"id": "S7", "km": 332, "name": "7-11 興達門市", "mark": "高雄市茄萣區茄萣路一段350號", "tel": "07-690-8629", "arr": "15:08", "dep": "15:18", "lat": 22.8955522, "lon": 120.1843016, "kind": "sup", "q": "7-ELEVEN 興達門市 茄萣", "am": 968, "dm": 978, "short": "興達"}, {"id": "終", "km": 363, "name": "高雄 屏山國小", "mark": "高雄市左營區屏山里海功東路2號", "tel": "", "arr": "16:32", "dep": "—", "lat": 22.6937433, "lon": 120.3014988, "kind": "cp", "q": "高雄市左營區屏山國民小學", "am": 1052, "dm": null, "short": "左營"}];
+const ROUTE = [{"lat": 25.1436734, "lon": 121.3965608, "km": 0}, {"lat": 25.09, "lon": 121.23}, {"lat": 25.03, "lon": 121.09}, {"lat": 24.9882131, "lon": 121.0185329, "km": 44}, {"lat": 24.9, "lon": 120.975}, {"lat": 24.85, "lon": 120.93}, {"lat": 24.7787535, "lon": 120.9144783, "km": 71}, {"lat": 24.7, "lon": 120.87}, {"lat": 24.61, "lon": 120.775}, {"lat": 24.5692224, "lon": 120.7118692, "km": 105}, {"lat": 24.44, "lon": 120.645}, {"lat": 24.35, "lon": 120.598}, {"lat": 24.2896509, "lon": 120.5401129, "km": 144}, {"lat": 24.15, "lon": 120.468}, {"lat": 24.05, "lon": 120.418}, {"lat": 23.965555, "lon": 120.340988, "km": 188}, {"lat": 23.9530027, "lon": 120.3347976, "km": 190}, {"lat": 23.85, "lon": 120.248}, {"lat": 23.72, "lon": 120.196}, {"lat": 23.6186561, "lon": 120.1649812, "km": 236}, {"lat": 23.46, "lon": 120.148}, {"lat": 23.38, "lon": 120.14}, {"lat": 23.284442, "lon": 120.1370712, "km": 277}, {"lat": 23.2063431, "lon": 120.1341053, "km": 287}, {"lat": 23.128, "lon": 120.113}, {"lat": 23.06, "lon": 120.145}, {"lat": 22.9986486, "lon": 120.1701949, "km": 317}, {"lat": 22.947, "lon": 120.183}, {"lat": 22.8955522, "lon": 120.1843016, "km": 332}, {"lat": 22.81, "lon": 120.225}, {"lat": 22.6937433, "lon": 120.3014988, "km": 363}];
 </script>
 
 <script>
@@ -1646,13 +1670,17 @@ const ROUTE = [{"lat": 25.1436734, "lon": 121.3965608, "km": 0}, {"lat": 25.09, 
     g.setAttribute('role','link');
     const times = s.arr==='—' ? s.dep : (s.dep==='—' ? s.arr : s.arr+'–'+s.dep);
     g.setAttribute('aria-label', s.id+' '+s.name+' '+s.km+'K '+times+'，開啟 Google 地圖');
-    const r = s.kind==='eat' ? 10 : (s.kind==='cp' ? 9 : 7);
+    const R={eat:10, cp:9, sup:7, pass:6};
+    const r = R[s.kind] || 7;
     const t=document.createElementNS(NS,'title');
     t.textContent = s.id+' · '+s.name+'\n'+s.km+'K · '+s.mark+'\n'+times+(s.tel? '\n'+s.tel : '');
     g.appendChild(t);
     const c=document.createElementNS(NS,'circle'); c.setAttribute('r',r); g.appendChild(c);
     const lb=document.createElementNS(NS,'text');
-    lb.setAttribute('class','mkl'); lb.setAttribute('x', r+7); lb.setAttribute('y', 4);
+    lb.setAttribute('class','mkl');
+    /* 打卡通過的 CP 可能和相鄰補給點只差 1-2 km，標籤改放正下方避免疊字 */
+    if(s.kind==='pass'){ lb.setAttribute('x',0); lb.setAttribute('y', r+13); lb.setAttribute('text-anchor','middle'); }
+    else { lb.setAttribute('x', r+7); lb.setAttribute('y', 4); }
     lb.textContent = s.short+' '+s.km+'K';
     g.appendChild(lb);
     const open=()=>window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.q),'_blank','noopener');

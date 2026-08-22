@@ -626,8 +626,11 @@ section.s{scroll-margin-top:82px;}
 /* 各表格的欄寬 */
 .insight-table.t-cp{min-width:820px;}
 .insight-table.t-cp .r{grid-template-columns:210px 132px 78px 128px 122px 110px;}
-.insight-table.t-sup{min-width:1180px;}
-.insight-table.t-sup .r{grid-template-columns:58px 74px 210px 1fr 82px 104px 96px 72px;}
+.insight-table.t-sup{min-width:1265px;}
+.insight-table.t-sup .r{grid-template-columns:56px 70px 72px 200px 1fr 80px 102px 94px 70px;}
+.insight-table .c.leg{color:var(--ink-4);}
+.insight-table .c.leg::before{content:'+'; opacity:.55; margin-right:1px;}
+.insight-table .c.leg[data-none]::before{content:'';}
 .insight-table.t-sup .c.num{white-space:nowrap;}
 /* 地址欄：可換行，底下掛可直接撥打的電話 */
 .insight-table .c.addr .amet{display:block; font-family:var(--font-mono); font-size:11px; color:var(--ink-4); margin-top:2px;}
@@ -966,6 +969,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r head">
           <div class="c feature" data-i18n="s2.th1">#</div>
           <div class="c" data-i18n="s2.th2">累計</div>
+          <div class="c" data-i18n="s2.th2b">距上站</div>
           <div class="c" data-i18n="s2.th3">地點</div>
           <div class="c" data-i18n="s2.th4">地址／電話</div>
           <div class="c" data-i18n="s2.th5">抵達</div>
@@ -976,6 +980,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r r-cp">
           <div class="c feature">起</div>
           <div class="c num">0</div>
+          <div class="c num leg" data-none>—</div>
           <div class="c">八里 廖添丁廟</div>
           <div class="c addr">新北市八里區訊塘里中華路三段2號<br><span class="amet">大會起點 · 台15-11.0K</span></div>
           <div class="c num">—</div>
@@ -986,6 +991,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S1</div>
           <div class="c num">44</div>
+          <div class="c num leg">44</div>
           <div class="c">7-11 永安港門市</div>
           <div class="c addr">桃園市新屋區中山西路三段1148號<br><span class="amet">24h · ★4.3(177) · 有廁所座位 · 距台61 約 320m</span><br><a class="telline" href="tel:034864411">03-486-4411</a></div>
           <div class="c num">00:46</div>
@@ -996,6 +1002,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r r-cp">
           <div class="c feature">CP1</div>
           <div class="c num">71</div>
+          <div class="c num leg">27</div>
           <div class="c">新竹 風情海岸</div>
           <div class="c addr">新竹市香山區美山里美山連絡道<br><span class="amet">大會檢查站 · 台61-79.0K</span></div>
           <div class="c num">02:01</div>
@@ -1006,6 +1013,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S2</div>
           <div class="c num">105</div>
+          <div class="c num leg">34</div>
           <div class="c">7-11 白沙屯門市</div>
           <div class="c addr">苗栗縣通霄鎮白東里白東100號<br><span class="amet">24h · ★4.1(456) · 在台1線上 · 距台61 約 300m</span><br><a class="telline" href="tel:037791746">037-791746</a></div>
           <div class="c num">03:48</div>
@@ -1016,6 +1024,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S3</div>
           <div class="c num">144</div>
+          <div class="c num leg">39</div>
           <div class="c">中油 台中港站</div>
           <div class="c addr">臺中市清水區海濱里臨港路六段1號<br><span class="amet">24h · ★4.0(429) · 臨港路六段＝台17 ✓</span><br><a class="telline" href="tel:0426562247">04-2656-2247</a></div>
           <div class="c num">05:42</div>
@@ -1026,6 +1035,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r r-cp">
           <div class="c feature">CP2</div>
           <div class="c num">190</div>
+          <div class="c num leg">46</div>
           <div class="c">彰化 王功福海宮</div>
           <div class="c addr">彰化縣芳苑鄉民生村芳漢路王功段2號<br><span class="amet">大會檢查站 · 台17-54.3K</span></div>
           <div class="c num">07:47</div>
@@ -1036,6 +1046,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S4</div>
           <div class="c num">236</div>
+          <div class="c num leg">46</div>
           <div class="c">全家 口湖下崙店</div>
           <div class="c addr">雲林縣口湖鄉崙中村中山路71號<br><span class="amet">24h · ★4.5(135) · 中山路＝台17 ✓</span><br><a class="telline" href="tel:057990369">05-799-0369</a></div>
           <div class="c num">10:07</div>
@@ -1046,6 +1057,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S5</div>
           <div class="c num">277</div>
+          <div class="c num leg">41</div>
           <div class="c">7-11 南鯤鯓門市</div>
           <div class="c addr">臺南市北門區蚵寮里841-1號<br><span class="amet">24h · ★4.2(81) · 就在台17 路邊 ✓</span><br><a class="telline" href="tel:067864853">06-786-4853</a></div>
           <div class="c num">12:00</div>
@@ -1056,6 +1068,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r r-cp">
           <div class="c feature">CP3</div>
           <div class="c num">287</div>
+          <div class="c num leg">10</div>
           <div class="c">將軍 吉安宮</div>
           <div class="c addr">臺南市將軍區將軍里三吉36號<br><span class="amet">大會檢查站 · 台17-150.5K</span><br><a class="telline" href="tel:067944683">06-794-4683</a></div>
           <div class="c num">12:39</div>
@@ -1066,6 +1079,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r r-meal">
           <div class="c feature">餐</div>
           <div class="c num">317</div>
+          <div class="c num leg">30</div>
           <div class="c">二牛牛肉湯</div>
           <div class="c addr">臺南市安平區平安里安平路570號<br><span class="amet">週六 07:00–01:00 · ★4.1(5,859) · 安平路 · 刻意繞道</span><br><a class="telline" href="tel:062226292">06-222-6292</a></div>
           <div class="c num">13:56</div>
@@ -1076,6 +1090,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r">
           <div class="c feature">S6</div>
           <div class="c num">332</div>
+          <div class="c num leg">15</div>
           <div class="c">7-11 興達門市</div>
           <div class="c addr">高雄市茄萣區茄萣路一段350號<br><span class="amet">24h · ★4.0(83) · 距台17 約 300m</span><br><a class="telline" href="tel:076908629">07-690-8629</a></div>
           <div class="c num">15:17</div>
@@ -1086,6 +1101,7 @@ section.s{scroll-margin-top:82px;}
         <div class="r r-cp">
           <div class="c feature">終</div>
           <div class="c num">363</div>
+          <div class="c num leg">31</div>
           <div class="c">高雄 屏山國小</div>
           <div class="c addr">高雄市左營區屏山里海功東路2號<br><span class="amet">大會終點 · 台17-218.0K</span></div>
           <div class="c num">16:41</div>
@@ -1290,6 +1306,7 @@ window.I18N = {
     "s2.meta": "Schedule · 25 km/h",
     "s2.th1": "#",
     "s2.th2": "累計",
+    "s2.th2b": "距上站",
     "s2.th3": "地點",
     "s2.th4": "地址／電話",
     "s2.th5": "抵達",
@@ -1366,6 +1383,7 @@ window.I18N = {
     "s2.meta": "Schedule · 25 km/h",
     "s2.th1": "#",
     "s2.th2": "Cum.",
+    "s2.th2b": "Leg",
     "s2.th3": "Location",
     "s2.th4": "Address / Tel",
     "s2.th5": "Arrive",

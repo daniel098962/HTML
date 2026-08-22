@@ -1,0 +1,1851 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="auto">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="2026 北高 360 當日用作戰圖：可縮放路線地圖、即時定位、補給點時刻表與導航連結。" />
+<meta name="color-scheme" content="light dark" />
+<title data-i18n="doc.title">北高 360 補給作戰圖 · TBA360 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── PAPER ── */
+  --paper: #f6f3ec; --paper-2: #ece6d6; --paper-3: #ddd5bf;
+  --bg-card: #fbfaf6; --bg-elev: #ffffff;
+
+  /* ── INK ── */
+  --ink: #0d1117; --ink-2: #1f2937; --ink-3: #4b5563;
+  --ink-4: #6b7280; --ink-5: #9ca3af;
+
+  /* ── RULES ── */
+  --rule: #d6cfb8; --rule-2: #e6dfc7; --rule-3: #efe9d4;
+
+  /* ── SEMANTIC ── */
+  --ok: #166534; --ok-2: #16a34a; --ok-soft: #dcfce7;
+  --warn: #92400e; --warn-2: #b45309; --warn-3: #d97706;
+  --warn-soft: #fef3c7; --warn-bg: #fffbeb;
+  --danger: #8a2a25;
+
+  /* ── ACCENT (DEFAULT = WATER) — 由 Skill 依主題覆寫 ── */
+  --accent: #1e40af; --accent-2: #2563eb; --accent-3: #60a5fa;
+  --accent-4: #93c5fd; --accent-soft: #dbeafe; --accent-bg: #eff6ff;
+  --info: #2a5d8f; --info-bg: #e0e9f2;
+
+  /* ── CODE ── */
+  --code-bg: #0f172a; --code-bg-2: #1e293b; --code-ink: #e5e7eb;
+  --tk-keyword: #c084fc; --tk-type: #fbbf24; --tk-method: #60a5fa;
+  --tk-string: #a3e635; --tk-comment: #64748b; --tk-const: #fda4af;
+  --tk-fn: #5eead4;
+
+  /* ── SPACING & FX ── */
+  --radius-sm: 4px; --radius: 10px; --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 1px 0 rgba(20,15,10,.04), 0 6px 24px -12px rgba(20,15,10,.18);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.06);
+
+  /* ── TYPO ── */
+  --font-sans: "Noto Sans TC","Inter",-apple-system,system-ui,sans-serif;
+  --font-tc: "Noto Sans TC","Inter",system-ui,sans-serif;
+  --font-lat: "Inter",-apple-system,sans-serif;
+  --font-mono: "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+/* DARK MODE — both prefers-color-scheme and manual data-theme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14161a; --paper-2: #1c1f25; --paper-3: #252830;
+    --bg-card: #1c1f25; --bg-elev: #252830;
+    --ink: #f5f1e8; --ink-2: #d6d0c2; --ink-3: #9a9286;
+    --ink-4: #6d655c; --ink-5: #4a4540;
+    --rule: #2f3239; --rule-2: #25282d; --rule-3: #1e2025;
+    --accent-soft: rgba(96,165,250,0.15); --accent-bg: rgba(30,64,175,0.08);
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #14161a; --paper-2: #1c1f25; --paper-3: #252830;
+  --bg-card: #1c1f25; --bg-elev: #252830;
+  --ink: #f5f1e8; --ink-2: #d6d0c2; --ink-3: #9a9286;
+  --ink-4: #6d655c; --ink-5: #4a4540;
+  --rule: #2f3239; --rule-2: #25282d; --rule-3: #1e2025;
+  --accent-soft: rgba(96,165,250,0.15); --accent-bg: rgba(30,64,175,0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════ */
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--paper); color: var(--ink);
+  font-family: var(--font-tc);
+  font-size: 16px; line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body {
+  background:
+    radial-gradient(ellipse at top, color-mix(in srgb, var(--accent) 4%, transparent), transparent 60%),
+    var(--paper);
+}
+::selection { background: var(--accent); color: #fff; }
+a { color: inherit; }
+
+/* TYPO */
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+h1 { font-size: clamp(36px, 5vw, 68px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.04; text-wrap: balance; }
+h2 { font-size: clamp(28px, 3.2vw, 44px); font-weight: 700; letter-spacing: -0.015em; line-height: 1.15; text-wrap: balance; }
+h3 { font-size: clamp(20px, 1.8vw, 26px); font-weight: 700; line-height: 1.25; }
+h4 { font-size: 18px; font-weight: 600; }
+p { margin: 0 0 14px; font-size: 16px; color: var(--ink-2); line-height: 1.65; text-wrap: pretty; }
+p:last-child { margin-bottom: 0; }
+
+.mono { font-family: var(--font-mono); }
+code, .kbd {
+  font-family: var(--font-mono); font-size: 0.92em;
+  background: var(--paper-2); padding: 2px 7px; border-radius: 4px;
+  color: var(--ink); border: 1px solid var(--rule-2); white-space: nowrap;
+}
+.kbd {
+  font-size: 12px; background: var(--rule-2); border: 1px solid var(--rule);
+  border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px;
+}
+
+/* WRAP */
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .wrap { padding: 0 20px; } }
+
+/* SECTION */
+section.s { padding: 80px 0; border-top: 1px solid var(--rule-2); }
+section.s:first-of-type { border-top: 0; }
+section[id] { scroll-margin-top: 80px; }
+
+/* SECTION HEAD (編號徽章版) */
+.section-head {
+  display: flex; align-items: baseline; gap: 24px;
+  margin-bottom: 36px; padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule-2);
+}
+.section-head .num {
+  font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+  color: var(--accent); letter-spacing: 0.16em;
+  background: var(--accent-soft); padding: 6px 12px;
+  border-radius: 4px; white-space: nowrap;
+}
+.section-head h2 { flex: 1; margin: 0; }
+.section-head .meta {
+  font-family: var(--font-mono); font-size: 12px;
+  color: var(--ink-4); text-transform: uppercase;
+  letter-spacing: 0.14em; white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOPBAR
+   ═══════════════════════════════════════════════════════════════ */
+
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar-inner {
+  max-width: 1280px; margin: 0 auto; padding: 14px 32px;
+  display: flex; align-items: center; gap: 24px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: var(--ink); color: var(--paper);
+  display: grid; place-items: center;
+  font-family: var(--font-lat); font-weight: 700;
+  font-size: 13px; letter-spacing: 0.04em;
+}
+.brand-text { line-height: 1.3; font-size: 13px; }
+.brand-text b { display: block; font-weight: 600; color: var(--ink); }
+.brand-text span { color: var(--ink-3); font-size: 11.5px; }
+
+.nav { display: flex; gap: 4px; flex: 1; flex-wrap: wrap; }
+.nav a {
+  font-family: var(--font-mono); font-size: 12px;
+  color: var(--ink-3); text-decoration: none;
+  padding: 6px 10px; border-radius: 6px;
+  letter-spacing: 0.04em; transition: 0.15s;
+  white-space: nowrap;
+}
+.nav a:hover, .nav a.active, .nav a[aria-current="page"] {
+  background: var(--paper-2); color: var(--ink);
+}
+
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+
+.lang-toggle {
+  display: inline-flex; padding: 3px;
+  background: var(--paper-2); border: 1px solid var(--rule);
+  border-radius: 100px;
+}
+.lang-toggle button {
+  border: 0; background: transparent; padding: 5px 12px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  color: var(--ink-3); cursor: pointer; border-radius: 100px;
+  letter-spacing: 0.04em; transition: 0.12s; min-width: 32px;
+}
+.lang-toggle button.is-active { background: var(--ink); color: var(--paper); }
+.lang-toggle button:not(.is-active):hover { color: var(--ink); }
+
+.theme-toggle {
+  background: transparent; border: 1px solid var(--rule);
+  border-radius: 100px; width: 32px; height: 32px;
+  cursor: pointer; display: grid; place-items: center;
+  color: var(--ink-3); transition: 0.15s;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink-3); }
+.theme-toggle svg { width: 16px; height: 16px; }
+
+.status-pulse {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--ink-4); letter-spacing: 0.1em;
+}
+.status-pulse .dot {
+  width: 8px; height: 8px; background: var(--ok-2); border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+}
+
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .topbar-inner { gap: 12px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HERO  (Motif 01)
+   ═══════════════════════════════════════════════════════════════ */
+
+.hero { padding: 80px 0 60px; position: relative; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--rule-3) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule-3) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 30% 30%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 30% 30%, black 30%, transparent 75%);
+  opacity: 0.5; pointer-events: none;
+}
+.hero .wrap { position: relative; }
+.hero .eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 13px;
+  font-weight: 600; color: var(--accent); letter-spacing: 0.16em;
+  text-transform: uppercase; margin-bottom: 28px;
+  padding: 8px 16px; background: var(--accent-soft);
+  border-radius: 999px;
+}
+.hero .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.hero h1 .accent { color: var(--accent); }
+.hero h1 .strike {
+  text-decoration: line-through; text-decoration-thickness: 3px;
+  text-decoration-color: var(--warn-3); color: var(--ink-4);
+}
+.hero .lede {
+  margin-top: 28px;
+  font-size: 22px; line-height: 1.55; color: var(--ink-2);
+  max-width: 980px; font-weight: 400; text-wrap: pretty;
+}
+.hero .lede strong { color: var(--ink); font-weight: 600; }
+.hero .summary-cards {
+  margin-top: 56px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+.hero .scard {
+  background: var(--bg-card); border: 1.5px solid var(--rule);
+  border-radius: 10px; padding: 20px 22px;
+}
+.hero .scard .lbl {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.14em; color: var(--ink-4); font-weight: 600;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.hero .scard .val { font-size: 16px; color: var(--ink); font-weight: 600; line-height: 1.4; }
+.hero .scard .sub { font-size: 13px; color: var(--ink-4); margin-top: 4px; font-family: var(--font-mono); }
+@media (max-width: 1000px) { .hero .summary-cards { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px)  { .hero .summary-cards { grid-template-columns: 1fr; } }
+
+/* ═══════════════════════════════════════════════════════════════
+   MOTIFS  (CSS for all 14+ motifs baked in)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ──────────── M02 · TL;DR Cards ──────────── */
+.tldr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 12px; padding: 22px; position: relative; }
+.card .k { font-family: var(--font-lat); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 10px; }
+.card .v { font-size: 22px; font-weight: 600; line-height: 1.25; letter-spacing: -.005em; margin-bottom: 8px; }
+.card .d { font-size: 13.5px; color: var(--ink-3); line-height: 1.6; }
+.card.warn { background: var(--accent-bg); border-color: color-mix(in srgb, var(--accent) 20%, var(--rule)); }
+.card.warn .k, .card.warn .v { color: var(--accent); }
+.card.info { background: var(--info-bg); border-color: color-mix(in srgb, var(--info) 20%, var(--rule)); }
+.card.info .k { color: var(--info); }
+@media (max-width: 880px) { .tldr { grid-template-columns: 1fr; } }
+
+/* ──────────── M03 · Pain Grid ──────────── */
+.pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.pain-card {
+  background: var(--bg-card); border: 1.5px solid var(--rule);
+  border-radius: 10px; padding: 24px;
+  position: relative; transition: transform 0.2s, box-shadow 0.2s;
+}
+.pain-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+.pain-card::before {
+  content: ""; position: absolute; top: -1.5px; left: 22px; width: 56px;
+  height: 4px; background: var(--warn-3); border-radius: 0 0 3px 3px;
+}
+.pain-card .num { font-family: var(--font-mono); font-size: 11px; color: var(--warn-2); letter-spacing: 0.14em; font-weight: 700; margin-bottom: 10px; }
+.pain-card h3 { font-size: 18px; margin-bottom: 10px; }
+.pain-card p { font-size: 14px; color: var(--ink-3); line-height: 1.55; }
+.pain-card .files { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 5px; }
+.pain-card .files code { font-size: 11px; padding: 2px 6px; }
+@media (max-width: 880px) { .pain-grid { grid-template-columns: 1fr; } }
+
+/* ──────────── M04 · Before/After Shift ──────────── */
+.shift { display: grid; grid-template-columns: 1fr 56px 1fr; gap: 0; align-items: stretch; }
+.shift-col { border-radius: 12px; padding: 28px; }
+.shift-col.before { background: var(--paper-2); border: 1.5px solid var(--rule); }
+.shift-col.after { background: var(--ink); color: var(--paper); }
+.shift-col .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+.shift-col.before .label { color: var(--ink-4); }
+.shift-col.after .label { color: var(--accent-3); }
+.shift-col h3 { font-size: 21px; margin-bottom: 18px; }
+.shift-col.after h3 { color: var(--paper); }
+.shift-col .role { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-top: 1px dashed var(--rule); }
+.shift-col.after .role { border-color: #374151; }
+.shift-col .role:last-child { border-bottom: 1px dashed var(--rule); }
+.shift-col.after .role:last-child { border-color: #374151; }
+.shift-col .who { font-family: var(--font-mono); font-size: 11px; width: 80px; flex-shrink: 0; font-weight: 700; color: var(--ink-4); padding-top: 2px; }
+.shift-col.after .who { color: var(--accent-3); }
+.shift-col .what { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.shift-col.after .what { color: var(--paper); }
+.shift-col.after code { background: var(--code-bg-2); color: var(--tk-string); border-color: #334155; font-size: 11px; }
+.shift-divider { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--accent); }
+.shift-divider svg { width: 40px; height: 40px; }
+.shift-divider .word { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); font-weight: 700; margin-top: 6px; text-transform: uppercase; }
+.shift-takeaway {
+  margin-top: 28px; padding: 18px 24px;
+  background: var(--accent-soft); border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.shift-takeaway .icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0; font-family: var(--font-mono);
+}
+.shift-takeaway p { margin: 0; font-size: 15px; color: var(--ink); }
+.shift-takeaway p strong { color: var(--accent); font-weight: 700; }
+@media (max-width: 880px) { .shift { grid-template-columns: 1fr; gap: 16px; } .shift-divider { transform: rotate(90deg); } }
+
+/* ──────────── M05 · Expected vs Actual Panels ──────────── */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.panel { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--rule); background: var(--bg-elev); }
+.panel-head .ttl { font-size: 13px; font-weight: 600; }
+.panel-head .tag { font-family: var(--font-lat); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; }
+.tag.want { background: var(--ok-soft); color: var(--ok); border: 1px solid rgba(0,0,0,0.05); }
+.tag.got { background: var(--accent-bg); color: var(--accent); border: 1px solid rgba(0,0,0,0.05); }
+.panel-body { padding: 16px 0; }
+pre.code { margin: 0; padding: 0 18px; font-family: var(--font-mono); font-size: 13px; line-height: 1.75; color: var(--ink); overflow-x: auto; white-space: pre; }
+pre.code .key { color: #7a4ea0; }
+pre.code .str { color: #3a6b3a; }
+pre.code .pun { color: var(--ink-3); }
+pre.code .com { color: var(--ink-4); font-style: italic; }
+pre.code .ws, pre.code .nl { color: #c7a36a; }
+.legend { display: flex; gap: 14px; padding: 10px 18px 14px; border-top: 1px dashed var(--rule); font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); flex-wrap: wrap; }
+.legend span b { color: #c7a36a; }
+@media (max-width: 880px) { .compare { grid-template-columns: 1fr; } }
+
+/* ──────────── M06 · Insight Table ──────────── */
+.insight-table { border: 1.5px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--bg-card); }
+.insight-table .r { display: grid; grid-template-columns: 170px 1fr 1fr 1fr; border-bottom: 1px solid var(--rule-2); }
+.insight-table .r:last-child { border-bottom: 0; }
+.insight-table .r.head { background: var(--ink); color: var(--paper); }
+.insight-table .c { padding: 12px 16px; font-size: 14px; color: var(--ink-2); border-right: 1px solid var(--rule-2); display: flex; align-items: center; }
+.insight-table .c:last-child { border-right: 0; }
+.insight-table .c.feature { font-family: var(--font-mono); font-size: 12px; color: var(--ink); font-weight: 700; background: var(--paper-2); }
+.insight-table .r.head .c { color: var(--paper); font-weight: 600; }
+.insight-table .r.head .c.feature { background: var(--code-bg-2); color: var(--paper); }
+.insight-table .c.is-best { background: var(--ok-soft); color: var(--ok); font-weight: 600; }
+.insight-table .c.is-worst { background: var(--accent-bg); color: var(--accent); }
+.insight-table .check { width: 18px; height: 18px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-right: 8px; flex-shrink: 0; }
+.insight-table .check.yes { background: var(--ok-soft); color: var(--ok); }
+.insight-table .check.no { background: var(--accent-bg); color: var(--accent); }
+
+/* ──────────── M07 · Code Block ──────────── */
+.code-block { background: var(--code-bg); color: var(--code-ink); border-radius: 10px; padding: 18px 22px; font-family: var(--font-mono); font-size: 12px; line-height: 1.65; overflow: auto; }
+.code-block .header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--code-bg-2); font-size: 11px; color: var(--ink-4); letter-spacing: 0.08em; }
+.code-block .header .dots { display: flex; gap: 5px; }
+.code-block .header .dots i { width: 9px; height: 9px; border-radius: 50%; display: block; }
+.code-block .header .dots i:nth-child(1) { background: #ef4444; }
+.code-block .header .dots i:nth-child(2) { background: #f59e0b; }
+.code-block .header .dots i:nth-child(3) { background: #10b981; }
+.code-block .header .file { margin-left: 6px; color: var(--ink-5); font-weight: 600; }
+.code-block pre { margin: 0; white-space: pre; }
+.tk-keyword { color: var(--tk-keyword); }
+.tk-type { color: var(--tk-type); }
+.tk-method { color: var(--tk-method); }
+.tk-string { color: var(--tk-string); }
+.tk-comment { color: var(--tk-comment); font-style: italic; }
+.tk-const { color: var(--tk-const); }
+.tk-fn { color: var(--tk-fn); }
+
+/* ──────────── M08 · Pipeline Steps ──────────── */
+.trigger-line { position: relative; padding: 20px 0; }
+.trigger-line::before { content: ""; position: absolute; left: 14%; right: 14%; top: 76px; height: 2px; background: repeating-linear-gradient(90deg, var(--ink-3) 0 6px, transparent 6px 12px); }
+.trigger-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; position: relative; }
+.trigger-step { text-align: center; display: flex; flex-direction: column; align-items: center; }
+.trigger-step .icon {
+  width: 60px; height: 60px;
+  background: var(--paper); border: 2px solid var(--ink); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; position: relative; z-index: 2;
+  box-shadow: 0 0 0 8px var(--paper); color: var(--ink);
+}
+.trigger-step .icon svg { width: 26px; height: 26px; }
+.trigger-step h3 { font-size: 18px; margin-bottom: 4px; }
+.trigger-step .label { font-family: var(--font-mono); font-size: 10px; color: var(--accent); letter-spacing: 0.12em; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; }
+.trigger-step p { font-size: 13px; color: var(--ink-3); max-width: 280px; margin: 0; }
+.trigger-step .when { margin-top: 10px; padding: 6px 10px; background: var(--paper-2); border-radius: 5px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-2); }
+.trigger-step.augment .icon { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+@media (max-width: 880px) { .trigger-steps { grid-template-columns: 1fr; } .trigger-line::before { display: none; } }
+
+/* ──────────── M09 · Phase Cards ──────────── */
+.phase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.phase-card { background: var(--bg-card); border: 1.5px solid var(--rule); border-radius: 12px; padding: 26px 22px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.phase-card .ribbon { position: absolute; top: 0; left: 0; right: 0; height: 5px; }
+.phase-card.p1 .ribbon { background: var(--accent); }
+.phase-card.p2 .ribbon { background: var(--warn-3); }
+.phase-card.p3 .ribbon { background: var(--ink); }
+.phase-card .ph-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; font-weight: 700; color: var(--ink-3); margin-bottom: 4px; }
+.phase-card.p1 .ph-num { color: var(--accent); }
+.phase-card.p2 .ph-num { color: var(--warn-2); }
+.phase-card h3 { font-size: 20px; margin-bottom: 4px; }
+.phase-card .owner { font-size: 12px; color: var(--ink-4); margin-bottom: 14px; font-family: var(--font-mono); }
+.phase-card ul { margin: 0; padding: 0; list-style: none; }
+.phase-card li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-top: 1px dashed var(--rule); font-size: 13px; color: var(--ink-2); line-height: 1.45; }
+.phase-card li:first-child { border-top: 0; padding-top: 0; }
+.phase-card .ck { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--ink-3); flex-shrink: 0; margin-top: 2px; }
+.phase-card li .it { font-weight: 700; color: var(--ink); font-size: 13px; }
+.phase-card li .id { font-size: 11px; color: var(--ink-4); display: block; margin-top: 1px; line-height: 1.45; }
+.phase-card .footer-tag { margin-top: auto; padding-top: 14px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-4); letter-spacing: 0.1em; }
+@media (max-width: 880px) { .phase-grid { grid-template-columns: 1fr; } }
+
+/* ──────────── M10 · Risk Cards ──────────── */
+.risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.risk-card { background: var(--bg-card); border: 1.5px solid var(--rule); border-left: 5px solid var(--warn-3); border-radius: 6px; padding: 22px 24px; }
+.risk-card .lvl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--warn-2); font-weight: 700; margin-bottom: 4px; }
+.risk-card h3 { font-size: 17px; margin-bottom: 8px; }
+.risk-card .body { font-size: 13px; color: var(--ink-3); line-height: 1.55; margin-bottom: 10px; }
+.risk-card .mit { background: var(--paper-2); border-radius: 5px; padding: 10px 14px; font-size: 12px; color: var(--ink-2); border-left: 3px solid var(--ok); }
+.risk-card .mit strong { color: var(--ok); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; }
+@media (max-width: 880px) { .risk-grid { grid-template-columns: 1fr; } }
+
+/* ──────────── M11 · Evidence Shot + Annot ──────────── */
+.evidence { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 32px; align-items: start; }
+.shot { background: #000; border: 1px solid var(--rule); border-radius: 18px; padding: 8px; box-shadow: var(--shadow); position: relative; cursor: zoom-in; }
+.shot img { display: block; width: 100%; border-radius: 10px; }
+.shot-cap { font-size: 11.5px; color: var(--ink-4); margin-top: 10px; text-align: center; font-family: var(--font-lat); letter-spacing: 0.04em; }
+.shot .zoom-hint { position: absolute; right: 14px; bottom: 14px; background: rgba(0,0,0,0.65); color: #fff; font-family: var(--font-lat); font-size: 11px; letter-spacing: 0.06em; padding: 5px 10px; border-radius: 999px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.shot:hover .zoom-hint, .shot:focus .zoom-hint { opacity: 1; }
+.annot { display: flex; flex-direction: column; gap: 12px; }
+.annot-item { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; padding: 14px 16px; background: var(--bg-card); border: 1px solid var(--rule); border-radius: 10px; }
+.annot-num { width: 30px; height: 30px; border-radius: 8px; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-family: var(--font-lat); font-weight: 600; font-size: 13px; }
+.annot-item.flag .annot-num { background: var(--accent); }
+.annot-body h4 { margin: 2px 0 4px; font-size: 14.5px; font-weight: 600; }
+.annot-body p { margin: 0; font-size: 13px; color: var(--ink-3); line-height: 1.6; }
+@media (max-width: 880px) { .evidence { grid-template-columns: 1fr; } }
+
+/* ──────────── M12 · Prose ──────────── */
+.prose p { margin: 0 0 14px; color: var(--ink-2); max-width: 72ch; text-wrap: pretty; }
+.prose p strong { color: var(--ink); font-weight: 600; }
+.prose ul { margin: 0 0 16px; padding-left: 1.1em; color: var(--ink-2); }
+.prose ul li { margin: 6px 0; }
+.prose ul li::marker { color: var(--ink-4); }
+.prose h3 { margin: 28px 0 10px; font-size: 17px; font-weight: 600; letter-spacing: -.005em; }
+.prose .quote {
+  padding: 18px 22px; background: var(--bg-card);
+  border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+  color: var(--ink-2); font-style: normal;
+}
+
+/* ──────────── M13 · Summary Table ──────────── */
+.summary-table { margin-top: 18px; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; background: var(--bg-card); }
+.summary-table .row { display: grid; grid-template-columns: 1.6fr 1fr; gap: 18px; padding: 14px 20px; border-bottom: 1px solid var(--rule); align-items: center; }
+.summary-table .row:last-child { border-bottom: 0; }
+.summary-table .row.head { background: var(--bg-elev); font-family: var(--font-lat); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-4); padding: 11px 20px; }
+.summary-table .row.flag { background: var(--accent-bg); }
+.summary-table .row > div:first-child { color: var(--ink); font-size: 14px; }
+.summary-table .row code { background: var(--rule-3); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; }
+
+/* Pills */
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 3px 9px; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--rule); color: var(--ink-2); font-family: var(--font-lat); }
+.pill .d { width: 5px; height: 5px; border-radius: 50%; background: var(--ink-4); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); border-color: rgba(0,0,0,0.05); }
+.pill.ok .d { background: var(--ok); }
+.pill.warn { background: var(--accent-bg); color: var(--accent); border-color: rgba(0,0,0,0.05); }
+.pill.warn .d { background: var(--accent); }
+
+/* ──────────── M14 · Recommendation Matrix ──────────── */
+.reco { background: var(--ink); color: var(--paper); border-radius: var(--radius-lg); padding: 48px 44px; }
+.reco .eyebrow { color: rgba(255,255,255,0.5); background: transparent; padding: 0; margin-bottom: 12px; }
+.reco h2 { color: var(--paper); margin-bottom: 12px; }
+.reco .lede { color: rgba(255,255,255,0.7); margin-top: 0; }
+.reco-grid { margin-top: 36px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.reco-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 22px; display: grid; gap: 12px; align-content: start; }
+.reco-card.rec { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+.reco-rank { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+.reco-card.rec .reco-rank { color: var(--accent-3); }
+.reco-title { font-size: 18px; font-weight: 600; }
+.reco-reason { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.55; }
+.reco-best-for { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.6); padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.04em; }
+@media (max-width: 1000px) { .reco-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px)  { .reco-grid { grid-template-columns: 1fr; } .reco { padding: 28px 22px; } }
+
+/* ──────────── M17 · Full-output Toggle ──────────── */
+.full-output { margin-top: 24px; }
+.full-toggle { display: inline-flex; align-items: center; gap: 12px; font-family: inherit; font-size: 13.5px; padding: 11px 18px; border-radius: 10px; border: 1px solid var(--rule); background: var(--bg-card); color: var(--ink); cursor: pointer; transition: 0.15s; font-weight: 500; }
+.full-toggle:hover { border-color: var(--ink-4); background: var(--bg-elev); }
+.full-toggle .caret { font-family: var(--font-mono); color: var(--ink-3); transition: transform 0.2s; font-size: 12px; }
+.full-toggle[aria-expanded="true"] .caret { transform: rotate(90deg); }
+.full-toggle .hint { font-size: 11px; color: var(--ink-4); letter-spacing: 0.04em; padding-left: 8px; border-left: 1px solid var(--rule); }
+.full-panel { margin-top: 14px; background: var(--code-bg); border: 1px solid #2c2823; border-radius: 12px; overflow: hidden; }
+.full-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-bottom: 1px solid #2c2823; background: #26221e; }
+.full-head .ttl { color: var(--code-ink); font-size: 12.5px; font-weight: 600; }
+.full-head .meta { color: #9a9286; font-size: 11px; letter-spacing: 0.04em; }
+.raw-json { margin: 0; padding: 18px 22px; color: #e9e2d2; font-family: var(--font-mono); font-size: 12px; line-height: 1.65; overflow-x: auto; white-space: pre; max-height: 520px; overflow-y: auto; }
+.full-note { padding: 14px 22px; border-top: 1px solid #2c2823; font-size: 12.5px; color: #c7b58e; line-height: 1.65; background: #22201c; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════════ */
+
+footer { background: var(--ink); color: var(--paper); padding: 56px 0 40px; }
+footer .wrap { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; padding-bottom: 30px; border-bottom: 1px solid #1e293b; }
+footer h3 { font-size: 22px; color: var(--paper); margin-bottom: 12px; }
+footer h3 .accent { color: var(--accent-3); }
+footer p { color: #9ca3af; font-size: 13px; }
+footer .col-title { font-family: var(--font-mono); font-size: 11px; color: var(--accent-3); letter-spacing: 0.14em; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+footer ul { margin: 0; padding: 0; list-style: none; }
+footer li { font-size: 12px; color: #d1d5db; padding: 4px 0; font-family: var(--font-mono); }
+footer .meta { padding: 18px 0 0; margin-top: 18px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: #6b7280; letter-spacing: 0.12em; text-transform: uppercase; }
+@media (max-width: 880px) { footer .wrap { grid-template-columns: 1fr; } }
+
+/* ═══════════════════════════════════════════════════════════════
+   LIGHTBOX
+   ═══════════════════════════════════════════════════════════════ */
+
+.lightbox { position: fixed; inset: 0; background: rgba(15, 12, 8, 0.92); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 40px; cursor: zoom-out; }
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 100%; max-height: 100%; border-radius: 8px; box-shadow: 0 30px 100px rgba(0,0,0,0.6); }
+.lightbox .close { position: absolute; top: 20px; right: 24px; color: #fff; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; cursor: pointer; font-family: var(--font-lat); }
+.lightbox .close:hover { background: rgba(255,255,255,0.18); }
+
+/* ═══════════════════════════════════════════════════════════════
+   MOTION SAFETY
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   THEME OVERRIDE — AMBER (暖琥珀 · 與 八里沙鹿海線作戰圖 同組)
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --accent:#b8541a; --accent-2:#d97706; --accent-3:#f59e0b;
+  --accent-4:#fbbf24; --accent-soft:#f4e3d3; --accent-bg:#fffbeb;
+  --info:#2a5d8f; --info-bg:#e0e9f2;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --accent:#f0913f; --accent-2:#e07b28; --accent-3:#fbbf24;
+    --accent-4:#fcd34d; --accent-soft:rgba(240,145,63,.16); --accent-bg:rgba(240,145,63,.09);
+    --info:#7fb3e0; --info-bg:rgba(127,179,224,.10);
+    --ok:#4ade80; --ok-soft:rgba(34,197,94,.16);
+    --warn:#fbbf24; --warn-2:#f59e0b; --warn-soft:rgba(217,119,6,.16); --warn-bg:rgba(217,119,6,.07);
+    --danger:#f87171;
+  }
+}
+:root[data-theme="dark"]{
+  --accent:#f0913f; --accent-2:#e07b28; --accent-3:#fbbf24;
+  --accent-4:#fcd34d; --accent-soft:rgba(240,145,63,.16); --accent-bg:rgba(240,145,63,.09);
+  --info:#7fb3e0; --info-bg:rgba(127,179,224,.10);
+  --ok:#4ade80; --ok-soft:rgba(34,197,94,.16);
+  --warn:#fbbf24; --warn-2:#f59e0b; --warn-soft:rgba(217,119,6,.16); --warn-bg:rgba(217,119,6,.07);
+  --danger:#f87171;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REPORT-SPECIFIC ADDITIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* sticky topbar 會蓋住錨點跳轉的標題 */
+section.s{scroll-margin-top:82px;}
+
+/* FIG. label — 工程繪圖標籤 */
+.fig{
+  display:flex; align-items:center; gap:12px;
+  font-family:var(--font-mono); font-size:10.5px; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--ink-4);
+  margin:0 0 12px;
+}
+.fig::after{content:""; flex:1; height:1px; background:var(--rule-2);}
+.fig .no{color:var(--accent);}
+
+/* 橫向捲動容器 — 寬表格在手機上自己捲，頁面本體不橫捲 */
+.table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+.table-scroll::-webkit-scrollbar{height:8px;}
+.table-scroll::-webkit-scrollbar-thumb{background:var(--rule); border-radius:99px;}
+.scroll-hint{
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em;
+  color:var(--ink-5); margin-top:8px; text-align:right; text-transform:uppercase;
+}
+
+/* 各表格的欄寬 */
+.insight-table.t-cp{min-width:820px;}
+.insight-table.t-cp .r{grid-template-columns:210px 132px 78px 128px 122px 110px;}
+.insight-table.t-sup{min-width:1180px;}
+.insight-table.t-sup .r{grid-template-columns:58px 74px 210px 1fr 82px 104px 96px 72px;}
+.insight-table.t-sup .c.num{white-space:nowrap;}
+/* 地址欄：可換行，底下掛可直接撥打的電話 */
+.insight-table .c.addr .amet{display:block; font-family:var(--font-mono); font-size:11px; color:var(--ink-4); margin-top:2px;}
+.insight-table .c.addr{display:block; padding-top:11px; padding-bottom:11px; font-size:12.5px; line-height:1.5; color:var(--ink-3);}
+.telline{display:inline-block; margin-top:3px; font-family:var(--font-mono); font-size:11.5px; font-weight:600; color:var(--accent); text-decoration:none;}
+.telline:hover{text-decoration:underline;}
+.insight-table.t-pace{min-width:720px;}
+.insight-table.t-pace .r{grid-template-columns:150px 118px 1fr 140px;}
+
+/* 表頭 — 固定深底淺字。base 的 --ink/--paper 在暗色會對調，
+   會讓 .r.head .c.feature 變成 #14161a 字壓在 #1e293b 底上（幾乎看不見） */
+.insight-table .r.head{background:#12151b;}
+.insight-table .r.head .c{color:#f2ede2; border-right-color:rgba(255,255,255,.10);}
+.insight-table .r.head .c.feature{background:#0a0d12; color:#f2ede2;}
+
+/* 儲存格變體 */
+.insight-table .c.num{font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+.insight-table .c.is-danger{
+  background:color-mix(in srgb, var(--danger) 12%, transparent);
+  color:var(--danger); font-weight:600;
+}
+.insight-table .r.r-cp .c{background:var(--accent-bg);}
+.insight-table .r.r-cp .c.feature{background:var(--accent-soft); color:var(--accent);}
+.insight-table .r.r-meal .c{background:color-mix(in srgb, var(--accent) 15%, transparent);}
+.insight-table .r.r-meal .c.feature{background:var(--accent); color:#fff;}
+.insight-table .r.r-pass .c{opacity:.62; font-style:italic;}
+.insight-table .r.r-plan{outline:2px solid var(--accent); outline-offset:-2px;}
+
+/* Google Maps 連結 */
+.maplink{
+  display:inline-flex; align-items:center; gap:4px;
+  font-family:var(--font-mono); font-size:10.5px; font-weight:600; letter-spacing:.08em;
+  color:var(--accent); text-decoration:none;
+  border:1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  border-radius:999px; padding:3px 8px; white-space:nowrap;
+}
+.maplink:hover{background:var(--accent); color:#fff; border-color:var(--accent);}
+.maplink svg{width:11px; height:11px;}
+
+/* Hard-gate 對照面板 */
+.bignum{
+  font-family:var(--font-mono); font-size:38px; font-weight:700;
+  letter-spacing:-.02em; line-height:1; color:var(--ink);
+}
+.bignum .u{font-size:15px; font-weight:600; color:var(--ink-4); margin-left:4px;}
+.panel.is-gate{border-color:color-mix(in srgb, var(--accent) 42%, var(--rule)); border-width:1.5px;}
+.panel.is-gate .bignum{color:var(--accent);}
+.panel .pbody{padding:22px 20px;}
+.panel .pbody .why{font-size:13px; color:var(--ink-3); line-height:1.6; margin-top:12px;}
+.gate-note{
+  margin-top:16px; padding:16px 20px; border-radius:8px;
+  background:var(--accent); color:#fff; font-size:14.5px; line-height:1.65; font-weight:500;
+}
+.gate-note b{font-family:var(--font-mono); letter-spacing:.02em;}
+
+/* 店家資訊條 */
+.shopbar{
+  display:flex; flex-wrap:wrap; gap:8px 10px; margin-bottom:18px;
+}
+.shopbar .chip{
+  font-family:var(--font-mono); font-size:11.5px; color:var(--ink-2);
+  background:var(--bg-card); border:1px solid var(--rule);
+  border-radius:6px; padding:6px 11px;
+}
+.shopbar .chip b{color:var(--accent); font-weight:700;}
+
+/* 兩張補充卡 */
+.dual{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px;}
+@media (max-width:880px){.dual{grid-template-columns:1fr;} .compare{grid-template-columns:1fr;}}
+
+/* TL;DR 四張改 2×2 */
+.tldr.c2{grid-template-columns:1fr 1fr;}
+@media (max-width:880px){.tldr.c2{grid-template-columns:1fr;}}
+
+/* 圖說小字 */
+.capnote{
+  font-family:var(--font-mono); font-size:11px; color:var(--ink-4);
+  margin-top:12px; line-height:1.6;
+}
+
+/* 風險卡分級色 */
+.risk-card.lv-high{border-left-color:var(--danger);}
+.risk-card.lv-high .lvl{color:var(--danger);}
+.risk-card.lv-info{border-left-color:var(--info);}
+.risk-card.lv-info .lvl{color:var(--info);}
+
+/* 手機：section-head 的 .meta 是 nowrap，會把 h2 擠成細長條 —— 改成標題獨佔一行 */
+@media (max-width:640px){
+  .section-head{flex-wrap:wrap; gap:10px 14px; align-items:center; margin-bottom:26px;}
+  .section-head h2{flex:1 1 100%; order:3;}
+  .section-head .meta{font-size:11px;}
+  .shopbar .chip{font-size:11px;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MAP · 台灣路線圖（inline SVG · 自製 pan/zoom · 無外部依賴）
+   ═══════════════════════════════════════════════════════════════ */
+.mapwrap{display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:20px; align-items:start;}
+@media (max-width:960px){.mapwrap{grid-template-columns:1fr;}}
+
+.mapstage{
+  position:relative; border:1.5px solid var(--rule); border-radius:12px; overflow:hidden;
+  background:var(--sea); height:min(74vh,780px); touch-action:pan-y; cursor:grab;
+}
+.mapstage.is-drag{cursor:grabbing;}
+.mapstage svg{display:block; width:100%; height:100%;}
+:root{--sea:#e7edee; --land:#f0ebdd; --coast:#cdbfa3;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sea:#0d141c; --land:#18202b; --coast:#33465a;}}
+:root[data-theme="dark"]{--sea:#0d141c; --land:#18202b; --coast:#33465a;}
+
+.rt-glow{fill:none; stroke:var(--accent); stroke-opacity:.28; stroke-width:8; stroke-linejoin:round; stroke-linecap:round;}
+.rt-line{fill:none; stroke:var(--accent); stroke-width:3; stroke-linejoin:round; stroke-linecap:round;}
+.cityDot{fill:var(--ink-4);}
+.cityLab{font-family:var(--font-mono); font-size:11px; fill:var(--ink-4);}
+
+.mk{cursor:pointer;}
+.mk circle{stroke:var(--bg-card); stroke-width:2.5; fill:var(--ink);}
+.mk.k-cp circle{fill:var(--accent);}
+.mk.k-eat circle{fill:var(--ok);}
+.mk.k-end circle{fill:var(--ink);}
+.mk .mkt{font-family:var(--font-mono); font-size:10px; font-weight:700; fill:var(--bg-card); text-anchor:middle; dominant-baseline:central; pointer-events:none;}
+.mk .mkl{font-family:var(--font-sans); font-size:11px; font-weight:600; fill:var(--ink); paint-order:stroke; stroke:var(--sea); stroke-width:3.5px; stroke-linejoin:round; pointer-events:none;}
+.mk:hover circle,.mk:focus circle{stroke:var(--accent); stroke-width:3.5;}
+
+#meDot circle.halo{fill:var(--info); opacity:.22;}
+#meDot circle.core{fill:var(--info); stroke:#fff; stroke-width:2.5;}
+@media (prefers-reduced-motion:no-preference){
+  #meDot circle.halo{animation:mePulse 2s ease-out infinite;}
+  @keyframes mePulse{0%{r:8;opacity:.35}100%{r:22;opacity:0}}
+}
+
+.mapctl{position:absolute; top:12px; right:12px; display:flex; flex-direction:column; gap:6px;}
+.mapctl button{
+  width:38px; height:38px; border-radius:9px; border:1px solid var(--rule);
+  background:var(--bg-card); color:var(--ink); font-size:17px; font-weight:600;
+  cursor:pointer; display:grid; place-items:center; box-shadow:var(--shadow-sm);
+  font-family:var(--font-mono);
+}
+.mapctl button:hover{border-color:var(--accent); color:var(--accent);}
+.mapctl button.on{background:var(--accent); color:#fff; border-color:var(--accent);}
+.maplegend{
+  position:absolute; left:12px; bottom:12px; display:flex; flex-wrap:wrap; gap:6px 12px;
+  background:color-mix(in srgb, var(--bg-card) 88%, transparent); backdrop-filter:blur(6px);
+  border:1px solid var(--rule); border-radius:8px; padding:8px 12px;
+  font-family:var(--font-mono); font-size:10.5px; color:var(--ink-3);
+}
+.maplegend i{width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:5px; vertical-align:middle;}
+
+.maphint{
+  position:absolute; top:12px; left:12px; max-width:calc(100% - 78px);
+  background:color-mix(in srgb, var(--bg-card) 88%, transparent); backdrop-filter:blur(6px);
+  border:1px solid var(--rule); border-radius:8px; padding:7px 11px;
+  font-family:var(--font-mono); font-size:10.5px; color:var(--ink-4); line-height:1.5;
+}
+
+/* 側邊即時面板 */
+.livepanel{display:flex; flex-direction:column; gap:12px;}
+.lcard{background:var(--bg-card); border:1.5px solid var(--rule); border-radius:12px; padding:16px 18px;}
+.lcard .lk{font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-4); margin-bottom:8px;}
+.lcard .lv{font-size:20px; font-weight:700; line-height:1.25; color:var(--ink);}
+.lcard .ls{font-family:var(--font-mono); font-size:12px; color:var(--ink-3); margin-top:6px; line-height:1.55;}
+.lcard.hot{border-color:var(--accent); background:var(--accent-bg);}
+.lcard.hot .lv{color:var(--accent);}
+.locbtn{
+  width:100%; padding:13px; border-radius:10px; border:0; cursor:pointer;
+  background:var(--accent); color:#fff; font-size:14.5px; font-weight:700;
+  font-family:var(--font-sans); display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.locbtn:hover{filter:brightness(1.07);}
+.locbtn[disabled]{opacity:.55; cursor:default;}
+.locbtn.tracking{background:var(--info);}
+.progbar{height:7px; border-radius:99px; background:var(--paper-3); overflow:hidden; margin-top:10px;}
+.progbar i{display:block; height:100%; background:var(--accent); border-radius:99px; width:0;}
+.locnote{font-family:var(--font-mono); font-size:11px; color:var(--ink-4); line-height:1.6;}
+
+/* 精簡提醒條 */
+.notes{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+@media (max-width:880px){.notes{grid-template-columns:1fr;}}
+.note{background:var(--bg-card); border:1px solid var(--rule); border-left:4px solid var(--accent-3); border-radius:8px; padding:14px 16px;}
+.note b{display:block; font-size:13.5px; margin-bottom:4px; color:var(--ink);}
+.note span{font-size:12.5px; color:var(--ink-3); line-height:1.55;}
+
+/* 吃飯卡 */
+.eat{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:880px){.eat{grid-template-columns:1fr;}}
+.eatcard{background:var(--bg-card); border:1.5px solid var(--rule); border-radius:12px; padding:22px; display:flex; flex-direction:column;}
+.eatcard.pick{border-color:var(--ok); border-width:2px;}
+.eatcard .tagline{font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; color:var(--ink-4); margin-bottom:8px;}
+.eatcard.pick .tagline{color:var(--ok);}
+.eatcard h3{font-size:19px; margin:0 0 4px;}
+.eatcard .stars{font-family:var(--font-mono); font-size:12.5px; color:var(--warn-2); margin-bottom:12px;}
+.eatcard dl{display:grid; grid-template-columns:64px 1fr; gap:7px 10px; margin:0 0 14px; font-size:13px;}
+.eatcard dt{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em; color:var(--ink-4); padding-top:2px;}
+.eatcard dd{margin:0; color:var(--ink-2); line-height:1.5;}
+.eatcard .verdict{margin-top:auto; padding:11px 14px; border-radius:7px; font-size:12.5px; line-height:1.6;}
+.eatcard.pick .verdict{background:var(--ok-soft); color:var(--ok);}
+.eatcard.alt .verdict{background:var(--accent-bg); color:var(--accent);}
+.eatcard .acts{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+.btnlink{
+  display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+  font-family:var(--font-mono); font-size:11.5px; font-weight:600;
+  border:1px solid var(--rule); border-radius:999px; padding:7px 13px; color:var(--ink-2);
+}
+.btnlink:hover{border-color:var(--accent); color:var(--accent);}
+.btnlink.solid{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+.btnlink.solid:hover{background:var(--accent); border-color:var(--accent); color:#fff;}
+.insight-table.t-cut{min-width:760px;}
+.insight-table.t-cut .r{grid-template-columns:236px 88px 148px 132px 1fr;}
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">360</div>
+      <div class="brand-text">
+        <b data-i18n="brand.title">北高 360 補給作戰圖</b>
+        <span data-i18n="brand.sub">2026 / 11 / 13 23:00 → 11 / 14 · 八里 → 左營</span>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#section-01" data-i18n="nav.s1">路線圖</a>
+      <a href="#section-02" data-i18n="nav.s2">時刻表</a>
+      <a href="#section-03" data-i18n="nav.s3">關門</a>
+      <a href="#section-04" data-i18n="nav.s4">吃飯</a>
+    </nav>
+    <div class="topbar-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="zh" class="is-active">中文</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="切換深色／淺色主題">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ § 01 · 路線圖 ═══════════════ -->
+<section class="s" id="section-01" style="padding-top:34px">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">§ 01</div>
+      <h2 data-i18n="s1.title">路線圖</h2>
+      <div class="meta" data-i18n="s1.meta">Route Map · 363 KM</div>
+    </div>
+
+    <div class="mapwrap">
+      <div class="mapstage" id="mapStage">
+        <svg id="map" viewBox="50 25 470 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="台灣西部海岸 北高 360 路線圖">
+          <defs>
+            <linearGradient id="landG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--land)"/>
+              <stop offset="100%" stop-color="var(--land)"/>
+            </linearGradient>
+          </defs>
+          <g id="world">
+            <path id="twOutline" fill="url(#landG)" stroke="var(--coast)" stroke-width="1.4" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            <g id="cities"></g>
+            <polyline id="rtGlow" class="rt-glow" vector-effect="non-scaling-stroke"/>
+            <polyline id="rtLine" class="rt-line" vector-effect="non-scaling-stroke"/>
+            <g id="markers"></g>
+            <g id="meDot" style="display:none" pointer-events="none">
+              <circle class="halo" r="8"/>
+              <circle class="core" r="6"/>
+            </g>
+          </g>
+        </svg>
+
+        <div class="mapctl">
+          <button type="button" id="zIn"  aria-label="放大">+</button>
+          <button type="button" id="zOut" aria-label="縮小">−</button>
+          <button type="button" id="zFit" aria-label="縮放到整條路線">⤢</button>
+          <button type="button" id="zMe"  aria-label="移到我的位置">⌖</button>
+        </div>
+
+        <div class="maphint" data-i18n="map.hint">滑鼠：拖曳平移 · Ctrl＋滾輪縮放　　手機：兩指縮放平移</div>
+        <div class="maplegend">
+          <span><i style="background:var(--accent)"></i><span data-i18n="lg.cp">官方檢查站</span></span>
+          <span><i style="background:var(--ink)"></i><span data-i18n="lg.sup">補給點</span></span>
+          <span><i style="background:var(--ok)"></i><span data-i18n="lg.eat">正餐</span></span>
+          <span><i style="background:var(--info)"></i><span data-i18n="lg.me">我的位置</span></span>
+        </div>
+      </div>
+
+      <aside class="livepanel">
+        <button type="button" class="locbtn" id="locBtn">
+          <span aria-hidden="true">⌖</span><span id="locBtnTxt" data-i18n="loc.btn">開啟定位</span>
+        </button>
+
+        <div class="lcard hot">
+          <div class="lk" data-i18n="live.next">NEXT STOP · 下一站</div>
+          <div class="lv" id="nextName">—</div>
+          <div class="ls" id="nextInfo" data-i18n="live.tapLoc">開啟定位後顯示距離與進度</div>
+          <div class="progbar"><i id="progFill"></i></div>
+        </div>
+
+        <div class="lcard">
+          <div class="lk" data-i18n="live.pos">MY POSITION · 目前位置</div>
+          <div class="lv" id="posKm">—</div>
+          <div class="ls" id="posInfo" data-i18n="live.posIdle">尚未定位</div>
+        </div>
+
+        <div class="lcard">
+          <div class="lk" data-i18n="live.sched">VS SCHEDULE · 對照計畫</div>
+          <div class="lv" id="schedDelta">—</div>
+          <div class="ls" id="schedInfo" data-i18n="live.schedIdle">以 11/13 23:00 出發、移動均速 25 km/h 的計畫表比對</div>
+        </div>
+
+        <div class="locnote" data-i18n="loc.note">定位只在你的裝置上運算，不會傳到任何伺服器。點地圖上任一個點可直接開 Google Maps 導航。</div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ § 02 · 時刻表 ═══════════════ -->
+<section class="s" id="section-02">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">§ 02</div>
+      <h2 data-i18n="s2.title">補給點時刻表</h2>
+      <div class="meta" data-i18n="s2.meta">Schedule · 25 km/h</div>
+    </div>
+    <div class="table-scroll">
+      <div class="insight-table t-sup">
+        <div class="r head">
+          <div class="c feature" data-i18n="s2.th1">#</div>
+          <div class="c" data-i18n="s2.th2">累計</div>
+          <div class="c" data-i18n="s2.th3">地點</div>
+          <div class="c" data-i18n="s2.th4">地址／電話</div>
+          <div class="c" data-i18n="s2.th5">抵達</div>
+          <div class="c" data-i18n="s2.th6">停留</div>
+          <div class="c" data-i18n="s2.th7">出發</div>
+          <div class="c" data-i18n="s2.th8">導航</div>
+        </div>
+        <div class="r r-cp">
+          <div class="c feature">起</div>
+          <div class="c num">0</div>
+          <div class="c">八里 廖添丁廟</div>
+          <div class="c addr">新北市八里區訊塘里中華路三段2號<br><span class="amet">大會起點 · 台15-11.0K</span></div>
+          <div class="c num">—</div>
+          <div class="c num">—</div>
+          <div class="c num">11/13 23:00</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=廖添丁廟+八里" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r">
+          <div class="c feature">S1</div>
+          <div class="c num">44</div>
+          <div class="c">7-11 永安港門市</div>
+          <div class="c addr">桃園市新屋區中山西路三段1148號<br><span class="amet">24h · ★4.3(177) · 有廁所座位 · 距台61 約 320m</span><br><a class="telline" href="tel:034864411">03-486-4411</a></div>
+          <div class="c num">00:46</div>
+          <div class="c num">10</div>
+          <div class="c num">00:56</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN+永安港門市" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r r-cp">
+          <div class="c feature">CP1</div>
+          <div class="c num">71</div>
+          <div class="c">新竹 風情海岸</div>
+          <div class="c addr">新竹市香山區美山里美山連絡道<br><span class="amet">大會檢查站 · 台61-79.0K</span></div>
+          <div class="c num">02:01</div>
+          <div class="c num">25 · 早餐</div>
+          <div class="c num">02:26</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=風情海岸+美山連絡道" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r">
+          <div class="c feature">S2</div>
+          <div class="c num">105</div>
+          <div class="c">7-11 白沙屯門市</div>
+          <div class="c addr">苗栗縣通霄鎮白東里白東100號<br><span class="amet">24h · ★4.1(456) · 在台1線上 · 距台61 約 300m</span><br><a class="telline" href="tel:037791746">037-791746</a></div>
+          <div class="c num">03:48</div>
+          <div class="c num">20</div>
+          <div class="c num">04:08</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN+白沙屯門市" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r">
+          <div class="c feature">S3</div>
+          <div class="c num">144</div>
+          <div class="c">中油 台中港站</div>
+          <div class="c addr">臺中市清水區海濱里臨港路六段1號<br><span class="amet">24h · ★4.0(429) · 臨港路六段＝台17 ✓</span><br><a class="telline" href="tel:0426562247">04-2656-2247</a></div>
+          <div class="c num">05:42</div>
+          <div class="c num">15</div>
+          <div class="c num">05:57</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=台灣中油+台中港站" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r r-cp">
+          <div class="c feature">CP2</div>
+          <div class="c num">190</div>
+          <div class="c">彰化 王功福海宮</div>
+          <div class="c addr">彰化縣芳苑鄉民生村芳漢路王功段2號<br><span class="amet">大會檢查站 · 台17-54.3K</span></div>
+          <div class="c num">07:47</div>
+          <div class="c num">30 · 大休</div>
+          <div class="c num">08:17</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=王功福海宮" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r">
+          <div class="c feature">S4</div>
+          <div class="c num">236</div>
+          <div class="c">全家 口湖下崙店</div>
+          <div class="c addr">雲林縣口湖鄉崙中村中山路71號<br><span class="amet">24h · ★4.5(135) · 中山路＝台17 ✓</span><br><a class="telline" href="tel:057990369">05-799-0369</a></div>
+          <div class="c num">10:07</div>
+          <div class="c num">15</div>
+          <div class="c num">10:22</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=全家便利商店+口湖下崙店" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r">
+          <div class="c feature">S5</div>
+          <div class="c num">277</div>
+          <div class="c">7-11 南鯤鯓門市</div>
+          <div class="c addr">臺南市北門區蚵寮里841-1號<br><span class="amet">24h · ★4.2(81) · 就在台17 路邊 ✓</span><br><a class="telline" href="tel:067864853">06-786-4853</a></div>
+          <div class="c num">12:00</div>
+          <div class="c num">15</div>
+          <div class="c num">12:15</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN+南鯤鯓門市" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r r-cp">
+          <div class="c feature">CP3</div>
+          <div class="c num">287</div>
+          <div class="c">將軍 吉安宮</div>
+          <div class="c addr">臺南市將軍區將軍里三吉36號<br><span class="amet">大會檢查站 · 台17-150.5K</span><br><a class="telline" href="tel:067944683">06-794-4683</a></div>
+          <div class="c num">12:39</div>
+          <div class="c num">5 · 打卡</div>
+          <div class="c num">12:44</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=口寮吉安宮+將軍" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r r-meal">
+          <div class="c feature">餐</div>
+          <div class="c num">317</div>
+          <div class="c">二牛牛肉湯</div>
+          <div class="c addr">臺南市安平區平安里安平路570號<br><span class="amet">週六 07:00–01:00 · ★4.1(5,859) · 安平路 · 刻意繞道</span><br><a class="telline" href="tel:062226292">06-222-6292</a></div>
+          <div class="c num">13:56</div>
+          <div class="c num">45 · 正餐</div>
+          <div class="c num">14:41</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=二牛牛肉湯+安平" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r">
+          <div class="c feature">S6</div>
+          <div class="c num">332</div>
+          <div class="c">7-11 興達門市</div>
+          <div class="c addr">高雄市茄萣區茄萣路一段350號<br><span class="amet">24h · ★4.0(83) · 距台17 約 300m</span><br><a class="telline" href="tel:076908629">07-690-8629</a></div>
+          <div class="c num">15:17</div>
+          <div class="c num">10</div>
+          <div class="c num">15:27</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN+興達門市+茄萣" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+        <div class="r r-cp">
+          <div class="c feature">終</div>
+          <div class="c num">363</div>
+          <div class="c">高雄 屏山國小</div>
+          <div class="c addr">高雄市左營區屏山里海功東路2號<br><span class="amet">大會終點 · 台17-218.0K</span></div>
+          <div class="c num">16:41</div>
+          <div class="c num">—</div>
+          <div class="c num">—</div>
+          <div class="c"><a class="maplink" href="https://www.google.com/maps/search/?api=1&amp;query=高雄市左營區屏山國民小學" target="_blank" rel="noopener noreferrer">MAP</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint" data-i18n="scroll.h1">← 表格可左右捲動 →</div>
+  </div>
+</section>
+
+<!-- ═══════════════ § 03 · 關門 ═══════════════ -->
+<section class="s" id="section-03">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">§ 03</div>
+      <h2 data-i18n="s3.title">關門時間</h2>
+      <div class="meta" data-i18n="s3.meta">Cutoffs</div>
+    </div>
+    <div class="table-scroll">
+      <div class="insight-table t-cut">
+        <div class="r head">
+          <div class="c feature" data-i18n="s3.th1">檢查站</div>
+          <div class="c" data-i18n="s3.th2">累計</div>
+          <div class="c" data-i18n="s3.th3">官方關門</div>
+          <div class="c" data-i18n="s3.th4">預計抵達</div>
+          <div class="c" data-i18n="s3.th5">餘裕</div>
+        </div>
+        <div class="r">
+          <div class="c feature">起 · 八里 廖添丁廟</div>
+          <div class="c num">0</div>
+          <div class="c num">11/13 23:40</div>
+          <div class="c num">23:00 出發</div>
+          <div class="c num">—</div>
+        </div>
+        <div class="r">
+          <div class="c feature">CP1 · 新竹 風情海岸</div>
+          <div class="c num">71</div>
+          <div class="c num">11/14 03:00</div>
+          <div class="c num">02:01</div>
+          <div class="c num is-worst">59 分</div>
+        </div>
+        <div class="r">
+          <div class="c feature">CP2 · 彰化 王功福海宮</div>
+          <div class="c num">190</div>
+          <div class="c num">09:50</div>
+          <div class="c num">07:47</div>
+          <div class="c num is-best">2h03</div>
+        </div>
+        <div class="r">
+          <div class="c feature">CP3 · 將軍 吉安宮</div>
+          <div class="c num">287</div>
+          <div class="c num">15:00</div>
+          <div class="c num">12:39</div>
+          <div class="c num is-best">2h21</div>
+        </div>
+        <div class="r">
+          <div class="c feature">終 · 高雄 屏山國小</div>
+          <div class="c num">363</div>
+          <div class="c num">19:00</div>
+          <div class="c num">16:41</div>
+          <div class="c num is-best">2h19</div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint" data-i18n="scroll.h2">← 表格可左右捲動 →</div>
+  </div>
+</section>
+
+<!-- ═══════════════ § 04 · 吃飯 ═══════════════ -->
+<section class="s" id="section-04">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">§ 04</div>
+      <h2 data-i18n="s4.title">正餐：台南牛肉湯</h2>
+      <div class="meta" data-i18n="s4.meta">Lunch Stop · 317 KM</div>
+    </div>
+
+    <div class="eat">
+      <div class="eatcard pick">
+        <div class="tagline" data-i18n="s4.a.tag">★ 主選 · 全天無空檔</div>
+        <h3>二牛牛肉湯</h3>
+        <div class="stars" data-i18n="s4.a.star">Google 4.1 ★ · 5,400+ 則評價</div>
+        <dl>
+          <dt data-i18n="s4.dt.addr">ADDR</dt><dd>台南市安平區安平路570號</dd>
+          <dt data-i18n="s4.dt.tel">TEL</dt><dd>06-222-6292</dd>
+          <dt data-i18n="s4.dt.hours">HOURS</dt><dd data-i18n="s4.a.hours">週六 07:00–01:00（週一至五 07:30–00:30）</dd>
+          <dt data-i18n="s4.dt.park">PARK</dt><dd data-i18n="s4.a.park">店旁有付費停車場，室內有冷氣</dd>
+          <dt data-i18n="s4.dt.eta">ETA</dt><dd>13:56</dd>
+        </dl>
+        <div class="verdict" data-i18n="s4.a.verdict">週六從早上七點開到隔天凌晨一點，中間不休息。不管你早到還是晚到三小時都吃得到 —— 這一站沒有時間壓力。</div>
+        <div class="acts">
+          <a class="btnlink solid" href="https://www.google.com/maps/search/?api=1&amp;query=二牛牛肉湯+安平" target="_blank" rel="noopener noreferrer">開啟導航</a>
+          <a class="btnlink" href="tel:062226292">撥號</a>
+        </div>
+      </div>
+
+      <div class="eatcard alt">
+        <div class="tagline" data-i18n="s4.b.tag">備案 · 只有早到才吃得到</div>
+        <h3>文章牛肉湯 安平總店</h3>
+        <div class="stars" data-i18n="s4.b.star">Google 2.1 萬則評價 · 觀光客入門店</div>
+        <dl>
+          <dt data-i18n="s4.dt.addr">ADDR</dt><dd>台南市安平區安平路300號</dd>
+          <dt data-i18n="s4.dt.hours">HOURS</dt><dd data-i18n="s4.b.hours">24 小時，但每日 14:00–17:00 備料休息</dd>
+          <dt data-i18n="s4.dt.park">PARK</dt><dd data-i18n="s4.b.park">距二牛約 270 公尺，同一條安平路</dd>
+          <dt data-i18n="s4.dt.eta">ETA</dt><dd>13:56</dd>
+        </dl>
+        <div class="verdict" data-i18n="s4.b.verdict">預計抵達時間剛好卡在 14:00 備料休息的門口。除非你比計畫快 30 分鐘、13:30 前到，否則直接去二牛，不要賭。</div>
+        <div class="acts">
+          <a class="btnlink" href="https://www.google.com/maps/search/?api=1&amp;query=文章牛肉湯+安平總店" target="_blank" rel="noopener noreferrer">開啟導航</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="capnote" data-i18n="s4.note">原本規劃的佳里萬林牛肉湯（14:00 打烊）已經拿掉 —— 它要求你比官方關門配速快 3 km/h 才吃得到，而且佳里在台17 以東要繞道。安平這兩家就在台17 旁邊，順路。</div>
+  </div>
+</section>
+
+<!-- ═══════════════ 當天注意 ═══════════════ -->
+<section class="s" id="section-05">
+  <div class="wrap">
+    <div class="notes">
+      <div class="note">
+        <b data-i18n="n1.t">台61 本線禁行自行車</b>
+        <span data-i18n="n1.b">走並行的台15 或機慢車道。支援車也別停在本線路肩。</span>
+      </div>
+      <div class="note">
+        <b data-i18n="n2.t">23:00–06:00 夜騎 7 小時</b>
+        <span data-i18n="n2.b">西濱這時段砂石車最多。前後燈、反光背心必備。</span>
+      </div>
+      <div class="note">
+        <b data-i18n="n3.t">六個補給點全部 24 小時</b>
+        <span data-i18n="n3.b">已逐一用 Google 地圖查證存在。S3／S4／S5 就在台17 線邊；S1／S2／S6 距路線約 300m —— 那幾段公路旁本來就沒有店家。表上電話可直接點擊撥號。</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h3 data-i18n="footer.title">北高 360 補給作戰圖</h3>
+      <p data-i18n="footer.sub">11/13 23:00 八里廖添丁廟 → 11/14 屏山國小 · 363 KM · 全程台61／台17</p>
+    </div>
+    <div>
+      <div class="col-title">CUTOFF</div>
+      <ul>
+        <li data-i18n="footer.c1">CP1 新竹 11/14 03:00</li>
+        <li data-i18n="footer.c2">終點 屏山國小 19:00</li>
+      </ul>
+    </div>
+    <div>
+      <div class="col-title">CONTACT</div>
+      <ul>
+        <li data-i18n="footer.k1">二牛牛肉湯 06-222-6292</li>
+        <li data-i18n="footer.k2">預計完賽 16:41</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="meta">
+      <div data-i18n="footer.ml">DRAWING-NO. TBA360-2026-11 · REV.B · NOT TO SCALE</div>
+      <div data-i18n="footer.mr">ISSUED 2026-08-22</div>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="放大檢視">
+  <button class="close" id="lbClose" type="button" aria-label="關閉">×</button>
+  <img id="lbImg" alt="" />
+</div>
+
+<script>
+window.I18N = {
+  zh: {
+    "html.lang": "zh-Hant",
+    "doc.title": "北高 360 補給作戰圖 · TBA360 2026",
+    "brand.title": "北高 360 補給作戰圖",
+    "brand.sub": "2026 / 11 / 13 23:00 → 11 / 14 · 八里 → 左營",
+    "nav.s1": "路線圖",
+    "nav.s2": "時刻表",
+    "nav.s3": "關門",
+    "nav.s4": "吃飯",
+    "s1.title": "路線圖",
+    "s1.meta": "Route Map · 363 KM",
+    "map.hint": "滑鼠：拖曳平移 · Ctrl＋滾輪縮放　　手機：兩指縮放平移",
+    "lg.cp": "官方檢查站",
+    "lg.sup": "補給點",
+    "lg.eat": "正餐",
+    "lg.me": "我的位置",
+    "loc.btn": "開啟定位",
+    "live.next": "NEXT STOP · 下一站",
+    "live.tapLoc": "開啟定位後顯示距離與進度",
+    "live.pos": "MY POSITION · 目前位置",
+    "live.posIdle": "尚未定位",
+    "live.sched": "VS SCHEDULE · 對照計畫",
+    "live.schedIdle": "以 11/13 23:00 出發、移動均速 25 km/h 的計畫表比對",
+    "loc.note": "定位只在你的裝置上運算，不會傳到任何伺服器。點地圖上任一個點可直接開 Google Maps 導航。",
+    "s2.title": "補給點時刻表",
+    "s2.meta": "Schedule · 25 km/h",
+    "s2.th1": "#",
+    "s2.th2": "累計",
+    "s2.th3": "地點",
+    "s2.th4": "地址／電話",
+    "s2.th5": "抵達",
+    "s2.th6": "停留",
+    "s2.th7": "出發",
+    "s2.th8": "導航",
+    "s3.title": "關門時間",
+    "s3.meta": "Cutoffs",
+    "s3.th1": "檢查站",
+    "s3.th2": "累計",
+    "s3.th3": "官方關門",
+    "s3.th4": "預計抵達",
+    "s3.th5": "餘裕",
+    "scroll.h1": "← 表格可左右捲動 →",
+    "scroll.h2": "← 表格可左右捲動 →",
+    "s4.title": "正餐：台南牛肉湯",
+    "s4.meta": "Lunch Stop · 317 KM",
+    "s4.a.tag": "★ 主選 · 全天無空檔",
+    "s4.a.star": "Google 4.1 ★ · 5,400+ 則評價",
+    "s4.dt.addr": "ADDR",
+    "s4.dt.tel": "TEL",
+    "s4.dt.hours": "HOURS",
+    "s4.dt.park": "PARK",
+    "s4.dt.eta": "ETA",
+    "s4.a.hours": "週六 07:00–01:00（週一至五 07:30–00:30）",
+    "s4.a.park": "店旁有付費停車場，室內有冷氣",
+    "s4.a.verdict": "週六從早上七點開到隔天凌晨一點，中間不休息。不管你早到還是晚到三小時都吃得到 —— 這一站沒有時間壓力。",
+    "s4.b.tag": "備案 · 只有早到才吃得到",
+    "s4.b.star": "Google 2.1 萬則評價 · 觀光客入門店",
+    "s4.b.hours": "24 小時，但每日 14:00–17:00 備料休息",
+    "s4.b.park": "距二牛約 270 公尺，同一條安平路",
+    "s4.b.verdict": "預計抵達時間剛好卡在 14:00 備料休息的門口。除非你比計畫快 30 分鐘、13:30 前到，否則直接去二牛，不要賭。",
+    "s4.note": "原本規劃的佳里萬林牛肉湯（14:00 打烊）已經拿掉 —— 它要求你比官方關門配速快 3 km/h 才吃得到，而且佳里在台17 以東要繞道。安平這兩家就在台17 旁邊，順路。",
+    "n1.t": "台61 本線禁行自行車",
+    "n1.b": "走並行的台15 或機慢車道。支援車也別停在本線路肩。",
+    "n2.t": "23:00–06:00 夜騎 7 小時",
+    "n2.b": "西濱這時段砂石車最多。前後燈、反光背心必備。",
+    "n3.t": "六個補給點全部 24 小時",
+    "n3.b": "已逐一用 Google 地圖查證存在。S3／S4／S5 就在台17 線邊；S1／S2／S6 距路線約 300m —— 那幾段公路旁本來就沒有店家。表上電話可直接點擊撥號。",
+    "footer.title": "北高 360 補給作戰圖",
+    "footer.sub": "11/13 23:00 八里廖添丁廟 → 11/14 屏山國小 · 363 KM · 全程台61／台17",
+    "footer.c1": "CP1 新竹 11/14 03:00",
+    "footer.c2": "終點 屏山國小 19:00",
+    "footer.k1": "二牛牛肉湯 06-222-6292",
+    "footer.k2": "預計完賽 16:41",
+    "footer.ml": "DRAWING-NO. TBA360-2026-11 · REV.B · NOT TO SCALE",
+    "footer.mr": "ISSUED 2026-08-22"
+},
+  en: {
+    "html.lang": "en",
+    "doc.title": "TBA 360 Supply Plan · Bali → Zuoying",
+    "brand.title": "TBA 360 Supply Plan",
+    "brand.sub": "2026 / 11 / 13 23:00 → 11 / 14 · Bali → Zuoying",
+    "nav.s1": "Map",
+    "nav.s2": "Schedule",
+    "nav.s3": "Cutoffs",
+    "nav.s4": "Food",
+    "s1.title": "Route Map",
+    "s1.meta": "Route Map · 363 KM",
+    "map.hint": "Mouse: drag to pan · Ctrl+wheel to zoom    Phone: two fingers to pan and zoom",
+    "lg.cp": "Checkpoint",
+    "lg.sup": "Supply stop",
+    "lg.eat": "Meal",
+    "lg.me": "My position",
+    "loc.btn": "Enable location",
+    "live.next": "NEXT STOP",
+    "live.tapLoc": "Enable location to see distance and progress",
+    "live.pos": "MY POSITION",
+    "live.posIdle": "Not located yet",
+    "live.sched": "VS SCHEDULE",
+    "live.schedIdle": "Compared against the 23:00 start at 25 km/h moving",
+    "loc.note": "Location is computed on your device only and never sent anywhere. Tap any point on the map to open Google Maps.",
+    "s2.title": "Supply Schedule",
+    "s2.meta": "Schedule · 25 km/h",
+    "s2.th1": "#",
+    "s2.th2": "Cum.",
+    "s2.th3": "Location",
+    "s2.th4": "Address / Tel",
+    "s2.th5": "Arrive",
+    "s2.th6": "Stop",
+    "s2.th7": "Depart",
+    "s2.th8": "Nav",
+    "s3.title": "Cutoffs",
+    "s3.meta": "Cutoffs",
+    "s3.th1": "Checkpoint",
+    "s3.th2": "Cum.",
+    "s3.th3": "Cutoff",
+    "s3.th4": "ETA",
+    "s3.th5": "Margin",
+    "scroll.h1": "← scroll table horizontally →",
+    "scroll.h2": "← scroll table horizontally →",
+    "s4.title": "Main Meal: Tainan Beef Soup",
+    "s4.meta": "Lunch Stop · 317 KM",
+    "s4.a.tag": "★ PICK · open all day",
+    "s4.a.star": "Google 4.1 ★ · 5,400+ reviews",
+    "s4.dt.addr": "ADDR",
+    "s4.dt.tel": "TEL",
+    "s4.dt.hours": "HOURS",
+    "s4.dt.park": "PARK",
+    "s4.dt.eta": "ETA",
+    "s4.a.hours": "Sat 07:00–01:00 (Mon–Fri 07:30–00:30)",
+    "s4.a.park": "Paid car park next door, air-conditioned inside",
+    "s4.a.verdict": "Open Saturday 07:00 to 01:00 with no break. Three hours early or three hours late, you still eat — no time pressure at this stop.",
+    "s4.b.tag": "BACKUP · only if you run early",
+    "s4.b.star": "Google 21,000 reviews · the tourist standard",
+    "s4.b.hours": "24 h, but closed daily 14:00–17:00 for prep",
+    "s4.b.park": "About 270 m from Erniu, same street",
+    "s4.b.verdict": "Your ETA lands right on the 14:00 prep break. Unless you are 30 minutes up and arrive before 13:30, go straight to Erniu instead of gambling.",
+    "s4.note": "The original pick, Wanlin in Jiali (closes 14:00), is dropped: it demanded 3 km/h above the official cutoff pace and sat east of Highway 17. Both Anping shops are right on the route.",
+    "n1.t": "Bicycles banned from the Hwy 61 mainline",
+    "n1.b": "Use the parallel Hwy 15 or the slow lane. The support car must not stop on the mainline shoulder.",
+    "n2.t": "Seven hours of night riding, 23:00–06:00",
+    "n2.b": "Peak gravel-truck hours on the west coast. Lights front and rear plus a reflective vest.",
+    "n3.t": "All six stops open 24 h",
+    "n3.b": "Each was verified on Google Maps. S3, S4 and S5 sit on Highway 17 itself; S1, S2 and S6 are about 300 m off it — there is simply nothing roadside on those stretches. Phone numbers are tap-to-call.",
+    "footer.title": "TBA 360 Supply Plan",
+    "footer.sub": "23:00 on 11/13 from Bali → Pingshan Elementary on 11/14 · 363 KM · Hwy 61/17 throughout",
+    "footer.c1": "CP1 Hsinchu 11/14 03:00",
+    "footer.c2": "Finish Pingshan Elementary 19:00",
+    "footer.k1": "Erniu Beef Soup 06-222-6292",
+    "footer.k2": "Projected finish 16:41",
+    "footer.ml": "DRAWING-NO. TBA360-2026-11 · REV.B · NOT TO SCALE",
+    "footer.mr": "ISSUED 2026-08-22"
+}
+};
+</script>
+<!-- ═══════════════════════════════════════════════════════════════
+     INTERACTIONS  (scroll-spy / lang / theme / lightbox / toggles)
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  /* ──────────── LANG TOGGLE ──────────── */
+  let LANG = localStorage.getItem('lang') === 'en' ? 'en' : 'zh';
+
+  function applyI18n() {
+    const dict = window.I18N[LANG];
+    document.documentElement.lang = dict["html.lang"] || 'zh-Hant';
+    document.title = dict["doc.title"] || document.title;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('.lang-toggle button').forEach(b => {
+      b.classList.toggle('is-active', b.dataset.lang === LANG);
+    });
+  }
+  function setLang(lang) {
+    if (lang !== 'zh' && lang !== 'en') return;
+    LANG = lang;
+    localStorage.setItem('lang', lang);
+    applyI18n();
+  }
+  document.querySelectorAll('.lang-toggle button').forEach(b => {
+    b.addEventListener('click', () => setLang(b.dataset.lang));
+  });
+
+  /* ──────────── THEME TOGGLE (dark/light) ──────────── */
+  const SUN_PATH = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
+  const MOON_PATH = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  const themeIcon = document.getElementById('themeIcon');
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (themeIcon) themeIcon.innerHTML = theme === 'dark' ? SUN_PATH : MOON_PATH;
+  }
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) applyTheme(savedTheme);
+  else {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+  }
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      localStorage.setItem('theme', next);
+    });
+  }
+
+  /* ──────────── SCROLL SPY ──────────── */
+  const navLinks = [...document.querySelectorAll('.nav a[href^="#"]')];
+  const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  function onScroll() {
+    const y = window.scrollY + 120;
+    let active = sections[0];
+    sections.forEach(s => { if (s && s.offsetTop <= y) active = s; });
+    navLinks.forEach(a => {
+      const match = active && a.getAttribute('href') === '#' + active.id;
+      a.classList.toggle('active', match);
+      if (match) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ──────────── SMOOTH SCROLL FOR NAV LINKS ──────────── */
+  navLinks.forEach(a => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href');
+      if (href.startsWith('#')) {
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const top = target.getBoundingClientRect().top + window.scrollY - 70;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }
+    });
+  });
+
+  /* ──────────── LIGHTBOX ──────────── */
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbClose = document.getElementById('lbClose');
+  function openLb(src, alt) {
+    if (!lightbox) return;
+    lbImg.src = src; lbImg.alt = alt || '';
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLb() {
+    if (!lightbox) return;
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.shot[data-lightbox], .shot').forEach(shot => {
+    shot.addEventListener('click', () => {
+      const img = shot.querySelector('img');
+      if (img) openLb(img.src, img.alt);
+    });
+    shot.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const img = shot.querySelector('img');
+        if (img) openLb(img.src, img.alt);
+      }
+    });
+  });
+  if (lightbox) {
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox || e.target === lbImg) closeLb();
+    });
+  }
+  if (lbClose) lbClose.addEventListener('click', closeLb);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox && lightbox.classList.contains('open')) closeLb();
+  });
+
+  /* ──────────── FULL-OUTPUT TOGGLES ──────────── */
+  document.querySelectorAll('.full-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panel = btn.nextElementSibling;
+      if (!panel) return;
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      if (isOpen) { panel.setAttribute('hidden', ''); btn.setAttribute('aria-expanded', 'false'); }
+      else { panel.removeAttribute('hidden'); btn.setAttribute('aria-expanded', 'true'); }
+    });
+  });
+
+  /* ──────────── INIT ──────────── */
+  applyI18n();
+  onScroll();
+})();
+</script>
+<script>
+const TW_PATH = "M 405.1,36.7 L 434.3,43.9 L 456.5,79.6 L 481.1,105.1 L 496.3,115.3 L 490.4,143.4 L 474.1,179.1 L 479.9,214.8 L 474.1,255.7 L 453.0,306.7 L 434.3,339.9 L 425.0,375.6 L 410.9,431.7 L 398.1,495.5 L 380.5,551.7 L 367.7,597.6 L 347.8,643.5 L 316.2,684.3 L 284.7,720.1 L 261.3,760.9 L 253.1,801.7 L 248.4,852.8 L 246.1,902.5 L 232.1,891.0 L 213.4,873.2 L 208.7,832.3 L 193.5,789.0 L 165.4,760.9 L 138.5,743.0 L 114.0,717.5 L 90.6,671.6 L 73.1,615.4 L 68.4,556.8 L 76.6,503.2 L 77.7,462.3 L 94.1,416.4 L 114.0,378.1 L 124.5,339.9 L 145.5,309.2 L 170.1,288.8 L 187.6,263.3 L 200.5,237.8 L 218.0,212.3 L 239.1,191.9 L 257.8,163.8 L 269.5,133.2 L 285.8,107.7 L 306.9,92.3 L 335.0,78.3 L 361.8,70.7 L 382.9,64.3 L 394.6,50.2 Z";
+const STOPS = [{"id": "起", "km": 0, "name": "八里 廖添丁廟", "mark": "新北市八里區訊塘里中華路三段2號", "tel": "", "arr": "—", "dep": "11/13 23:00", "lat": 25.1436734, "lon": 121.3965608, "kind": "cp", "q": "廖添丁廟 八里", "am": null, "dm": 0, "short": "八里"}, {"id": "S1", "km": 44, "name": "7-11 永安港門市", "mark": "桃園市新屋區中山西路三段1148號", "tel": "03-486-4411", "arr": "00:46", "dep": "00:56", "lat": 24.9882131, "lon": 121.0185329, "kind": "sup", "q": "7-ELEVEN 永安港門市", "am": 106, "dm": 116, "short": "永安港"}, {"id": "CP1", "km": 71, "name": "新竹 風情海岸", "mark": "新竹市香山區美山里美山連絡道", "tel": "", "arr": "02:01", "dep": "02:26", "lat": 24.7787535, "lon": 120.9144783, "kind": "cp", "q": "風情海岸 美山連絡道", "am": 181, "dm": 206, "short": "風情海岸"}, {"id": "S2", "km": 105, "name": "7-11 白沙屯門市", "mark": "苗栗縣通霄鎮白東里白東100號", "tel": "037-791746", "arr": "03:48", "dep": "04:08", "lat": 24.5692224, "lon": 120.7118692, "kind": "sup", "q": "7-ELEVEN 白沙屯門市", "am": 288, "dm": 308, "short": "白沙屯"}, {"id": "S3", "km": 144, "name": "中油 台中港站", "mark": "臺中市清水區海濱里臨港路六段1號", "tel": "04-2656-2247", "arr": "05:42", "dep": "05:57", "lat": 24.2896509, "lon": 120.5401129, "kind": "sup", "q": "台灣中油 台中港站", "am": 402, "dm": 417, "short": "台中港"}, {"id": "CP2", "km": 190, "name": "彰化 王功福海宮", "mark": "彰化縣芳苑鄉民生村芳漢路王功段2號", "tel": "", "arr": "07:47", "dep": "08:17", "lat": 23.9530027, "lon": 120.3347976, "kind": "cp", "q": "王功福海宮", "am": 527, "dm": 557, "short": "王功"}, {"id": "S4", "km": 236, "name": "全家 口湖下崙店", "mark": "雲林縣口湖鄉崙中村中山路71號", "tel": "05-799-0369", "arr": "10:07", "dep": "10:22", "lat": 23.6186561, "lon": 120.1649812, "kind": "sup", "q": "全家便利商店 口湖下崙店", "am": 667, "dm": 682, "short": "下崙"}, {"id": "S5", "km": 277, "name": "7-11 南鯤鯓門市", "mark": "臺南市北門區蚵寮里841-1號", "tel": "06-786-4853", "arr": "12:00", "dep": "12:15", "lat": 23.284442, "lon": 120.1370712, "kind": "sup", "q": "7-ELEVEN 南鯤鯓門市", "am": 780, "dm": 795, "short": "南鯤鯓"}, {"id": "CP3", "km": 287, "name": "將軍 吉安宮", "mark": "臺南市將軍區將軍里三吉36號", "tel": "06-794-4683", "arr": "12:39", "dep": "12:44", "lat": 23.2063431, "lon": 120.1341053, "kind": "cp", "q": "口寮吉安宮 將軍", "am": 819, "dm": 824, "short": "將軍"}, {"id": "餐", "km": 317, "name": "二牛牛肉湯", "mark": "臺南市安平區平安里安平路570號", "tel": "06-222-6292", "arr": "13:56", "dep": "14:41", "lat": 22.9986486, "lon": 120.1701949, "kind": "eat", "q": "二牛牛肉湯 安平", "am": 896, "dm": 941, "short": "安平"}, {"id": "S6", "km": 332, "name": "7-11 興達門市", "mark": "高雄市茄萣區茄萣路一段350號", "tel": "07-690-8629", "arr": "15:17", "dep": "15:27", "lat": 22.8955522, "lon": 120.1843016, "kind": "sup", "q": "7-ELEVEN 興達門市 茄萣", "am": 977, "dm": 987, "short": "興達"}, {"id": "終", "km": 363, "name": "高雄 屏山國小", "mark": "高雄市左營區屏山里海功東路2號", "tel": "", "arr": "16:41", "dep": "—", "lat": 22.6937433, "lon": 120.3014988, "kind": "cp", "q": "高雄市左營區屏山國民小學", "am": 1061, "dm": null, "short": "左營"}];
+const ROUTE = [{"lat": 25.1436734, "lon": 121.3965608, "km": 0}, {"lat": 25.09, "lon": 121.23}, {"lat": 25.03, "lon": 121.09}, {"lat": 24.9882131, "lon": 121.0185329, "km": 44}, {"lat": 24.9, "lon": 120.975}, {"lat": 24.85, "lon": 120.93}, {"lat": 24.7787535, "lon": 120.9144783, "km": 71}, {"lat": 24.7, "lon": 120.87}, {"lat": 24.61, "lon": 120.775}, {"lat": 24.5692224, "lon": 120.7118692, "km": 105}, {"lat": 24.44, "lon": 120.645}, {"lat": 24.35, "lon": 120.598}, {"lat": 24.2896509, "lon": 120.5401129, "km": 144}, {"lat": 24.15, "lon": 120.468}, {"lat": 24.05, "lon": 120.418}, {"lat": 23.9530027, "lon": 120.3347976, "km": 190}, {"lat": 23.85, "lon": 120.248}, {"lat": 23.72, "lon": 120.196}, {"lat": 23.6186561, "lon": 120.1649812, "km": 236}, {"lat": 23.46, "lon": 120.148}, {"lat": 23.38, "lon": 120.14}, {"lat": 23.284442, "lon": 120.1370712, "km": 277}, {"lat": 23.2063431, "lon": 120.1341053, "km": 287}, {"lat": 23.128, "lon": 120.113}, {"lat": 23.06, "lon": 120.145}, {"lat": 22.9986486, "lon": 120.1701949, "km": 317}, {"lat": 22.947, "lon": 120.183}, {"lat": 22.8955522, "lon": 120.1843016, "km": 332}, {"lat": 22.81, "lon": 120.225}, {"lat": 22.6937433, "lon": 120.3014988, "km": 363}];
+</script>
+
+<script>
+/* ═══════════════ MAP · ROUTE · GEOLOCATION ═══════════════ */
+(function(){
+  'use strict';
+  const svg   = document.getElementById('map');
+  const world = document.getElementById('world');
+  const stage = document.getElementById('mapStage');
+  if(!svg || !world || !stage) return;
+
+  /* 等距圓柱投影，係數由既有作戰圖的台灣輪廓最小平方擬合而來 */
+  const PA=228.30, PB=-27345.4, PC=-256.65, PD=6525.3;
+  const px = lon => PA*lon + PB;
+  const py = lat => PC*lat + PD;
+  const VB = {x:50, y:25, w:470, h:900};
+  const START = new Date(2026,10,13,23,0,0);   /* 2026-11-13 23:00 */
+  const TOTAL = STOPS[STOPS.length-1].km;
+
+  document.getElementById('twOutline').setAttribute('d', TW_PATH);
+
+  /* ── 城市標記 ── */
+  const CITIES=[['台北',25.033,121.565],['台中',24.147,120.673],['高雄',22.627,120.302],['花蓮',23.977,121.601],['台東',22.758,121.144]];
+  const cityG=document.getElementById('cities');
+  CITIES.forEach(([n,la,lo])=>{
+    const x=px(lo), y=py(la);
+    cityG.insertAdjacentHTML('beforeend',
+      '<circle class="cityDot" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="2"/>'+
+      '<text class="cityLab" x="'+(x+6).toFixed(1)+'" y="'+(y+3.5).toFixed(1)+'">'+n+'</text>');
+  });
+
+  /* ── 路線里程內插：ROUTE 只有停留點帶 km，中間轉折點按大圓距離比例補 ── */
+  function hav(a,b){
+    const R=6371, t=Math.PI/180;
+    const dLat=(b.lat-a.lat)*t, dLon=(b.lon-a.lon)*t;
+    const s=Math.sin(dLat/2)**2 + Math.cos(a.lat*t)*Math.cos(b.lat*t)*Math.sin(dLon/2)**2;
+    return 2*R*Math.asin(Math.min(1,Math.sqrt(s)));
+  }
+  (function fillKm(){
+    let i=0;
+    while(i<ROUTE.length){
+      if(ROUTE[i].km==null){ i++; continue; }
+      let j=i+1;
+      while(j<ROUTE.length && ROUTE[j].km==null) j++;
+      if(j>=ROUTE.length) break;
+      const seg=[]; let tot=0;
+      for(let k=i;k<j;k++){ const d=hav(ROUTE[k],ROUTE[k+1]); seg.push(d); tot+=d; }
+      const dk=ROUTE[j].km-ROUTE[i].km;
+      let acc=0;
+      for(let k=i;k<j-1;k++){ acc+=seg[k-i]; ROUTE[k+1].km=ROUTE[i].km+dk*(tot?acc/tot:0); }
+      i=j;
+    }
+  })();
+
+  const pts=ROUTE.map(p=>px(p.lon).toFixed(1)+','+py(p.lat).toFixed(1)).join(' ');
+  document.getElementById('rtGlow').setAttribute('points',pts);
+  document.getElementById('rtLine').setAttribute('points',pts);
+
+  /* ── 停留點標記 ── */
+  const NS='http://www.w3.org/2000/svg';
+  const mkG=document.getElementById('markers');
+  const marks=[];
+  STOPS.forEach(s=>{
+    const x=px(s.lon), y=py(s.lat);
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('class','mk k-'+s.kind);
+    g.setAttribute('tabindex','0');
+    g.setAttribute('role','link');
+    const times = s.arr==='—' ? s.dep : (s.dep==='—' ? s.arr : s.arr+'–'+s.dep);
+    g.setAttribute('aria-label', s.id+' '+s.name+' '+s.km+'K '+times+'，開啟 Google 地圖');
+    const r = s.kind==='eat' ? 10 : (s.kind==='cp' ? 9 : 7);
+    const t=document.createElementNS(NS,'title');
+    t.textContent = s.id+' · '+s.name+'\n'+s.km+'K · '+s.mark+'\n'+times+(s.tel? '\n'+s.tel : '');
+    g.appendChild(t);
+    const c=document.createElementNS(NS,'circle'); c.setAttribute('r',r); g.appendChild(c);
+    const lb=document.createElementNS(NS,'text');
+    lb.setAttribute('class','mkl'); lb.setAttribute('x', r+7); lb.setAttribute('y', 4);
+    lb.textContent = s.short+' '+s.km+'K';
+    g.appendChild(lb);
+    const open=()=>window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.q),'_blank','noopener');
+    g.addEventListener('click',open);
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); }});
+    mkG.appendChild(g);
+    marks.push({g,x,y});
+  });
+
+  /* ── pan / zoom ── */
+  const meG=document.getElementById('meDot');
+  let scale=1, tx=0, ty=0, mePos=null;
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+  function apply(){
+    world.setAttribute('transform','translate('+tx+' '+ty+') scale('+scale+')');
+    const inv=1/scale;
+    marks.forEach(m=>m.g.setAttribute('transform','translate('+m.x+' '+m.y+') scale('+inv+')'));
+    if(mePos) meG.setAttribute('transform','translate('+mePos.x+' '+mePos.y+') scale('+inv+')');
+  }
+  function toSvg(cx,cy){
+    const p=svg.createSVGPoint(); p.x=cx; p.y=cy;
+    return p.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function zoomAt(p,f){
+    const ns=clamp(scale*f,0.75,16), k=ns/scale;
+    tx=p.x-k*(p.x-tx); ty=p.y-k*(p.y-ty); scale=ns; apply();
+  }
+  function fitBox(minX,minY,maxX,maxY,pad){
+    const w=(maxX-minX)+pad*2, h=(maxY-minY)+pad*2;
+    scale=clamp(Math.min(VB.w/w, VB.h/h),0.75,16);
+    tx=VB.x+(VB.w-w*scale)/2-(minX-pad)*scale;
+    ty=VB.y+(VB.h-h*scale)/2-(minY-pad)*scale;
+    apply();
+  }
+  function fitRoute(){
+    const xs=marks.map(m=>m.x), ys=marks.map(m=>m.y);
+    fitBox(Math.min.apply(null,xs),Math.min.apply(null,ys),
+           Math.max.apply(null,xs)+70,Math.max.apply(null,ys),28);
+  }
+
+  /* 滑鼠滾輪預設讓頁面捲動；要縮放地圖請按住 Ctrl／⌘。
+     否則使用者捲到地圖上時會被地圖吃掉，永遠捲不過去。 */
+  stage.addEventListener('wheel',e=>{
+    if(!(e.ctrlKey||e.metaKey)) return;
+    e.preventDefault();
+    zoomAt(toSvg(e.clientX,e.clientY), e.deltaY<0?1.16:1/1.16);
+  },{passive:false});
+
+  const active=new Map();
+  let panLast=null, pinchLast=0;
+  let lastMid=null;
+  stage.addEventListener('pointerdown',e=>{
+    if(e.target.closest('.mk')) return;
+    active.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    /* 觸控單指不接管：留給頁面上下捲動。滑鼠／觸控筆才單指拖曳平移。 */
+    if(active.size===1 && e.pointerType!=='touch'){
+      panLast=toSvg(e.clientX,e.clientY); stage.classList.add('is-drag');
+      if(stage.setPointerCapture) stage.setPointerCapture(e.pointerId);
+    }
+    if(active.size===2){ panLast=null; pinchLast=pinchDist(); lastMid=pinchMid(); }
+  });
+  function pinchDist(){
+    const v=[...active.values()];
+    return Math.hypot(v[0].x-v[1].x, v[0].y-v[1].y);
+  }
+  function pinchMid(){
+    const v=[...active.values()];
+    return toSvg((v[0].x+v[1].x)/2,(v[0].y+v[1].y)/2);
+  }
+  stage.addEventListener('pointermove',e=>{
+    if(!active.has(e.pointerId)) return;
+    active.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(active.size===2){
+      const d=pinchDist(), mid=pinchMid();
+      if(pinchLast>0 && d>0) zoomAt(mid, d/pinchLast);
+      if(lastMid){ tx+=mid.x-lastMid.x; ty+=mid.y-lastMid.y; apply(); }
+      lastMid=mid; pinchLast=d; return;
+    }
+    if(!panLast) return;
+    const p=toSvg(e.clientX,e.clientY);
+    tx+=p.x-panLast.x; ty+=p.y-panLast.y; panLast=p; apply();
+  });
+  function endPtr(e){
+    active.delete(e.pointerId);
+    if(active.size<2){ pinchLast=0; lastMid=null; }
+    if(active.size===0){ panLast=null; stage.classList.remove('is-drag'); }
+    else if(active.size===1){ const v=[...active.entries()][0]; panLast=null; active.set(v[0],v[1]); }
+  }
+  stage.addEventListener('pointerup',endPtr);
+  stage.addEventListener('pointercancel',endPtr);
+  stage.addEventListener('pointerleave',endPtr);
+
+  document.getElementById('zIn').onclick =()=>zoomAt({x:VB.x+VB.w/2,y:VB.y+VB.h/2},1.35);
+  document.getElementById('zOut').onclick=()=>zoomAt({x:VB.x+VB.w/2,y:VB.y+VB.h/2},1/1.35);
+  document.getElementById('zFit').onclick= fitRoute;
+
+  /* ── 定位 ── */
+  const locBtn=document.getElementById('locBtn');
+  const locTxt=document.getElementById('locBtnTxt');
+  const LOCTXT=t=>{ locTxt.removeAttribute('data-i18n'); locTxt.textContent=t; };
+  const el=id=>document.getElementById(id);
+  /* 寫入即時資訊時拔掉 data-i18n，否則切換語言會把定位結果蓋回靜態字串 */
+  function live(id,txt){ const n=el(id); n.removeAttribute('data-i18n'); n.textContent=txt; }
+  let watchId=null;
+
+  function nearest(lat,lon){
+    const kx=111.32*Math.cos(lat*Math.PI/180), ky=110.57;
+    let best={d:Infinity,km:0};
+    for(let i=0;i<ROUTE.length-1;i++){
+      const a=ROUTE[i], b=ROUTE[i+1];
+      const ax=(a.lon-lon)*kx, ay=(a.lat-lat)*ky;
+      const bx=(b.lon-lon)*kx, by=(b.lat-lat)*ky;
+      const dx=bx-ax, dy=by-ay, L2=dx*dx+dy*dy;
+      let t = L2 ? -(ax*dx+ay*dy)/L2 : 0;
+      t=clamp(t,0,1);
+      const qx=ax+t*dx, qy=ay+t*dy, d=Math.hypot(qx,qy);
+      if(d<best.d) best={d:d, km:a.km+(b.km-a.km)*t};
+    }
+    return best;
+  }
+  /* 計畫表在某個里程的預定時刻（自 23:00 起算的分鐘） */
+  function plannedMin(km){
+    if(km<=STOPS[0].km) return STOPS[0].dm;
+    for(let i=1;i<STOPS.length;i++){
+      if(km<=STOPS[i].km){
+        const a=STOPS[i-1], b=STOPS[i];
+        const f=(km-a.km)/(b.km-a.km||1);
+        return a.dm + (b.am-a.dm)*f;
+      }
+    }
+    return STOPS[STOPS.length-1].am;
+  }
+  const fmtMin=m=>{const s=m<0?'-':'';m=Math.abs(Math.round(m));
+    return s+(m>=60? Math.floor(m/60)+' 小時 '+(m%60)+' 分' : m+' 分');};
+
+  function onPos(pos){
+    const {latitude:lat, longitude:lon} = pos.coords;
+    const x=px(lon), y=py(lat);
+    mePos={x,y};
+    meG.style.display='';
+    apply();
+
+    const n=nearest(lat,lon);
+    const onRoute = n.d<=3;
+    live('posKm',onRoute ? n.km.toFixed(1)+' K' : '路線外');
+    live('posInfo',onRoute
+      ? '在路線上 · 距終點還有 '+(TOTAL-n.km).toFixed(1)+' km'
+      : '離路線最近點 '+n.d.toFixed(1)+' km（約在 '+n.km.toFixed(0)+'K 處）');
+
+    const next = STOPS.find(s=>s.km > n.km+0.2);
+    if(next && onRoute){
+      live('nextName',next.id+' · '+next.name);
+      live('nextInfo','還有 '+(next.km-n.km).toFixed(1)+' km · 計畫 '+next.arr+' 抵達 · '+next.mark);
+    }else if(next){
+      live('nextName',next.id+' · '+next.name);
+      live('nextInfo','（你目前不在路線上）計畫 '+next.arr+' 抵達');
+    }else{
+      live('nextName','已抵達終點');
+      live('nextInfo','屏山國小 '+TOTAL+'K');
+    }
+    el('progFill').style.width = clamp(n.km/TOTAL*100,0,100).toFixed(1)+'%';
+
+    const nowMin=(Date.now()-START.getTime())/60000;
+    if(nowMin < -60){
+      const h=Math.round(-nowMin/60);
+      live('schedDelta','尚未出發');
+      live('schedInfo','距 11/13 23:00 出發還有約 '+(h>=24? Math.round(h/24)+' 天' : h+' 小時'));
+    }else if(!onRoute){
+      live('schedDelta','—');
+      live('schedInfo','要在路線上才能比對進度');
+    }else{
+      const delta=plannedMin(n.km)-nowMin;
+      live('schedDelta',Math.abs(delta)<3 ? '準點'
+        : (delta>0 ? '領先 '+fmtMin(delta) : '落後 '+fmtMin(-delta)));
+      live('schedInfo','計畫在 '+n.km.toFixed(0)+'K 的時刻是 '
+        + new Date(START.getTime()+plannedMin(n.km)*60000)
+            .toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',hour12:false}));
+    }
+  }
+  function onErr(err){
+    LOCTXT('定位失敗');
+    locBtn.disabled=false; locBtn.classList.remove('tracking');
+    live('posInfo',err.code===1
+      ? '你拒絕了定位權限。要用這個功能請在瀏覽器設定裡允許本頁定位。'
+      : '拿不到定位（'+(err.message||'timeout')+'）。室內或收訊差時常見，到戶外再試。');
+    watchId=null;
+  }
+  locBtn.addEventListener('click',()=>{
+    if(watchId!==null){
+      navigator.geolocation.clearWatch(watchId); watchId=null;
+      locBtn.classList.remove('tracking'); LOCTXT('開啟定位');
+      meG.style.display='none'; mePos=null;
+      return;
+    }
+    if(!navigator.geolocation){ live('posInfo','這個瀏覽器不支援定位。'); return; }
+    locBtn.disabled=true; LOCTXT('定位中…');
+    watchId=navigator.geolocation.watchPosition(p=>{
+      locBtn.disabled=false; locBtn.classList.add('tracking'); LOCTXT('定位中（點此關閉）');
+      onPos(p);
+    }, onErr, {enableHighAccuracy:true, maximumAge:15000, timeout:20000});
+  });
+  document.getElementById('zMe').onclick=()=>{
+    if(!mePos){ locBtn.click(); return; }
+    scale=6; tx=VB.x+VB.w/2-mePos.x*scale; ty=VB.y+VB.h/2-mePos.y*scale; apply();
+  };
+
+  fitRoute();
+  window.addEventListener('resize',()=>{ /* viewBox 固定，無需重算 */ });
+})();
+</script>
+
+</body>
+</html>

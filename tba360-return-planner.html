@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="auto">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title data-i18n="doc.title">台南練習騎 · 回程方案規劃器</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════ DESIGN TOKENS — 工程紙本 / forest ═══════════ */
+:root {
+  --paper:#f6f3ec; --paper-2:#ece6d6; --paper-3:#ddd5bf;
+  --bg-card:#fbfaf6; --bg-elev:#ffffff;
+  --ink:#0d1117; --ink-2:#1f2937; --ink-3:#4b5563; --ink-4:#6b7280; --ink-5:#9ca3af;
+  --rule:#d6cfb8; --rule-2:#e6dfc7; --rule-3:#efe9d4;
+  --ok:#166534; --ok-2:#16a34a; --ok-soft:#dcfce7;
+  --warn:#92400e; --warn-2:#b45309; --warn-3:#d97706; --warn-soft:#fef3c7; --warn-bg:#fffbeb;
+  --danger:#8a2a25; --danger-soft:#fae4e2;
+  --accent:#2f5d4f; --accent-2:#3d7868; --accent-3:#5fa18e; --accent-4:#8bc4b3;
+  --accent-soft:#e3ece6; --accent-bg:#f0f5f2;
+  --info:#2a5d8f; --info-bg:#e0e9f2;
+  --code-bg:#0f172a; --code-bg-2:#1e293b; --code-ink:#e5e7eb;
+  --radius-sm:4px; --radius:10px; --radius-lg:14px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.04);
+  --shadow:0 1px 0 rgba(20,15,10,.04), 0 6px 24px -12px rgba(20,15,10,.18);
+  --font-tc:"Noto Sans TC","Inter",system-ui,sans-serif;
+  --font-lat:"Inter",-apple-system,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:#14161a; --paper-2:#1c1f25; --paper-3:#252830;
+    --bg-card:#1c1f25; --bg-elev:#252830;
+    --ink:#f5f1e8; --ink-2:#d6d0c2; --ink-3:#9a9286; --ink-4:#6d655c; --ink-5:#4a4540;
+    --rule:#2f3239; --rule-2:#25282d; --rule-3:#1e2025;
+    --accent-soft:rgba(95,161,142,.17); --accent-bg:rgba(47,93,79,.12);
+    --ok-soft:rgba(22,163,74,.17); --warn-soft:rgba(217,119,6,.16); --warn-bg:rgba(217,119,6,.08);
+    --danger-soft:rgba(138,42,37,.22); --info-bg:rgba(42,93,143,.15);
+  }
+}
+:root[data-theme="dark"] {
+  --paper:#14161a; --paper-2:#1c1f25; --paper-3:#252830;
+  --bg-card:#1c1f25; --bg-elev:#252830;
+  --ink:#f5f1e8; --ink-2:#d6d0c2; --ink-3:#9a9286; --ink-4:#6d655c; --ink-5:#4a4540;
+  --rule:#2f3239; --rule-2:#25282d; --rule-3:#1e2025;
+  --accent-soft:rgba(95,161,142,.17); --accent-bg:rgba(47,93,79,.12);
+  --ok-soft:rgba(22,163,74,.17); --warn-soft:rgba(217,119,6,.16); --warn-bg:rgba(217,119,6,.08);
+  --danger-soft:rgba(138,42,37,.22); --info-bg:rgba(42,93,143,.15);
+}
+
+/* ═══════════ BASE ═══════════ */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--font-tc);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{background:radial-gradient(ellipse at top,color-mix(in srgb,var(--accent) 5%,transparent),transparent 60%),var(--paper)}
+::selection{background:var(--accent);color:#fff}
+a{color:inherit}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+h1{font-size:clamp(34px,5vw,64px);font-weight:800;letter-spacing:-.025em;line-height:1.05;text-wrap:balance}
+h2{font-size:clamp(26px,3.2vw,42px);line-height:1.15;text-wrap:balance}
+h3{font-size:clamp(19px,1.8vw,24px);line-height:1.25}
+h4{font-size:17px;font-weight:600}
+p{margin:0 0 14px;font-size:16px;color:var(--ink-2);line-height:1.65;text-wrap:pretty}
+p:last-child{margin-bottom:0}
+.mono{font-family:var(--font-mono)}
+code{font-family:var(--font-mono);font-size:.92em;background:var(--paper-2);padding:2px 7px;border-radius:4px;color:var(--ink);border:1px solid var(--rule-2);white-space:nowrap}
+.wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+@media(max-width:720px){.wrap{padding:0 18px}}
+section.s{padding:76px 0;border-top:1px solid var(--rule-2)}
+section[id]{scroll-margin-top:84px}
+.section-head{display:flex;align-items:baseline;gap:22px;margin-bottom:34px;padding-bottom:18px;border-bottom:1px solid var(--rule-2)}
+.section-head .num{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--accent);letter-spacing:.16em;background:var(--accent-soft);padding:6px 12px;border-radius:4px;white-space:nowrap}
+.section-head h2{flex:1;margin:0}
+.section-head .meta{font-family:var(--font-mono);font-size:12px;color:var(--ink-4);text-transform:uppercase;letter-spacing:.14em;white-space:nowrap}
+@media(max-width:640px){
+  .section-head{flex-wrap:wrap;gap:10px}
+  .section-head h2{flex:1 0 100%;order:3}
+  .section-head .meta{white-space:normal}
+}
+
+/* ═══════════ TOPBAR ═══════════ */
+.topbar{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid var(--rule)}
+.topbar-inner{max-width:1280px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;gap:22px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{width:30px;height:30px;border-radius:7px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--font-lat);font-weight:700;font-size:12px;letter-spacing:.02em}
+.brand-text{line-height:1.3;font-size:13px}
+.brand-text b{display:block;font-weight:600;color:var(--ink)}
+.brand-text span{color:var(--ink-3);font-size:11.5px;font-family:var(--font-mono)}
+.nav{display:flex;gap:3px;flex:1;flex-wrap:wrap}
+.nav a{font-family:var(--font-mono);font-size:12px;color:var(--ink-3);text-decoration:none;padding:6px 10px;border-radius:6px;letter-spacing:.03em;transition:.15s;white-space:nowrap}
+.nav a:hover,.nav a.active{background:var(--paper-2);color:var(--ink)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.lang-toggle{display:inline-flex;padding:3px;background:var(--paper-2);border:1px solid var(--rule);border-radius:100px}
+.lang-toggle button{border:0;background:transparent;padding:5px 11px;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--ink-3);cursor:pointer;border-radius:100px;transition:.12s;min-width:32px}
+.lang-toggle button.is-active{background:var(--ink);color:var(--paper)}
+.theme-toggle{background:transparent;border:1px solid var(--rule);border-radius:100px;width:32px;height:32px;cursor:pointer;display:grid;place-items:center;color:var(--ink-3);transition:.15s}
+.theme-toggle:hover{color:var(--ink);border-color:var(--ink-3)}
+.theme-toggle svg{width:16px;height:16px}
+@media(max-width:980px){.nav{display:none}.topbar-inner{gap:12px}}
+
+/* ═══════════ HERO ═══════════ */
+.hero{padding:72px 0 56px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--rule-3) 1px,transparent 1px),linear-gradient(90deg,var(--rule-3) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 60% at 30% 30%,black 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 80% 60% at 30% 30%,black 30%,transparent 75%);opacity:.5;pointer-events:none}
+.hero .wrap{position:relative}
+.hero .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12.5px;font-weight:600;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:26px;padding:8px 16px;background:var(--accent-soft);border-radius:999px}
+.hero .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.hero h1 .accent{color:var(--accent)}
+.hero .lede{margin-top:26px;font-size:21px;line-height:1.55;color:var(--ink-2);max-width:900px;text-wrap:pretty}
+.hero .lede strong{color:var(--ink);font-weight:600}
+.hero .summary-cards{margin-top:48px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.scard{background:var(--bg-card);border:1.5px solid var(--rule);border-radius:10px;padding:18px 20px}
+.scard .lbl{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;color:var(--ink-4);font-weight:600;text-transform:uppercase;margin-bottom:8px}
+.scard .val{font-size:16px;color:var(--ink);font-weight:600;line-height:1.4}
+.scard .sub{font-size:12.5px;color:var(--ink-4);margin-top:4px;font-family:var(--font-mono)}
+@media(max-width:1000px){.hero .summary-cards{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.hero .summary-cards{grid-template-columns:1fr}}
+
+/* ═══════════ FIG LABEL ═══════════ */
+.fig{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-4);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.fig::after{content:"";flex:1;height:1px;background:var(--rule-2)}
+
+/* ═══════════ OUTBOUND TABLE ═══════════ */
+.leg-table{border:1.5px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--bg-card)}
+.leg-row{display:grid;grid-template-columns:86px 92px 1fr 120px;border-bottom:1px solid var(--rule-2);align-items:center}
+.leg-row:last-child{border-bottom:0}
+.leg-row.head{background:#14161a;color:#f5f1e8}
+.leg-row.head .lc{color:#f5f1e8;font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.leg-row.night{background:var(--info-bg)}
+.leg-row.key{background:var(--accent-soft)}
+.lc{padding:11px 14px;font-size:14px;color:var(--ink-2);border-right:1px solid var(--rule-2);min-width:0;overflow:hidden}
+.lc:last-child{border-right:0}
+.lc.km,.lc.tm{font-family:var(--font-mono);font-weight:600;color:var(--ink)}
+.lc.note{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-4);text-align:right}
+.lc .place{font-weight:600;color:var(--ink)}
+@media(max-width:720px){
+  .leg-row{grid-template-columns:68px 74px 1fr}
+  .lc.note{display:none}
+}
+
+/* ═══════════ MAP LINK ═══════════ */
+.maplink{display:inline-flex;align-items:center;gap:12px;margin-top:18px;padding:13px 20px;border:1.5px solid var(--rule);border-radius:10px;background:var(--bg-card);color:var(--ink);text-decoration:none;transition:.15s;font-size:14px}
+.maplink:hover{border-color:var(--accent);background:var(--accent-bg)}
+.maplink svg{width:19px;height:19px;color:var(--accent);flex-shrink:0}
+.maplink .ml-t{font-weight:600;line-height:1.35}
+.maplink .ml-s{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-4);margin-top:2px}
+.maplink .ml-go{margin-left:6px;font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.1em}
+
+/* ═══════════ PLANNER ═══════════ */
+.planner{border:1.5px solid var(--rule);border-radius:14px;overflow:hidden;background:var(--bg-card)}
+.planner-controls{padding:22px 24px;border-bottom:1px solid var(--rule);background:var(--bg-elev)}
+.ctl-label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-4);font-weight:600;margin-bottom:10px}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mode-btn{text-align:left;background:var(--bg-card);border:1.5px solid var(--rule);border-radius:10px;padding:14px 16px;cursor:pointer;transition:.15s;font-family:inherit;color:var(--ink)}
+.mode-btn:hover{border-color:var(--accent-3)}
+.mode-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.mode-btn .mt{font-size:15px;font-weight:700;line-height:1.3;margin-bottom:4px}
+.mode-btn .ms{font-size:12px;color:var(--ink-4);font-family:var(--font-mono);line-height:1.4}
+.mode-btn[aria-pressed="true"] .ms{color:rgba(255,255,255,.72)}
+.mode-btn .tool{display:inline-block;margin-top:8px;font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;padding:2px 7px;border-radius:999px;background:var(--warn-soft);color:var(--warn)}
+.mode-btn .tool.no{background:var(--ok-soft);color:var(--ok)}
+.mode-btn[aria-pressed="true"] .tool{background:rgba(255,255,255,.18);color:#fff}
+@media(max-width:820px){.mode-grid{grid-template-columns:1fr}}
+
+.dep-list{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(188px,1fr));gap:8px}
+.dep-btn{position:relative;text-align:left;background:var(--bg-card);border:1.5px solid var(--rule);border-radius:8px;padding:11px 13px;cursor:pointer;transition:.15s;font-family:inherit;color:var(--ink)}
+.dep-btn:hover:not(:disabled){border-color:var(--accent-3)}
+.dep-btn[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.dep-btn:disabled{opacity:.42;cursor:not-allowed}
+.dep-btn .dt{font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--ink);letter-spacing:.02em}
+.dep-btn .dn{font-size:11.5px;color:var(--ink-4);font-family:var(--font-mono);margin-top:2px}
+.dep-btn .dq{position:absolute;top:9px;right:10px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;padding:2px 6px;border-radius:999px}
+.dq.good{background:var(--ok-soft);color:var(--ok)}
+.dq.low{background:var(--warn-soft);color:var(--warn)}
+.dq.none{background:var(--danger-soft);color:var(--danger)}
+
+/* stats */
+.planner-stats{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--rule)}
+.pstat{padding:18px 20px;border-right:1px solid var(--rule-2)}
+.pstat:last-child{border-right:0}
+.pstat .k{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4);font-weight:600;margin-bottom:6px}
+.pstat .v{font-size:23px;font-weight:700;color:var(--ink);line-height:1.15;font-family:var(--font-mono);letter-spacing:-.01em}
+.pstat .u{font-size:12px;color:var(--ink-4);margin-top:3px;font-family:var(--font-mono)}
+.pstat.hl .v{color:var(--accent)}
+@media(max-width:980px){.planner-stats{grid-template-columns:repeat(2,1fr)}.pstat{border-bottom:1px solid var(--rule-2)}}
+@media(max-width:520px){.planner-stats{grid-template-columns:1fr}}
+
+/* chain */
+.chain{padding:26px 24px}
+.chain-item{display:grid;grid-template-columns:76px 28px 1fr;gap:0;align-items:start}
+.chain-item .ct{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--ink);padding:2px 0 0;letter-spacing:.01em}
+.chain-item .ct.dim{color:var(--ink-4);font-weight:500}
+.chain-rail{position:relative;display:flex;justify-content:center}
+.chain-rail .node{width:11px;height:11px;border-radius:50%;background:var(--paper);border:2.5px solid var(--accent);margin-top:6px;z-index:2;flex-shrink:0}
+.chain-item.walk .chain-rail .node,.chain-item.wait .chain-rail .node{border-color:var(--ink-4);width:9px;height:9px;margin-top:7px}
+.chain-item.end .chain-rail .node{background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.chain-rail .line{position:absolute;top:14px;bottom:-14px;width:2px;background:var(--rule);left:50%;transform:translateX(-50%)}
+.chain-item:last-child .chain-rail .line{display:none}
+.chain-item.ride .chain-rail .line{background:repeating-linear-gradient(180deg,var(--accent-3) 0 5px,transparent 5px 10px)}
+.chain-body{padding:0 0 22px 16px;min-width:0}
+.chain-body .cw{font-size:15px;font-weight:600;color:var(--ink);line-height:1.4}
+.chain-body .cd{font-size:12.5px;color:var(--ink-4);margin-top:3px;font-family:var(--font-mono);line-height:1.5}
+.chain-body .cd b{color:var(--ink-3);font-weight:600}
+.chain-item.walk .chain-body .cw,.chain-item.wait .chain-body .cw{font-weight:500;color:var(--ink-3);font-size:14px}
+
+/* notes */
+.planner-notes{padding:0 24px 26px}
+.pnote{display:flex;gap:12px;align-items:flex-start;padding:13px 16px;border-radius:8px;font-size:13.5px;line-height:1.55;margin-top:10px}
+.pnote .pi{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:1px}
+.pnote.warn{background:var(--warn-bg);border:1px solid color-mix(in srgb,var(--warn-3) 30%,var(--rule))}
+.pnote.warn .pi{background:var(--warn-soft);color:var(--warn)}
+.pnote.bad{background:var(--danger-soft);border:1px solid color-mix(in srgb,var(--danger) 25%,var(--rule))}
+.pnote.bad .pi{background:var(--danger);color:#fff}
+.pnote.good{background:var(--accent-bg);border:1px solid color-mix(in srgb,var(--accent) 22%,var(--rule))}
+.pnote.good .pi{background:var(--accent-soft);color:var(--accent)}
+.pnote.info{background:var(--info-bg);border:1px solid color-mix(in srgb,var(--info) 20%,var(--rule))}
+.pnote.info .pi{background:rgba(42,93,143,.14);color:var(--info)}
+.pnote div:last-child{color:var(--ink-2)}
+.pnote b{color:var(--ink)}
+
+/* ═══════════ COMPARE TABLE ═══════════ */
+.cmp{border:1.5px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--bg-card)}
+.cmp .r{display:grid;grid-template-columns:154px repeat(3,1fr);border-bottom:1px solid var(--rule-2)}
+.cmp .r:last-child{border-bottom:0}
+.cmp .r.head{background:#14161a}
+.cmp .c{padding:12px 15px;font-size:13.5px;color:var(--ink-2);border-right:1px solid var(--rule-2);display:flex;align-items:center;min-width:0}
+.cmp .c:last-child{border-right:0}
+.cmp .c.feature{font-family:var(--font-mono);font-size:11.5px;color:var(--ink);font-weight:700;background:var(--paper-2)}
+.cmp .r.head .c{color:#f5f1e8;font-weight:600;font-size:13.5px}
+.cmp .r.head .c.feature{background:#1e293b;color:#f5f1e8}
+.cmp .c.is-best{background:var(--ok-soft);color:var(--ok);font-weight:600}
+.cmp .c.is-bad{background:var(--danger-soft);color:var(--danger)}
+@media(max-width:820px){
+  .cmp .r{grid-template-columns:1fr}
+  .cmp .c{border-right:0;border-bottom:1px solid var(--rule-3)}
+  .cmp .c.feature{background:var(--paper-3)}
+  .cmp .r.head{display:none}
+  .cmp .c[data-h]::before{content:attr(data-h);font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-right:10px;min-width:70px;flex-shrink:0}
+}
+
+/* ═══════════ RISK CARDS ═══════════ */
+.risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.risk-card{background:var(--bg-card);border:1.5px solid var(--rule);border-left:5px solid var(--warn-3);border-radius:6px;padding:20px 22px}
+.risk-card.crit{border-left-color:var(--danger)}
+.risk-card .lvl{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;color:var(--warn-2);font-weight:700;margin-bottom:5px}
+.risk-card.crit .lvl{color:var(--danger)}
+.risk-card h3{font-size:16.5px;margin-bottom:8px}
+.risk-card .body{font-size:13.5px;color:var(--ink-3);line-height:1.6;margin-bottom:10px}
+.risk-card .mit{background:var(--paper-2);border-radius:5px;padding:10px 13px;font-size:12.5px;color:var(--ink-2);border-left:3px solid var(--accent);line-height:1.55}
+.risk-card .mit strong{color:var(--accent);font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;display:block;margin-bottom:3px}
+@media(max-width:880px){.risk-grid{grid-template-columns:1fr}}
+
+/* ═══════════ PHASE CARDS ═══════════ */
+.phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.phase-card{background:var(--bg-card);border:1.5px solid var(--rule);border-radius:12px;padding:24px 22px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.phase-card .ribbon{position:absolute;top:0;left:0;right:0;height:5px}
+.phase-card.p1 .ribbon{background:var(--danger)}
+.phase-card.p2 .ribbon{background:var(--warn-3)}
+.phase-card.p3 .ribbon{background:var(--accent)}
+.phase-card .ph-num{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;font-weight:700;color:var(--ink-3);margin-bottom:3px}
+.phase-card.p1 .ph-num{color:var(--danger)}
+.phase-card.p2 .ph-num{color:var(--warn-2)}
+.phase-card.p3 .ph-num{color:var(--accent)}
+.phase-card h3{font-size:19px;margin-bottom:3px}
+.phase-card .owner{font-size:12px;color:var(--ink-4);margin-bottom:14px;font-family:var(--font-mono)}
+.phase-card ul{margin:0;padding:0;list-style:none}
+.phase-card li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px dashed var(--rule);font-size:13px;color:var(--ink-2);line-height:1.5}
+.phase-card li:first-child{border-top:0;padding-top:0}
+.phase-card .ck{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--ink-3);flex-shrink:0;margin-top:3px}
+.phase-card li .it{font-weight:700;color:var(--ink);font-size:13px}
+.phase-card li .id{font-size:11.5px;color:var(--ink-4);display:block;margin-top:2px;line-height:1.5;font-family:var(--font-mono)}
+@media(max-width:880px){.phase-grid{grid-template-columns:1fr}}
+
+/* ═══════════ FOOTER ═══════════ */
+footer{background:#14161a;color:#f5f1e8;padding:52px 0 36px}
+footer .wrap{display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;padding-bottom:28px;border-bottom:1px solid #2a2d33}
+footer h3{font-size:21px;color:#f5f1e8;margin-bottom:10px}
+footer h3 .accent{color:var(--accent-3)}
+footer p{color:#9ca3af;font-size:13px}
+footer .col-title{font-family:var(--font-mono);font-size:10.5px;color:var(--accent-3);letter-spacing:.14em;font-weight:700;text-transform:uppercase;margin-bottom:10px}
+footer ul{margin:0;padding:0;list-style:none}
+footer li{font-size:12px;color:#d1d5db;padding:4px 0;font-family:var(--font-mono);line-height:1.5}
+footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space-between;gap:16px;font-family:var(--font-mono);font-size:10.5px;color:#6b7280;letter-spacing:.1em;text-transform:uppercase;flex-wrap:wrap}
+@media(max-width:880px){footer .wrap{grid-template-columns:1fr}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">360</div>
+      <div class="brand-text">
+        <b data-i18n="brand.title">台南練習騎</b>
+        <span data-i18n="brand.sub">2026/10/17–18</span>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#section-01" data-i18n="nav.s1">去程</a>
+      <a href="#section-02" data-i18n="nav.s2">回程規劃器</a>
+      <a href="#section-03" data-i18n="nav.s3">方案對照</a>
+      <a href="#section-04" data-i18n="nav.s4">限制與風險</a>
+      <a href="#section-05" data-i18n="nav.s5">購票清單</a>
+    </nav>
+    <div class="topbar-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="zh" class="is-active">中文</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="切換深淺色">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Training Ride · Return Planner</span></div>
+    <h1 data-i18n="hero.h1">台南練習騎<br/><span class="accent">回程方案</span>規劃器</h1>
+    <p class="lede" data-i18n="hero.lede">去程固定：<strong>福鄉匯 01:00 出發，207 km 騎到員林搭車進台南</strong>。回程才是變數 —— 台鐵還是高鐵、幾點走、花多少、四台車要不要拆輪。在下面選一選，整條動線就出來。</p>
+    <div class="summary-cards">
+      <div class="scard">
+        <div class="lbl" data-i18n="hero.c1.lbl">去程里程</div>
+        <div class="val" data-i18n="hero.c1.val">207 km</div>
+        <div class="sub" data-i18n="hero.c1.sub">福鄉匯 → 員林站</div>
+      </div>
+      <div class="scard">
+        <div class="lbl" data-i18n="hero.c2.lbl">回程方式</div>
+        <div class="val" data-i18n="hero.c2.val">3 種</div>
+        <div class="sub" data-i18n="hero.c2.sub">人車同行／攜車袋／高鐵</div>
+      </div>
+      <div class="scard">
+        <div class="lbl" data-i18n="hero.c3.lbl">車輛</div>
+        <div class="val" data-i18n="hero.c3.val">4 台</div>
+        <div class="sub" data-i18n="hero.c3.sub">額度門檻 = 4</div>
+      </div>
+      <div class="scard">
+        <div class="lbl" data-i18n="hero.c4.lbl">關鍵變數</div>
+        <div class="val" data-i18n="hero.c4.val">拆不拆輪</div>
+        <div class="sub" data-i18n="hero.c4.sub">高鐵強制拆前後輪</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── §01 去程 ───────── -->
+<section class="s" id="section-01">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">§ 01</div>
+      <h2 data-i18n="s1.title">去程（固定）</h2>
+      <div class="meta" data-i18n="s1.meta">Saturday 10/17 · 207 km</div>
+    </div>
+    <div class="fig" data-i18n="s1.fig">Fig. 01 · 去程時刻鏈　均速 25 km/h　<span style="color:var(--ink-5)">DRAWING-NO. TBA360-OUT-01</span></div>
+    <div class="leg-table">
+      <div class="leg-row head"><div class="lc">里程</div><div class="lc">時刻</div><div class="lc">地點</div><div class="lc note">備註</div></div>
+      <div class="leg-row night"><div class="lc km">0 km</div><div class="lc tm">01:00</div><div class="lc"><span class="place">福鄉匯</span>　八德區長興二路30號</div><div class="lc note">出發</div></div>
+      <div class="leg-row night"><div class="lc km">33 km</div><div class="lc tm">02:19</div><div class="lc">永安漁港　<span style="color:var(--ink-4)">接上比賽路線 45K</span></div><div class="lc note">接駁段結束</div></div>
+      <div class="leg-row night"><div class="lc km">43 km</div><div class="lc tm">02:42</div><div class="lc"><span class="place">新豐休息站</span>　停 10 分</div><div class="lc note">24h</div></div>
+      <div class="leg-row night"><div class="lc km">95 km</div><div class="lc tm">04:58</div><div class="lc"><span class="place">7-11 白沙屯</span>　停 10 分</div><div class="lc note">24h</div></div>
+      <div class="leg-row"><div class="lc km">121 km</div><div class="lc tm">06:11</div><div class="lc"><span class="place">大安休息站</span>　停 25 分・早餐</div><div class="lc note">日出 05:55</div></div>
+      <div class="leg-row"><div class="lc km">169 km</div><div class="lc tm">08:31</div><div class="lc"><span class="place">7-11 管興</span>　停 15 分</div><div class="lc note">24h</div></div>
+      <div class="leg-row"><div class="lc km">181 km</div><div class="lc tm">09:15</div><div class="lc"><span class="place">王功 福海宮</span>　CP2・停 10 分</div><div class="lc note">切出路線</div></div>
+      <div class="leg-row key"><div class="lc km">207 km</div><div class="lc tm">10:27</div><div class="lc"><span class="place">台鐵員林站</span>　內陸接駁 26.1 km</div><div class="lc note">23 km/h → 11:11</div></div>
+    </div>
+    <a class="maplink" id="mapLink" target="_blank" rel="noopener"
+       href="https://www.google.com/maps/dir/24.93225,121.28040/24.98710,121.02025/24.91581,120.97196/24.56976,120.71294/24.37636,120.59111/24.02710,120.41146/23.95203,120.33429/23.95939,120.56953/data=!4m2!4m1!3e9">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>
+        <span class="ml-t" data-i18n="map.t">在 Google 地圖開啟去程路線</span>
+        <span class="ml-s" data-i18n="map.s">8 個導航點 · 機車模式 · 203 km / 4h23</span>
+      </span>
+      <span class="ml-go">OPEN →</span>
+    </a>
+
+    <div class="pnote info" style="margin-top:14px">
+      <div class="pi">MAP</div>
+      <div>地圖是用 <b>福鄉匯 → 永安漁港 → 新豐 → 白沙屯 → 大安 → 管興 → 王功 → 員林站</b> 這 8 個點串的，Google 會在點與點之間自己走道路最佳解。因此它顯示 <b>203 km</b>，比 GPX 實測的 207 km 少 4 km —— 差在沿海幾段實際軌跡的彎被拉直了。導航可用，里程以 207 km 為準。</div>
+    </div>
+
+    <div class="pnote good" style="margin-top:10px">
+      <div class="pi">TRAIN</div>
+      <div><b>員林 → 臺南　自強 115 次　11:53 → 13:25</b>（人車同行，額度 9）。抵站 10:27 留 86 分鐘緩衝；掉到 23 km/h 的 11:11 也還有 42 分鐘。<br/>更早的 <b>109 次 11:02</b> 開（額度 10）只有 35 分緩衝，慢一點就錯過 —— 不建議賭。下車走 570 m 到休日行旅。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── §02 回程規劃器 ───────── -->
+<section class="s" id="section-02">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">§ 02</div>
+      <h2 data-i18n="s2.title">回程規劃器</h2>
+      <div class="meta" data-i18n="s2.meta">Sunday 10/18 · Interactive</div>
+    </div>
+    <div class="fig" data-i18n="s2.fig">Fig. 02 · 選方式 → 選班次 → 看完整動線　<span style="color:var(--ink-5)">NOT TO SCALE</span></div>
+
+    <div class="planner">
+      <div class="planner-controls">
+        <div class="ctl-label" data-i18n="ctl.mode">① 回程方式</div>
+        <div class="mode-grid" id="modeGrid" role="group" aria-label="回程方式"></div>
+        <div class="ctl-label" style="margin-top:22px" data-i18n="ctl.dep">② 班次</div>
+        <div class="dep-list" id="depList" role="group" aria-label="班次"></div>
+      </div>
+      <div class="planner-stats" id="pstats"></div>
+      <div class="chain" id="chain"></div>
+      <div class="planner-notes" id="pnotes"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── §03 方案對照 ───────── -->
+<section class="s" id="section-03">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">§ 03</div>
+      <h2 data-i18n="s3.title">方案對照</h2>
+      <div class="meta" data-i18n="s3.meta">Comparison · 4 bikes</div>
+    </div>
+    <div class="fig" data-i18n="s3.fig">Fig. 03 · 各方式最佳班次比較（綠＝該列最優）</div>
+    <div class="cmp">
+      <div class="r head"><div class="c feature">項目</div><div class="c">台鐵 人車同行</div><div class="c">台鐵 攜車袋</div><div class="c">高鐵</div></div>
+      <div class="r"><div class="c feature">代表班次</div><div class="c" data-h="人車同行">區間快 1006</div><div class="c" data-h="攜車袋">自強 136</div><div class="c" data-h="高鐵">0640 ＋ 沙崙線</div></div>
+      <div class="r"><div class="c feature">臺南出發</div><div class="c is-bad" data-h="人車同行">08:06　需提早退房</div><div class="c" data-h="攜車袋">16:26</div><div class="c is-best" data-h="高鐵">12:48</div></div>
+      <div class="r"><div class="c feature">到桃園</div><div class="c" data-h="人車同行">12:43</div><div class="c" data-h="攜車袋">19:26</div><div class="c" data-h="高鐵">14:09</div></div>
+      <div class="r"><div class="c feature">回到福鄉匯</div><div class="c is-best" data-h="人車同行">約 13:12</div><div class="c is-bad" data-h="攜車袋">約 20:10</div><div class="c" data-h="高鐵">約 15:13</div></div>
+      <div class="r"><div class="c feature">拆前後輪</div><div class="c is-best" data-h="人車同行">不用</div><div class="c is-bad" data-h="攜車袋">4 台都要</div><div class="c is-bad" data-h="高鐵">4 台都要</div></div>
+      <div class="r"><div class="c feature">末段騎乘</div><div class="c is-best" data-h="人車同行">8.6 km</div><div class="c is-best" data-h="攜車袋">8.6 km</div><div class="c is-bad" data-h="高鐵">14.6 km</div></div>
+      <div class="r"><div class="c feature">每人車資</div><div class="c is-best" data-h="人車同行">$798</div><div class="c" data-h="攜車袋">$826</div><div class="c is-bad" data-h="高鐵">$1,227</div></div>
+      <div class="r"><div class="c feature">4 人合計</div><div class="c is-best" data-h="人車同行">$3,192</div><div class="c" data-h="攜車袋">$3,304</div><div class="c is-bad" data-h="高鐵">$4,908</div></div>
+      <div class="r"><div class="c feature">額度風險</div><div class="c" data-h="人車同行">12 個，夠</div><div class="c is-best" data-h="攜車袋">無額度限制</div><div class="c" data-h="高鐵">看座位，非自行車額度</div></div>
+      <div class="r"><div class="c feature">購票</div><div class="c is-bad" data-h="人車同行">只能臨櫃・10/15 起</div><div class="c is-best" data-h="攜車袋">線上隨時</div><div class="c is-best" data-h="高鐵">線上隨時</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── §04 限制與風險 ───────── -->
+<section class="s" id="section-04">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">§ 04</div>
+      <h2 data-i18n="s4.title">限制與風險</h2>
+      <div class="meta" data-i18n="s4.meta">Constraints · Verified 2026-10-12</div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-card crit">
+        <div class="lvl">CRITICAL</div>
+        <h3>自強 138 的自行車額度已歸零</h3>
+        <div class="body">原本唯一能從臺南整車北上的對號班次（16:09 → 桃園 19:54）。10/12 當天從 3 掉到 1 再到 0，查詢已回「查無資料」。</div>
+        <div class="mit"><strong>替代</strong>四台一起人車同行只剩區間快 1006（額度 12）。1038 只有 2 個，裝不下。</div>
+      </div>
+      <div class="risk-card crit">
+        <div class="lvl">CRITICAL</div>
+        <h3>區間快不能線上訂，10/15 才開賣</h3>
+        <div class="body">台鐵規定：非對號列車未開放線上訂購，須至車站窗口，且限「乘車日（含當日）4 日內」。乘車日 10/18 往前推 → 10/15 起。</div>
+        <div class="mit"><strong>行動</strong>10/15 到任一台鐵車站窗口買，不必跑台南；桃園站、中壢站都可以。</div>
+      </div>
+      <div class="risk-card">
+        <div class="lvl">RULE</div>
+        <h3>高鐵明文要求拆前後輪</h3>
+        <div class="body">官方乘車須知：軟式攜車袋「需拆卸前/後輪並完整置入攜車袋內」，單邊 ≤150 cm、三邊和 ≤220 cm，每人限一件，須置於各車廂前後端大型行李空間。查驗不符得拒絕運送。</div>
+        <div class="mit"><strong>做法</strong>四個袋子分散訂不同車廂；單一車廂末端空間塞不下四台。出發前實際量一次尺寸。</div>
+      </div>
+      <div class="risk-card">
+        <div class="lvl">RULE</div>
+        <h3>台鐵攜車袋也幾乎等於要拆兩輪</h3>
+        <div class="body">台鐵條文沒明寫拆哪個輪，但同樣限單邊 150 cm、三邊和 220 cm。公路車只拆前輪約 245 cm 會超標，兩輪都拆才落在 215 左右。</div>
+        <div class="mit"><strong>結論</strong>「改搭台鐵就不用拆」是錯的 —— 真正不用拆的只有人車同行。</div>
+      </div>
+      <div class="risk-card">
+        <div class="lvl">TIMING</div>
+        <h3>區間快 1006 早於退房時間</h3>
+        <div class="body">08:06 發車，旅館 11:00 才退房。要搭這班必須提早退房，約 07:30 離開，週日早上在台南沒有任何行程空間。</div>
+        <div class="mit"><strong>換來</strong>12:43 到桃園、約 13:12 到家，比其他方案早好幾個小時，下午整個是自己的。</div>
+      </div>
+      <div class="risk-card">
+        <div class="lvl">COMFORT</div>
+        <h3>區間快是 4 小時 37 分的無對號座</h3>
+        <div class="body">非對號車沒有劃位，週日北上海線可能有站票旅客。騎完 207 km 隔天再坐／站四個半小時，不輕鬆。</div>
+        <div class="mit"><strong>緩解</strong>臺南是起站方向的早班車，上車時人少，搶位子相對容易。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── §05 購票清單 ───────── -->
+<section class="s" id="section-05">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">§ 05</div>
+      <h2 data-i18n="s5.title">購票行動清單</h2>
+      <div class="meta" data-i18n="s5.meta">Action Items</div>
+    </div>
+    <div class="phase-grid">
+      <div class="phase-card p1">
+        <div class="ribbon"></div>
+        <div class="ph-num">NOW · 10/12–13</div>
+        <h3>去程票</h3>
+        <div class="owner">線上・台鐵官網／e訂通</div>
+        <ul>
+          <li><div class="ck"></div><div><span class="it">自強 115 次 × 4（兩鐵人車同行）</span><span class="id">員林 11:53 → 臺南 13:25　額度 9</span></div></li>
+          <li><div class="ck"></div><div><span class="it">訂票次日 24:00 前付款</span><span class="id">逾期 6 次／月會被停權一個月</span></div></li>
+          <li><div class="ck"></div><div><span class="it">訂票後 2 日內取票</span><span class="id">車站窗口／售票機／超商</span></div></li>
+        </ul>
+      </div>
+      <div class="phase-card p2">
+        <div class="ribbon"></div>
+        <div class="ph-num">WED · 10/15</div>
+        <h3>回程票（若選區間快）</h3>
+        <div class="owner">臨櫃・任一台鐵車站</div>
+        <ul>
+          <li><div class="ck"></div><div><span class="it">區間快 1006 × 4 張自行車票</span><span class="id">臺南 08:06 → 桃園 12:43　額度 12</span></div></li>
+          <li><div class="ck"></div><div><span class="it">每人限購 1 張自行車票</span><span class="id">能否一人代買四張未明文，先打 0800-765-888 問</span></div></li>
+          <li><div class="ck"></div><div><span class="it">退票免手續費</span><span class="id">先買著，臨時改方案也不虧</span></div></li>
+        </ul>
+      </div>
+      <div class="phase-card p3">
+        <div class="ribbon"></div>
+        <div class="ph-num">ANYTIME</div>
+        <h3>備案</h3>
+        <div class="owner">線上・不限時間</div>
+        <ul>
+          <li><div class="ck"></div><div><span class="it">攜車袋搭任意自強</span><span class="id">不限額度、不限車次，但四台都要拆兩輪</span></div></li>
+          <li><div class="ck"></div><div><span class="it">高鐵 0640 等班次</span><span class="id">同樣要拆兩輪，且青埔到家還有 14.6 km</span></div></li>
+          <li><div class="ck"></div><div><span class="it">攜車袋務必帶著</span><span class="id">誤點／改班次時唯一能上任何列車的保險</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h3 data-i18n="footer.title">回程只有一個真正的取捨：<span class="accent">拆輪，還是早起</span></h3>
+      <p data-i18n="footer.sub">區間快 1006 讓四台車整車上路、最便宜、最早到家，代價是週日七點半就得離開旅館。其他每一個方案，都要四個人把前後輪拆下來再裝回去。</p>
+    </div>
+    <div>
+      <div class="col-title">DATA SOURCE</div>
+      <ul>
+        <li>台鐵 兩鐵自行車額度查詢</li>
+        <li>台鐵 列車時刻／票價查詢</li>
+        <li>台灣高鐵 時刻表與票價</li>
+        <li>Google Maps 機車路線</li>
+      </ul>
+    </div>
+    <div>
+      <div class="col-title">UNVERIFIED</div>
+      <ul>
+        <li>額度為 10/12 瞬時值</li>
+        <li>高鐵剩餘座位未查</li>
+        <li>一人代買 4 張自行車票</li>
+        <li>末段騎乘假設 18 km/h</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="meta">
+      <div>TBA360 · TRAINING RIDE · RETURN PLANNER</div>
+      <div>VERIFIED 2026-10-12</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.I18N = {
+  zh: {
+    "html.lang":"zh-Hant",
+    "doc.title":"台南練習騎 · 回程方案規劃器",
+    "brand.title":"台南練習騎","brand.sub":"2026/10/17–18",
+    "nav.s1":"去程","nav.s2":"回程規劃器","nav.s3":"方案對照","nav.s4":"限制與風險","nav.s5":"購票清單",
+    "hero.eyebrow":"Training Ride · Return Planner",
+    "hero.h1":"台南練習騎<br/><span class=\"accent\">回程方案</span>規劃器",
+    "hero.lede":"去程固定：<strong>福鄉匯 01:00 出發，207 km 騎到員林搭車進台南</strong>。回程才是變數 —— 台鐵還是高鐵、幾點走、花多少、四台車要不要拆輪。在下面選一選，整條動線就出來。",
+    "hero.c1.lbl":"去程里程","hero.c1.val":"207 km","hero.c1.sub":"福鄉匯 → 員林站",
+    "hero.c2.lbl":"回程方式","hero.c2.val":"3 種","hero.c2.sub":"人車同行／攜車袋／高鐵",
+    "hero.c3.lbl":"車輛","hero.c3.val":"4 台","hero.c3.sub":"額度門檻 = 4",
+    "hero.c4.lbl":"關鍵變數","hero.c4.val":"拆不拆輪","hero.c4.sub":"高鐵強制拆前後輪",
+    "s1.title":"去程（固定）","s1.meta":"Saturday 10/17 · 207 km",
+    "s1.fig":"Fig. 01 · 去程時刻鏈　均速 25 km/h　<span style=\"color:var(--ink-5)\">DRAWING-NO. TBA360-OUT-01</span>",
+    "s2.title":"回程規劃器","s2.meta":"Sunday 10/18 · Interactive",
+    "s2.fig":"Fig. 02 · 選方式 → 選班次 → 看完整動線　<span style=\"color:var(--ink-5)\">NOT TO SCALE</span>",
+    "s3.title":"方案對照","s3.meta":"Comparison · 4 bikes",
+    "s3.fig":"Fig. 03 · 各方式最佳班次比較（綠＝該列最優）",
+    "s4.title":"限制與風險","s4.meta":"Constraints · Verified 2026-10-12",
+    "s5.title":"購票行動清單","s5.meta":"Action Items",
+    "ctl.mode":"① 回程方式","ctl.dep":"② 班次",
+    "map.t":"在 Google 地圖開啟去程路線","map.s":"8 個導航點 · 機車模式 · 203 km / 4h23",
+    "footer.title":"回程只有一個真正的取捨：<span class=\"accent\">拆輪，還是早起</span>",
+    "footer.sub":"區間快 1006 讓四台車整車上路、最便宜、最早到家，代價是週日七點半就得離開旅館。其他每一個方案，都要四個人把前後輪拆下來再裝回去。"
+  },
+  en: {
+    "html.lang":"en",
+    "doc.title":"Tainan Training Ride · Return Planner",
+    "brand.title":"Tainan Training Ride","brand.sub":"2026/10/17–18",
+    "nav.s1":"Outbound","nav.s2":"Planner","nav.s3":"Compare","nav.s4":"Risks","nav.s5":"Tickets",
+    "hero.eyebrow":"Training Ride · Return Planner",
+    "hero.h1":"Tainan Training Ride<br/><span class=\"accent\">Return Trip</span> Planner",
+    "hero.lede":"The outbound leg is fixed: <strong>leave Fuxianghui at 01:00, ride 207 km to Yuanlin, train into Tainan</strong>. The return is the open question — TRA or HSR, what time, what it costs, and whether four bikes get their wheels pulled. Pick below and the whole chain falls out.",
+    "hero.c1.lbl":"Outbound","hero.c1.val":"207 km","hero.c1.sub":"Fuxianghui → Yuanlin",
+    "hero.c2.lbl":"Return modes","hero.c2.val":"3","hero.c2.sub":"Roll-on / bagged / HSR",
+    "hero.c3.lbl":"Bikes","hero.c3.val":"4","hero.c3.sub":"quota threshold = 4",
+    "hero.c4.lbl":"Key variable","hero.c4.val":"Wheels off?","hero.c4.sub":"HSR mandates both wheels",
+    "s1.title":"Outbound (fixed)","s1.meta":"Saturday 10/17 · 207 km",
+    "s1.fig":"Fig. 01 · Outbound chain at 25 km/h　<span style=\"color:var(--ink-5)\">DRAWING-NO. TBA360-OUT-01</span>",
+    "s2.title":"Return Planner","s2.meta":"Sunday 10/18 · Interactive",
+    "s2.fig":"Fig. 02 · Pick mode → pick departure → read the chain　<span style=\"color:var(--ink-5)\">NOT TO SCALE</span>",
+    "s3.title":"Comparison","s3.meta":"Comparison · 4 bikes",
+    "s3.fig":"Fig. 03 · Best option per mode (green = best in row)",
+    "s4.title":"Constraints & Risks","s4.meta":"Constraints · Verified 2026-10-12",
+    "s5.title":"Ticket Actions","s5.meta":"Action Items",
+    "ctl.mode":"① Return mode","ctl.dep":"② Departure",
+    "map.t":"Open the outbound route in Google Maps","map.s":"8 waypoints · scooter mode · 203 km / 4h23",
+    "footer.title":"One real trade-off: <span class=\"accent\">pull the wheels, or get up early</span>",
+    "footer.sub":"Local Express 1006 takes all four bikes intact, costs least and gets you home first — but you leave the hotel at 07:30. Every other option means four people stripping and refitting both wheels."
+  }
+};
+</script>
+
+<script>
+(function(){
+/* ═════════ DATA (verified 2026-10-12) ═════════ */
+var HOTEL_WALK = 8;        // 休日行旅 → 台南車站 570 m
+var BUF_BOARD  = 15;       // 進站／月台／牽車緩衝
+var BUF_HSR    = 12;       // 沙崙站 → 高鐵閘口最小轉乘
+var T_PACK     = 20;       // 拆車裝袋
+var T_BUILD    = 15;       // 到站組裝
+var RIDE_KMH   = 18;       // 市區末段均速
+var KM_TRA     = 8.6;      // 台鐵桃園站 → 福鄉匯
+var KM_HSR     = 14.6;     // 高鐵桃園站 → 福鄉匯
+var CHECKOUT   = 11*60;    // 11:00 退房
+
+var SHALUN = [ // 臺南 → 沙崙（高鐵台南站）$37
+  {no:"3723",dep:"10:21",arr:"10:45"},{no:"3725",dep:"11:03",arr:"11:26"},
+  {no:"3727",dep:"11:39",arr:"12:03"},{no:"3731",dep:"12:02",arr:"12:26"},
+  {no:"3733",dep:"12:24",arr:"12:55"},{no:"3735",dep:"12:55",arr:"13:18"},
+  {no:"3737",dep:"13:36",arr:"14:00"},{no:"3741",dep:"14:07",arr:"14:31"}
+];
+
+var MODES = [
+  { id:"roll", name:"台鐵・人車同行", nameEn:"TRA · roll-on",
+    sub:"整車上車，不摺不裝袋", subEn:"Whole bike, no bagging",
+    tool:"不用拆輪", toolEn:"No wheels off", toolOk:true,
+    deps:[
+      {id:"r1",label:"08:06",train:"區間快 1006",dep:"08:06",arr:"12:43",dur:"4h37",quota:12,fare:532,bike:266,via:"海線直達"},
+      {id:"r2",label:"15:50",train:"區間快 1038",dep:"15:50",arr:"20:56",dur:"5h06",quota:2,fare:532,bike:266,via:"海線直達"},
+      {id:"r3",label:"16:09",train:"自強 138",dep:"16:09",arr:"19:54",dur:"3h45",quota:0,fare:826,bike:413,via:"山線"}
+    ]},
+  { id:"bag", name:"台鐵・攜車袋", nameEn:"TRA · bagged",
+    sub:"自強號，不限額度", subEn:"Any Tze-Chiang, no quota",
+    tool:"要拆前後輪", toolEn:"Both wheels off", toolOk:false,
+    deps:[
+      {id:"b1",label:"11:45",train:"自強",dep:"11:45",arr:"15:15",dur:"3h30",fare:826,bike:0,via:"山線"},
+      {id:"b2",label:"12:22",train:"自強",dep:"12:22",arr:"16:18",dur:"3h56",fare:826,bike:0,via:"山線"},
+      {id:"b3",label:"12:34",train:"自強 122",dep:"12:34",arr:"16:32",dur:"3h58",fare:826,bike:0,via:"山線"},
+      {id:"b4",label:"13:25",train:"自強 176",dep:"13:25",arr:"17:16",dur:"3h51",fare:826,bike:0,via:"山線"},
+      {id:"b5",label:"14:06",train:"自強 128",dep:"14:06",arr:"17:51",dur:"3h45",fare:826,bike:0,via:"山線"},
+      {id:"b6",label:"15:06",train:"自強 134",dep:"15:06",arr:"19:09",dur:"4h03",fare:826,bike:0,via:"山線"},
+      {id:"b7",label:"16:09",train:"自強 138",dep:"16:09",arr:"19:54",dur:"3h45",fare:826,bike:0,via:"山線"},
+      {id:"b8",label:"16:26",train:"自強 136",dep:"16:26",arr:"19:26",dur:"3h00",fare:826,bike:0,via:"全日最快"}
+    ]},
+  { id:"hsr", name:"高鐵（先搭沙崙線）", nameEn:"HSR (via Shalun line)",
+    sub:"台南車站 → 沙崙 → 高鐵", subEn:"Tainan → Shalun → HSR",
+    tool:"要拆前後輪", toolEn:"Both wheels off", toolOk:false,
+    deps:[
+      {id:"h1",label:"11:13",train:"高鐵 0630",dep:"11:13",arr:"12:36",dur:"1h23",fare:1190,bike:0,via:"標準車廂"},
+      {id:"h2",label:"11:41",train:"高鐵 0822",dep:"11:41",arr:"13:18",dur:"1h37",fare:1190,bike:0,via:"標準車廂"},
+      {id:"h3",label:"11:48",train:"高鐵 1634",dep:"11:48",arr:"13:09",dur:"1h21",fare:1190,bike:0,via:"標準車廂"},
+      {id:"h4",label:"12:13",train:"高鐵 0636",dep:"12:13",arr:"13:36",dur:"1h23",fare:1190,bike:0,via:"標準車廂"},
+      {id:"h5",label:"12:41",train:"高鐵 0826",dep:"12:41",arr:"14:18",dur:"1h37",fare:1190,bike:0,via:"標準車廂"},
+      {id:"h6",label:"12:48",train:"高鐵 0640",dep:"12:48",arr:"14:09",dur:"1h21",fare:1190,bike:0,via:"最快班次"},
+      {id:"h7",label:"13:13",train:"高鐵 0642",dep:"13:13",arr:"14:36",dur:"1h23",fare:1190,bike:0,via:"標準車廂"},
+      {id:"h8",label:"13:41",train:"高鐵 0830",dep:"13:41",arr:"15:18",dur:"1h37",fare:1190,bike:0,via:"標準車廂"}
+    ]}
+];
+
+/* ═════════ HELPERS ═════════ */
+function m2(s){var p=s.split(":");return (+p[0])*60+(+p[1]);}
+function hm(m){m=Math.round(m);var d=m<0?"−":"";m=Math.abs(m);return d+String(Math.floor(m/60)%24).padStart(2,"0")+":"+String(m%60).padStart(2,"0");}
+function dur(m){m=Math.round(m);var h=Math.floor(m/60),x=m%60;return h?h+" 小時 "+(x?x+" 分":""):x+" 分";}
+function money(n){return "$"+n.toLocaleString("en-US");}
+function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+
+var state={mode:"roll",dep:"r1"};
+
+/* ═════════ BUILD ITINERARY ═════════ */
+function build(){
+  var mode=MODES.filter(function(m){return m.id===state.mode;})[0];
+  var d=mode.deps.filter(function(x){return x.id===state.dep;})[0];
+  if(!d) d=mode.deps[0];
+
+  var steps=[], notes=[], feeder=null;
+  var bikeFare=d.bike||0, baseFare=d.fare, extra=0;
+  var needWheels=!mode.toolOk;
+  var rideKm = mode.id==="hsr" ? KM_HSR : KM_TRA;
+  var rideMin = rideKm/RIDE_KMH*60;
+
+  // --- work backwards to hotel departure ---
+  var boardT = m2(d.dep);
+  var leaveHotel;
+  if(mode.id==="hsr"){
+    // pick latest Shalun train arriving >= BUF_HSR before HSR departure
+    for(var i=0;i<SHALUN.length;i++){
+      if(m2(SHALUN[i].arr) <= boardT - BUF_HSR) feeder = SHALUN[i];
+    }
+    if(!feeder){ feeder = SHALUN[0]; }
+    extra = 37;
+    leaveHotel = m2(feeder.dep) - HOTEL_WALK - BUF_BOARD;
+  } else {
+    leaveHotel = boardT - HOTEL_WALK - BUF_BOARD;
+  }
+  var wakeT = leaveHotel - (needWheels ? T_PACK : 0);
+
+  // --- chain ---
+  if(needWheels){
+    steps.push({t:hm(wakeT),cls:"wait",w:"旅館拆車 · 裝袋",d:"前後輪都拆，四台 · 抓 "+T_PACK+" 分"});
+  }
+  steps.push({t:hm(leaveHotel),cls:"",w:"休日公園台南旅店 出發",d:"台南市北區公園路128號"});
+  steps.push({t:hm(leaveHotel+HOTEL_WALK),cls:"walk",w:"步行 570 m 到台南車站",d:"約 "+HOTEL_WALK+" 分　＋進站緩衝 "+BUF_BOARD+" 分"});
+
+  if(mode.id==="hsr"){
+    steps.push({t:feeder.dep,cls:"",w:"沙崙線 區間 "+feeder.no,d:"臺南 "+feeder.dep+" → 沙崙 "+feeder.arr+"　<b>$37</b>"});
+    var wait = boardT - m2(feeder.arr);
+    steps.push({t:feeder.arr,cls:"wait",w:"沙崙站 → 高鐵台南站",d:"同站轉乘，候車 "+wait+" 分"+(wait<15?"　（帶四個車袋偏趕）":"")});
+    steps.push({t:d.dep,cls:"",w:d.train,d:"台南 "+d.dep+" → 桃園 "+d.arr+"　"+d.dur+"　<b>"+money(d.fare)+"</b>"});
+  } else {
+    steps.push({t:d.dep,cls:"",w:d.train,d:"臺南 "+d.dep+" → 桃園 "+d.arr+"　"+d.dur+"　<b>"+money(d.fare)+(bikeFare?" ＋自行車 "+money(bikeFare):"")+"</b>"});
+  }
+
+  var atStation = m2(d.arr);
+  var t = atStation;
+  if(needWheels){
+    steps.push({t:hm(t),cls:"wait",w:"站內組裝自行車",d:"裝回前後輪 · 抓 "+T_BUILD+" 分"});
+    t += T_BUILD;
+  }
+  steps.push({t:hm(t),cls:"ride",w:"騎 "+rideKm.toFixed(1)+" km 回家",d:(mode.id==="hsr"?"高鐵桃園站（青埔）":"台鐵桃園站")+" → 福鄉匯　假設 "+RIDE_KMH+" km/h ≈ "+Math.round(rideMin)+" 分"});
+  t += rideMin;
+  steps.push({t:hm(t),cls:"end",w:"福鄉匯　抵達",d:"八德區長興二路30號"});
+
+  var total = t - wakeT;
+  var perHead = baseFare + bikeFare + extra;
+
+  /* --- notes --- */
+  if(d.quota===0){
+    notes.push({k:"bad",i:"SOLD OUT",h:"<b>這班的自行車額度已經是 0</b>，四台一台都上不去。留在這裡只是當對照用。"});
+  } else if(typeof d.quota==="number" && d.quota<4){
+    notes.push({k:"bad",i:"QUOTA "+d.quota,h:"額度只剩 <b>"+d.quota+" 個</b>，裝不下四台。要嘛拆成兩批走不同班次，要嘛改方案。"});
+  } else if(typeof d.quota==="number"){
+    notes.push({k:"good",i:"QUOTA "+d.quota,h:"自行車額度 <b>"+d.quota+" 個</b>，四台放得下。整車推上指定車廂的駐車架，<b>完全不用拆輪</b>。"});
+  }
+
+  if(leaveHotel < CHECKOUT){
+    notes.push({k:"warn",i:"EARLY",h:"要在 <b>"+hm(leaveHotel)+"</b> 離開旅館，比 11:00 的退房時間早 <b>"+dur(CHECKOUT-leaveHotel)+"</b>。得前一晚先跟櫃檯講，週日早上台南沒有行程空間。"});
+  }
+
+  if(needWheels){
+    notes.push({k:"warn",i:"WHEELS",h:"四台都要<b>拆前後輪</b>裝袋。表上已經含拆裝各 "+T_PACK+"／"+T_BUILD+" 分，但那是四個人同時動手的樂觀值。"});
+  }
+
+  if(mode.id==="hsr"){
+    notes.push({k:"info",i:"HSR RULE",h:"高鐵攜車袋每人限一件，須放各車廂前後端大型行李空間 —— <b>四個袋子要分散訂在不同車廂</b>，單一車廂塞不下。尺寸限單邊 150 cm、三邊和 220 cm。"});
+    notes.push({k:"info",i:"LAST LEG",h:"青埔到福鄉匯是 <b>14.6 km</b>，比台鐵桃園站的 8.6 km 多 6 km —— 拆完車、裝回去，還要多騎這段。"});
+  }
+
+  if(mode.id==="roll" && d.id==="r1"){
+    notes.push({k:"warn",i:"COUNTER",h:"區間快<b>不能線上訂</b>，只能臨櫃，而且限乘車日前 4 日內 → <b>10/15 起</b>才買得到。任一台鐵車站都可以，不必跑台南。"});
+    notes.push({k:"info",i:"SEATING",h:"非對號車沒有劃位，4 小時 37 分可能要站。臺南是早班車、上車人少，搶位子相對容易。"});
+  }
+  if(mode.id==="bag"){
+    notes.push({k:"good",i:"NO QUOTA",h:"攜車袋視同隨身行李，<b>所有列車皆可乘車、不限車廂、免費</b>，也沒有額度問題 —— 班次完全自由。"});
+  }
+
+  return {mode:mode,dep:d,steps:steps,notes:notes,total:total,perHead:perHead,
+          wake:wakeT,home:t,needWheels:needWheels,rideKm:rideKm};
+}
+
+/* ═════════ RENDER ═════════ */
+function renderModes(){
+  var g=document.getElementById("modeGrid"); g.innerHTML="";
+  MODES.forEach(function(m){
+    var b=el("button","mode-btn");
+    b.type="button";
+    b.setAttribute("aria-pressed", m.id===state.mode ? "true":"false");
+    b.innerHTML='<div class="mt">'+m.name+'</div><div class="ms">'+m.sub+'</div>'+
+                '<span class="tool'+(m.toolOk?" no":"")+'">'+m.tool+'</span>';
+    b.addEventListener("click",function(){
+      state.mode=m.id; state.dep=m.deps[0].id; renderAll();
+    });
+    g.appendChild(b);
+  });
+}
+function renderDeps(){
+  var mode=MODES.filter(function(m){return m.id===state.mode;})[0];
+  var g=document.getElementById("depList"); g.innerHTML="";
+  mode.deps.forEach(function(d){
+    var b=el("button","dep-btn"); b.type="button";
+    b.setAttribute("aria-pressed", d.id===state.dep ? "true":"false");
+    var q="";
+    if(typeof d.quota==="number"){
+      var cls = d.quota===0?"none":(d.quota<4?"low":"good");
+      q='<span class="dq '+cls+'">'+(d.quota===0?"額滿":"餘 "+d.quota)+'</span>';
+    }
+    b.innerHTML=q+'<div class="dt">'+d.label+'</div><div class="dn">'+d.train+' · '+d.dur+'</div>';
+    if(d.quota===0) b.disabled=false; // 仍可點選，當對照
+    b.addEventListener("click",function(){ state.dep=d.id; renderAll(); });
+    g.appendChild(b);
+  });
+}
+function renderResult(){
+  var r=build();
+  var s=document.getElementById("pstats"); s.innerHTML="";
+  [["到家時間",hm(r.home),"福鄉匯",true],
+   ["門到門總耗時",dur(r.total).replace(" 小時","h").replace(" 分","m"),"含拆裝與末段騎乘",false],
+   ["每人車資",money(r.perHead),"全票",false],
+   ["4 人合計",money(r.perHead*4),"不含飲食",false],
+   ["拆前後輪",r.needWheels?"要":"不用",r.needWheels?"四台 × 兩端":"整車上車",false]
+  ].forEach(function(x){
+    var d=el("div","pstat"+(x[3]?" hl":""));
+    d.innerHTML='<div class="k">'+x[0]+'</div><div class="v">'+x[1]+'</div><div class="u">'+x[2]+'</div>';
+    s.appendChild(d);
+  });
+
+  var c=document.getElementById("chain"); c.innerHTML="";
+  r.steps.forEach(function(st){
+    var it=el("div","chain-item "+(st.cls||""));
+    it.innerHTML='<div class="ct'+(st.cls==="walk"||st.cls==="wait"?" dim":"")+'">'+st.t+'</div>'+
+                 '<div class="chain-rail"><span class="line"></span><span class="node"></span></div>'+
+                 '<div class="chain-body"><div class="cw">'+st.w+'</div><div class="cd">'+st.d+'</div></div>';
+    c.appendChild(it);
+  });
+
+  var n=document.getElementById("pnotes"); n.innerHTML="";
+  r.notes.forEach(function(x){
+    var d=el("div","pnote "+x.k);
+    d.innerHTML='<div class="pi">'+x.i+'</div><div>'+x.h+'</div>';
+    n.appendChild(d);
+  });
+}
+function renderAll(){ renderModes(); renderDeps(); renderResult(); }
+
+/* ═════════ CHROME ═════════ */
+var LANG = localStorage.getItem("tba-lang")==="en" ? "en":"zh";
+function applyI18n(){
+  var dict=window.I18N[LANG];
+  document.documentElement.lang=dict["html.lang"];
+  document.title=dict["doc.title"];
+  document.querySelectorAll("[data-i18n]").forEach(function(e){
+    var k=e.getAttribute("data-i18n");
+    if(dict[k]!==undefined) e.innerHTML=dict[k];
+  });
+  document.querySelectorAll(".lang-toggle button").forEach(function(b){
+    b.classList.toggle("is-active", b.dataset.lang===LANG);
+  });
+}
+document.querySelectorAll(".lang-toggle button").forEach(function(b){
+  b.addEventListener("click",function(){
+    LANG=b.dataset.lang; localStorage.setItem("tba-lang",LANG); applyI18n();
+  });
+});
+
+var SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
+var MOON='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+var icon=document.getElementById("themeIcon");
+function applyTheme(t){ document.documentElement.setAttribute("data-theme",t); icon.innerHTML = t==="dark"?SUN:MOON; }
+var saved=localStorage.getItem("tba-theme");
+applyTheme(saved ? saved : (window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));
+document.getElementById("themeToggle").addEventListener("click",function(){
+  var next=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";
+  applyTheme(next); localStorage.setItem("tba-theme",next);
+});
+
+var navLinks=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var secs=navLinks.map(function(a){return document.querySelector(a.getAttribute("href"));}).filter(Boolean);
+function spy(){
+  var y=window.scrollY+130, active=secs[0];
+  secs.forEach(function(s){ if(s.offsetTop<=y) active=s; });
+  navLinks.forEach(function(a){
+    var on = active && a.getAttribute("href")==="#"+active.id;
+    a.classList.toggle("active",on);
+    if(on) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+  });
+}
+window.addEventListener("scroll",spy,{passive:true});
+navLinks.forEach(function(a){
+  a.addEventListener("click",function(e){
+    var t=document.querySelector(a.getAttribute("href"));
+    if(t){ e.preventDefault(); window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-72,behavior:"smooth"}); }
+  });
+});
+
+applyI18n(); renderAll(); spy();
+})();
+</script>
+
+</body>
+</html>

@@ -130,16 +130,31 @@ section[id]{scroll-margin-top:84px}
 .leg-row.key{background:var(--accent-soft)}
 .lc{padding:11px 14px;font-size:14px;color:var(--ink-2);border-right:1px solid var(--rule-2);min-width:0;overflow:hidden}
 .lc:last-child{border-right:0}
-.lc.km,.lc.tm{font-family:var(--font-mono);font-weight:600;color:var(--ink)}
+.lc.km,.lc.tm{font-family:var(--font-mono);font-weight:600;color:var(--ink);white-space:nowrap}
 .lc.note{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-4);text-align:right}
 .lc .place{font-weight:600;color:var(--ink)}
+.lc .gap{display:block;font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--accent);margin-top:2px;letter-spacing:.02em}
+.leg-row.head .lc .gap{color:#9ca3af}
 @media(max-width:720px){
-  .leg-row{grid-template-columns:68px 74px 1fr}
+  .leg-row{grid-template-columns:82px 62px 1fr}
+  .lc{padding:10px 9px;font-size:13px}
   .lc.note{display:none}
 }
 
 .route-grid{grid-template-columns:1fr 1fr!important}
 @media(max-width:820px){.route-grid{grid-template-columns:1fr!important}}
+
+/* ═══════════ VARIABLE CONTROLS ═══════════ */
+.varbox{display:grid;grid-template-columns:1fr 1fr auto;gap:22px;align-items:end;padding:18px 22px;border:1.5px solid var(--rule);border-radius:12px;background:var(--bg-card)}
+.varctl{min-width:0}
+.vl{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+.vl span{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-4);font-weight:600}
+.vv{font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--accent);letter-spacing:-.01em}
+.varctl input[type=range]{width:100%;margin:0;accent-color:var(--accent);height:22px;cursor:pointer}
+.vt{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10px;color:var(--ink-5);margin-top:2px}
+.varreset{background:var(--paper-2);border:1px solid var(--rule);border-radius:8px;padding:9px 14px;font-family:var(--font-mono);font-size:11px;color:var(--ink-3);cursor:pointer;white-space:nowrap;transition:.15s}
+.varreset:hover{color:var(--ink);border-color:var(--ink-4)}
+@media(max-width:820px){.varbox{grid-template-columns:1fr;gap:18px}.varreset{justify-self:start}}
 
 /* ═══════════ MAP LINK ═══════════ */
 .maplink{display:inline-flex;align-items:center;gap:12px;margin-top:18px;padding:13px 20px;border:1.5px solid var(--rule);border-radius:10px;background:var(--bg-card);color:var(--ink);text-decoration:none;transition:.15s;font-size:14px}
@@ -323,12 +338,12 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
   <div class="wrap">
     <div class="eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Training Ride · Return Planner</span></div>
     <h1 data-i18n="hero.h1">台南練習騎<br/><span class="accent">回程方案</span>規劃器</h1>
-    <p class="lede" data-i18n="hero.lede">去程固定：<strong>福鄉匯 01:00 出發，207 km 騎到員林搭車進台南</strong>。回程才是變數 —— 台鐵還是高鐵、幾點走、花多少、四台車要不要拆輪。在下面選一選，整條動線就出來。</p>
+    <p class="lede" data-i18n="hero.lede"><strong>楊梅車站 01:00 出發</strong>，接 20.7 km 上比賽路線。終點挑 4 個、回程挑 3 種 —— 車停楊梅，火車也回楊梅，下車就是車。在下面選一選，整條動線、費用、拆不拆輪就出來。</p>
     <div class="summary-cards">
       <div class="scard">
         <div class="lbl" data-i18n="hero.c1.lbl">去程里程</div>
-        <div class="val" data-i18n="hero.c1.val">207 / 268 km</div>
-        <div class="sub" data-i18n="hero.c1.sub">員林站 ／ 嘉義站</div>
+        <div class="val" data-i18n="hero.c1.val">185–283 km</div>
+        <div class="sub" data-i18n="hero.c1.sub">楊梅出發 · 4 個終點</div>
       </div>
       <div class="scard">
         <div class="lbl" data-i18n="hero.c2.lbl">回程方式</div>
@@ -355,12 +370,28 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
     <div class="section-head">
       <div class="num">§ 01</div>
       <h2 data-i18n="s1.title">去程路線</h2>
-      <div class="meta" data-i18n="s1.meta">Saturday 10/17 · 2 options</div>
+      <div class="meta" data-i18n="s1.meta">Saturday 10/17 · 4 options</div>
     </div>
     <div class="ctl-label" style="margin-bottom:10px" data-i18n="ctl.route">① 去程終點</div>
     <div class="mode-grid route-grid" id="routeGrid" role="group" aria-label="去程路線"></div>
 
-    <div class="fig" id="routeFig" style="margin-top:26px"></div>
+    <div class="ctl-label" style="margin-top:22px;margin-bottom:10px" data-i18n="ctl.var">② 出發時間 × 均速</div>
+    <div class="varbox">
+      <div class="varctl">
+        <div class="vl"><span>出發時間</span><output id="startOut" class="vv">01:00</output></div>
+        <input type="range" id="startRange" min="-60" max="300" step="15" value="60" aria-label="出發時間">
+        <div class="vt"><span>23:00</span><span>01:00</span><span>05:00</span></div>
+      </div>
+      <div class="varctl">
+        <div class="vl"><span>移動均速</span><output id="speedOut" class="vv">25.0 km/h</output></div>
+        <input type="range" id="speedRange" min="18" max="32" step="0.5" value="25" aria-label="均速">
+        <div class="vt"><span>18</span><span>25</span><span>32</span></div>
+      </div>
+      <button type="button" class="varreset" id="varReset">重設 01:00 / 25</button>
+    </div>
+    <div id="trainCheck"></div>
+
+    <div class="fig" id="routeFig" style="margin-top:22px"></div>
     <div class="leg-table" id="routeTable"></div>
     <a class="maplink" id="mapLink" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -408,14 +439,13 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
     <div class="fig" data-i18n="s3.fig">Fig. 03 · 各方式最佳班次比較（綠＝該列最優）</div>
     <div class="cmp">
       <div class="r head"><div class="c feature">項目</div><div class="c">台鐵 人車同行</div><div class="c">台鐵 攜車袋</div><div class="c">高鐵</div></div>
-      <div class="r"><div class="c feature">代表班次</div><div class="c" data-h="人車同行">區間快 1006</div><div class="c" data-h="攜車袋">自強 136</div><div class="c" data-h="高鐵">0640 ＋ 沙崙線</div></div>
-      <div class="r"><div class="c feature">臺南出發</div><div class="c is-bad" data-h="人車同行">08:06　需提早退房</div><div class="c" data-h="攜車袋">16:26</div><div class="c is-best" data-h="高鐵">12:48</div></div>
-      <div class="r"><div class="c feature">到桃園</div><div class="c" data-h="人車同行">12:43</div><div class="c" data-h="攜車袋">19:26</div><div class="c" data-h="高鐵">14:09</div></div>
-      <div class="r"><div class="c feature">回到福鄉匯</div><div class="c is-best" data-h="人車同行">約 13:12</div><div class="c is-bad" data-h="攜車袋">約 20:10</div><div class="c" data-h="高鐵">約 15:13</div></div>
+      <div class="r"><div class="c feature">代表班次</div><div class="c" data-h="人車同行">區間快 1006</div><div class="c" data-h="攜車袋">自強 11:45</div><div class="c" data-h="高鐵">0640 ＋ 沙崙線</div></div>
+      <div class="r"><div class="c feature">臺南出發</div><div class="c is-bad" data-h="人車同行">08:06　需提早退房</div><div class="c" data-h="攜車袋">11:45</div><div class="c is-best" data-h="高鐵">12:48</div></div>
+      <div class="r"><div class="c feature">回到楊梅</div><div class="c is-best" data-h="人車同行">12:21</div><div class="c is-bad" data-h="攜車袋">15:37</div><div class="c" data-h="高鐵">15:17</div></div>
       <div class="r"><div class="c feature">拆前後輪</div><div class="c is-best" data-h="人車同行">不用</div><div class="c is-bad" data-h="攜車袋">4 台都要</div><div class="c is-bad" data-h="高鐵">4 台都要</div></div>
-      <div class="r"><div class="c feature">末段騎乘</div><div class="c is-best" data-h="人車同行">8.6 km</div><div class="c is-best" data-h="攜車袋">8.6 km</div><div class="c is-bad" data-h="高鐵">14.6 km</div></div>
-      <div class="r"><div class="c feature">每人車資</div><div class="c is-best" data-h="人車同行">$798</div><div class="c" data-h="攜車袋">$826</div><div class="c is-bad" data-h="高鐵">$1,227</div></div>
-      <div class="r"><div class="c feature">4 人合計</div><div class="c is-best" data-h="人車同行">$3,192</div><div class="c" data-h="攜車袋">$3,304</div><div class="c is-bad" data-h="高鐵">$4,908</div></div>
+      <div class="r"><div class="c feature">最後一哩</div><div class="c is-best" data-h="人車同行">下車就是停車場</div><div class="c" data-h="攜車袋">中壢轉區間車 11 分</div><div class="c is-bad" data-h="高鐵">組裝＋騎 15.8 km</div></div>
+      <div class="r"><div class="c feature">每人車資</div><div class="c is-best" data-h="人車同行">$753</div><div class="c" data-h="攜車袋">$825</div><div class="c is-bad" data-h="高鐵">$1,227</div></div>
+      <div class="r"><div class="c feature">4 人合計</div><div class="c is-best" data-h="人車同行">$3,012</div><div class="c" data-h="攜車袋">$3,300</div><div class="c is-bad" data-h="高鐵">$4,908</div></div>
       <div class="r"><div class="c feature">額度風險</div><div class="c" data-h="人車同行">12 個，夠</div><div class="c is-best" data-h="攜車袋">無額度限制</div><div class="c" data-h="高鐵">看座位，非自行車額度</div></div>
       <div class="r"><div class="c feature">購票</div><div class="c is-bad" data-h="人車同行">只能臨櫃・10/15 起</div><div class="c is-best" data-h="攜車袋">線上隨時</div><div class="c is-best" data-h="高鐵">線上隨時</div></div>
     </div>
@@ -433,13 +463,13 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
     <div class="risk-grid">
       <div class="risk-card crit">
         <div class="lvl">CRITICAL</div>
-        <h3>自強 138 的自行車額度已歸零</h3>
-        <div class="body">原本唯一能從臺南整車北上的對號班次（16:09 → 桃園 19:54）。10/12 當天從 3 掉到 1 再到 0，查詢已回「查無資料」。</div>
-        <div class="mit"><strong>替代</strong>四台一起人車同行只剩區間快 1006（額度 12）。1038 只有 2 個，裝不下。</div>
+        <h3>臺南 → 楊梅沒有自強號</h3>
+        <div class="body">07:30–17:00 的直達班次只有區間快 1006／1038 和莒光 554。對號人車同行的 7 個班次也沒有一班停楊梅 —— 等於回程只能押在區間快 1006 上（額度 12）。1038 只有 2 個額度，裝不下四台。</div>
+        <div class="mit"><strong>影響</strong>「攜車袋搭自強」這個備案到不了楊梅，得在中壢下車轉區間車（11 分、$22）。彈性比終點設在桃園差。</div>
       </div>
       <div class="risk-card crit">
         <div class="lvl">CRITICAL</div>
-        <h3>區間快不能線上訂，10/15 才開賣</h3>
+        <h3>回程的區間快不能線上訂</h3>
         <div class="body">台鐵規定：非對號列車未開放線上訂購，須至車站窗口，且限「乘車日（含當日）4 日內」。乘車日 10/18 往前推 → 10/15 起。</div>
         <div class="mit"><strong>行動</strong>10/15 到任一台鐵車站窗口買，不必跑台南；桃園站、中壢站都可以。</div>
       </div>
@@ -458,13 +488,13 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
       <div class="risk-card">
         <div class="lvl">TIMING</div>
         <h3>區間快 1006 早於退房時間</h3>
-        <div class="body">08:06 發車，旅館 11:00 才退房。要搭這班必須提早退房，約 07:30 離開，週日早上在台南沒有任何行程空間。</div>
-        <div class="mit"><strong>換來</strong>12:43 到桃園、約 13:12 到家，比其他方案早好幾個小時，下午整個是自己的。</div>
+        <div class="body">08:06 發車，旅館 11:00 才退房。要搭這班必須提早退房，約 07:43 離開，週日早上在台南沒有任何行程空間。</div>
+        <div class="mit"><strong>換來</strong>12:21 直接回到楊梅，下車就是停車場 —— 比其他方案早三小時，而且省掉末段騎乘。</div>
       </div>
       <div class="risk-card">
         <div class="lvl">COMFORT</div>
-        <h3>區間快是 4 小時 37 分的無對號座</h3>
-        <div class="body">非對號車沒有劃位，週日北上海線可能有站票旅客。騎完 207 km 隔天再坐／站四個半小時，不輕鬆。</div>
+        <h3>區間快是 4 小時 15 分的無對號座</h3>
+        <div class="body">非對號車沒有劃位，週日北上海線可能有站票旅客。騎完一整天隔天再坐／站四個多小時，不輕鬆。</div>
         <div class="mit"><strong>緩解</strong>臺南是起站方向的早班車，上車時人少，搶位子相對容易。</div>
       </div>
     </div>
@@ -486,7 +516,7 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
         <h3>去程票</h3>
         <div class="owner">線上・台鐵官網／e訂通</div>
         <ul>
-          <li><div class="ck"></div><div><span class="it">自強 115 次 × 4（兩鐵人車同行）</span><span class="id">員林 11:53 → 臺南 13:25　額度 9</span></div></li>
+          <li><div class="ck"></div><div><span class="it">自強 115 次 × 4（兩鐵人車同行）</span><span class="id">田中 12:02 → 臺南 13:25　額度 9</span></div></li>
           <li><div class="ck"></div><div><span class="it">訂票次日 24:00 前付款</span><span class="id">逾期 6 次／月會被停權一個月</span></div></li>
           <li><div class="ck"></div><div><span class="it">訂票後 2 日內取票</span><span class="id">車站窗口／售票機／超商</span></div></li>
         </ul>
@@ -497,7 +527,7 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
         <h3>回程票（若選區間快）</h3>
         <div class="owner">臨櫃・任一台鐵車站</div>
         <ul>
-          <li><div class="ck"></div><div><span class="it">區間快 1006 × 4 張自行車票</span><span class="id">臺南 08:06 → 桃園 12:43　額度 12</span></div></li>
+          <li><div class="ck"></div><div><span class="it">區間快 1006 × 4 張自行車票</span><span class="id">臺南 08:06 → 楊梅 12:21　額度 12</span></div></li>
           <li><div class="ck"></div><div><span class="it">每人限購 1 張自行車票</span><span class="id">能否一人代買四張未明文，先打 0800-765-888 問</span></div></li>
           <li><div class="ck"></div><div><span class="it">退票免手續費</span><span class="id">先買著，臨時改方案也不虧</span></div></li>
         </ul>
@@ -508,8 +538,8 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
         <h3>備案</h3>
         <div class="owner">線上・不限時間</div>
         <ul>
-          <li><div class="ck"></div><div><span class="it">攜車袋搭任意自強</span><span class="id">不限額度、不限車次，但四台都要拆兩輪</span></div></li>
-          <li><div class="ck"></div><div><span class="it">高鐵 0640 等班次</span><span class="id">同樣要拆兩輪，且青埔到家還有 14.6 km</span></div></li>
+          <li><div class="ck"></div><div><span class="it">攜車袋搭自強到中壢</span><span class="id">不限額度，但四台要拆兩輪＋轉區間車</span></div></li>
+          <li><div class="ck"></div><div><span class="it">高鐵 0640 等班次</span><span class="id">同樣要拆兩輪，青埔到楊梅還有 15.8 km</span></div></li>
           <li><div class="ck"></div><div><span class="it">攜車袋務必帶著</span><span class="id">誤點／改班次時唯一能上任何列車的保險</span></div></li>
         </ul>
       </div>
@@ -521,7 +551,7 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
   <div class="wrap">
     <div>
       <h3 data-i18n="footer.title">回程只有一個真正的取捨：<span class="accent">拆輪，還是早起</span></h3>
-      <p data-i18n="footer.sub">區間快 1006 讓四台車整車上路、最便宜、最早到家，代價是週日七點半就得離開旅館。其他每一個方案，都要四個人把前後輪拆下來再裝回去。</p>
+      <p data-i18n="footer.sub">區間快 1006 讓四台車整車上路、最便宜、12:21 就回到楊梅停車場，代價是週日七點四十三分就得離開旅館。其他每一個方案，都要四個人把前後輪拆下來。</p>
     </div>
     <div>
       <div class="col-title">DATA SOURCE</div>
@@ -538,7 +568,7 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
         <li>額度為 10/12 瞬時值</li>
         <li>高鐵剩餘座位未查</li>
         <li>一人代買 4 張自行車票</li>
-        <li>末段騎乘假設 18 km/h</li>
+        <li>中壢轉乘抓 20 分</li>
       </ul>
     </div>
   </div>
@@ -559,12 +589,12 @@ window.I18N = {
     "nav.s1":"去程","nav.s2":"回程規劃器","nav.s3":"方案對照","nav.s4":"限制與風險","nav.s5":"購票清單",
     "hero.eyebrow":"Training Ride · Return Planner",
     "hero.h1":"台南練習騎<br/><span class=\"accent\">回程方案</span>規劃器",
-    "hero.lede":"去程固定：<strong>福鄉匯 01:00 出發，207 km 騎到員林搭車進台南</strong>。回程才是變數 —— 台鐵還是高鐵、幾點走、花多少、四台車要不要拆輪。在下面選一選，整條動線就出來。",
-    "hero.c1.lbl":"去程里程","hero.c1.val":"207 / 268 km","hero.c1.sub":"員林站 ／ 嘉義站",
+    "hero.lede":"<strong>楊梅車站 01:00 出發</strong>，接 20.7 km 上比賽路線。終點挑 4 個、回程挑 3 種 —— 車停楊梅，火車也回楊梅，下車就是車。在下面選一選，整條動線、費用、拆不拆輪就出來。",
+    "hero.c1.lbl":"去程里程","hero.c1.val":"185–283 km","hero.c1.sub":"楊梅出發 · 4 個終點",
     "hero.c2.lbl":"回程方式","hero.c2.val":"3 種","hero.c2.sub":"人車同行／攜車袋／高鐵",
     "hero.c3.lbl":"車輛","hero.c3.val":"4 台","hero.c3.sub":"額度門檻 = 4",
     "hero.c4.lbl":"關鍵變數","hero.c4.val":"拆不拆輪","hero.c4.sub":"高鐵強制拆前後輪",
-    "s1.title":"去程路線","s1.meta":"Saturday 10/17 · 2 options",
+    "s1.title":"去程路線","s1.meta":"Saturday 10/17 · 4 options",
     "s1.fig":"Fig. 01 · 去程時刻鏈　均速 25 km/h　<span style=\"color:var(--ink-5)\">DRAWING-NO. TBA360-OUT-01</span>",
     "s2.title":"回程規劃器","s2.meta":"Sunday 10/18 · Interactive",
     "s2.fig":"Fig. 02 · 選方式 → 選班次 → 看完整動線　<span style=\"color:var(--ink-5)\">NOT TO SCALE</span>",
@@ -572,10 +602,10 @@ window.I18N = {
     "s3.fig":"Fig. 03 · 各方式最佳班次比較（綠＝該列最優）",
     "s4.title":"限制與風險","s4.meta":"Constraints · Verified 2026-10-12",
     "s5.title":"購票行動清單","s5.meta":"Action Items",
-    "ctl.route":"① 去程終點","ctl.mode":"① 回程方式","ctl.dep":"② 班次",
+    "ctl.route":"① 去程終點","ctl.var":"② 出發時間 × 均速","ctl.mode":"① 回程方式","ctl.dep":"② 班次",
     "map.t":"在 Google 地圖開啟去程路線","map.s":"8 個導航點 · 機車模式 · 203 km / 4h23",
     "footer.title":"回程只有一個真正的取捨：<span class=\"accent\">拆輪，還是早起</span>",
-    "footer.sub":"區間快 1006 讓四台車整車上路、最便宜、最早到家，代價是週日七點半就得離開旅館。其他每一個方案，都要四個人把前後輪拆下來再裝回去。"
+    "footer.sub":"區間快 1006 讓四台車整車上路、最便宜、12:21 就回到楊梅停車場，代價是週日七點四十三分就得離開旅館。其他每一個方案，都要四個人把前後輪拆下來。"
   },
   en: {
     "html.lang":"en",
@@ -584,12 +614,12 @@ window.I18N = {
     "nav.s1":"Outbound","nav.s2":"Planner","nav.s3":"Compare","nav.s4":"Risks","nav.s5":"Tickets",
     "hero.eyebrow":"Training Ride · Return Planner",
     "hero.h1":"Tainan Training Ride<br/><span class=\"accent\">Return Trip</span> Planner",
-    "hero.lede":"The outbound leg is fixed: <strong>leave Fuxianghui at 01:00, ride 207 km to Yuanlin, train into Tainan</strong>. The return is the open question — TRA or HSR, what time, what it costs, and whether four bikes get their wheels pulled. Pick below and the whole chain falls out.",
-    "hero.c1.lbl":"Outbound","hero.c1.val":"207 / 268 km","hero.c1.sub":"Yuanlin / Chiayi",
+    "hero.lede":"<strong>Leave Yangmei station at 01:00</strong>, 20.7 km to join the race route. Four finishes, three ways back — TRA or HSR, what time, what it costs, and whether four bikes get their wheels pulled. Pick below and the whole chain falls out.",
+    "hero.c1.lbl":"Outbound","hero.c1.val":"185–283 km","hero.c1.sub":"from Yangmei · 4 finishes",
     "hero.c2.lbl":"Return modes","hero.c2.val":"3","hero.c2.sub":"Roll-on / bagged / HSR",
     "hero.c3.lbl":"Bikes","hero.c3.val":"4","hero.c3.sub":"quota threshold = 4",
     "hero.c4.lbl":"Key variable","hero.c4.val":"Wheels off?","hero.c4.sub":"HSR mandates both wheels",
-    "s1.title":"Outbound Route","s1.meta":"Saturday 10/17 · 2 options",
+    "s1.title":"Outbound Route","s1.meta":"Saturday 10/17 · 4 options",
     "s1.fig":"Fig. 01 · Outbound chain at 25 km/h　<span style=\"color:var(--ink-5)\">DRAWING-NO. TBA360-OUT-01</span>",
     "s2.title":"Return Planner","s2.meta":"Sunday 10/18 · Interactive",
     "s2.fig":"Fig. 02 · Pick mode → pick departure → read the chain　<span style=\"color:var(--ink-5)\">NOT TO SCALE</span>",
@@ -597,7 +627,7 @@ window.I18N = {
     "s3.fig":"Fig. 03 · Best option per mode (green = best in row)",
     "s4.title":"Constraints & Risks","s4.meta":"Constraints · Verified 2026-10-12",
     "s5.title":"Ticket Actions","s5.meta":"Action Items",
-    "ctl.route":"① Outbound finish","ctl.mode":"① Return mode","ctl.dep":"② Departure",
+    "ctl.route":"① Outbound finish","ctl.var":"② Start time × average speed","ctl.mode":"① Return mode","ctl.dep":"② Departure",
     "map.t":"Open the outbound route in Google Maps","map.s":"8 waypoints · scooter mode · 203 km / 4h23",
     "footer.title":"One real trade-off: <span class=\"accent\">pull the wheels, or get up early</span>",
     "footer.sub":"Local Express 1006 takes all four bikes intact, costs least and gets you home first — but you leave the hotel at 07:30. Every other option means four people stripping and refitting both wheels."
@@ -614,8 +644,9 @@ var BUF_HSR    = 12;       // 沙崙站 → 高鐵閘口最小轉乘
 var T_PACK     = 20;       // 拆車裝袋
 var T_BUILD    = 15;       // 到站組裝
 var RIDE_KMH   = 18;       // 市區末段均速
-var KM_TRA     = 8.6;      // 台鐵桃園站 → 福鄉匯
-var KM_HSR     = 14.6;     // 高鐵桃園站 → 福鄉匯
+var XFER_WAIT  = 20;       // 中壢轉乘候車
+var LOCAL_MIN  = 11;       // 中壢 → 楊梅 區間車
+var LOCAL_FARE = 22;
 var CHECKOUT   = 11*60;    // 11:00 退房
 
 var SHALUN = [ // 臺南 → 沙崙（高鐵台南站）$37
@@ -625,79 +656,111 @@ var SHALUN = [ // 臺南 → 沙崙（高鐵台南站）$37
   {no:"3737",dep:"13:36",arr:"14:00"},{no:"3741",dep:"14:07",arr:"14:31"}
 ];
 
-/* ═════════ OUTBOUND ROUTES ═════════ */
-var MAP_BASE = "https://www.google.com/maps/dir/24.93225,121.28040/24.98710,121.02025/24.91581,120.97196/24.56976,120.71294/24.37636,120.59111/24.02710,120.41146/23.95203,120.33429";
+/* ═════════ OUTBOUND ROUTES — 楊梅車站 起點 ═════════ */
+/* legs: [累計km, 停留分, 地點, 備註, 是否終點] */
+var MB = "https://www.google.com/maps/dir/24.91355,121.14578/24.91581,120.97196/24.56976,120.71294/24.37636,120.59111/24.02710,120.41146/23.95203,120.33429";
+var SUNRISE = 5*60+55;
 var ROUTES = [
- { id:"yl", name:"台鐵員林站", nameEn:"TRA Yuanlin",
-   sub:"王功 CP2 轉進 26.1 km", subEn:"Turn inland 26.1 km at Wanggong",
-   badge:"207 km", arr:"10:27", arr23:"11:11",
-   map: MAP_BASE + "/23.95939,120.56953/data=!4m2!4m1!3e9",
-   mapS:"8 個導航點 · 機車模式 · Google 203 km / 4h23",
+ { id:"tz", name:"台鐵田中站", sub:"王功 CP2 轉進 33.6 km", badge:"193 km",
+   map: MB+"/23.85837,120.59157/data=!4m2!4m1!3e9",
+   mapS:"7 個導航點 · 機車模式 · Google 193 km / 4h04",
    legs:[
-    ["0 km","01:00","—","—","福鄉匯","八德區長興二路30號","night",0],
-    ["33 km","02:19","—","—","永安漁港","接上比賽路線 45K","night",0],
-    ["43 km","02:42","10","02:52","新豐休息站","24h","night",0],
-    ["95 km","04:58","10","05:08","7-11 白沙屯","24h","night",0],
-    ["121 km","06:11","25","06:36","大安休息站","早餐 · 日出 05:55","",0],
-    ["169 km","08:31","15","08:46","7-11 管興","24h","",0],
-    ["181 km","09:15","10","09:25","王功 福海宮","CP2 · 切出路線","",0],
-    ["207 km","10:27","—","—","台鐵員林站","內陸 26.1 km","key",1]
+    [0,0,"楊梅車站","大成路256號 · 區公所地下停車場",0],
+    [20.7,10,"新豐休息站","24h · 接上比賽路線 54.6K",0],
+    [73.1,10,"7-11 白沙屯","24h",0],
+    [99.1,25,"大安休息站","早餐",0],
+    [147.1,15,"7-11 管興","24h",0],
+    [159.1,10,"王功 福海宮","CP2 · 切出路線",0],
+    [192.7,0,"台鐵田中站","內陸 33.6 km",1]
    ],
+   trains:[{n:"自強 115 次",d:"12:02",a:"13:25",q:9,kind:"對號"}],
    notes:[
-    {k:"good",i:"TRAIN",h:"<b>員林 → 臺南　自強 115 次　11:53 → 13:25</b>（對號人車同行，額度 9，<b>線上可訂</b>）。抵站 10:27 留 86 分緩衝；掉到 23 km/h 的 11:11 也還有 42 分。<br/>車資每人 <b>$437 ＋ 自行車 $219 ＝ $656</b>。更早的 109 次 11:02 開只有 35 分緩衝，不建議賭。"},
-    {k:"good",i:"ARRIVE",h:"13:25 到臺南，走 570 m 進旅館 —— <b>整個週六下午加晚上都是空的</b>。"}
+    {k:"good",i:"TRAIN",h:"<b>田中 → 臺南　自強 115 次　12:02 → 13:25</b>（對號人車同行，額度 9，<b>線上可訂</b>）。車資每人 <b>$364 ＋ 自行車 $182 ＝ $546</b>。"},
+    {k:"good",i:"WHY HERE",h:"<b>員林以南唯一還有對號人車同行的站。</b>109 次跳過社頭／田中／二水直奔斗六，只有 115 次停田中。二水 198 km 更貼近 200，但沒有對號。"}
    ]},
- { id:"cy", name:"台鐵嘉義站", nameEn:"TRA Chiayi",
-   sub:"口湖休息站轉進 37.1 km", subEn:"Turn inland 37.1 km at Kouhu",
-   badge:"268 km", arr:"13:34", arr23:"14:30",
-   map: MAP_BASE + "/23.80039,120.27965/23.56822,120.15573/23.479075,120.441209/data=!4m2!4m1!3e9",
-   mapS:"10 個導航點 · 機車模式 · Google 265 km / 5h35",
+ { id:"yl", name:"台鐵員林站", sub:"王功 CP2 轉進 26.1 km", badge:"185 km",
+   map: MB+"/23.95939,120.56953/data=!4m2!4m1!3e9",
+   mapS:"7 個導航點 · 機車模式 · Google 185 km / 3h55",
    legs:[
-    ["0 km","01:00","—","—","福鄉匯","八德區長興二路30號","night",0],
-    ["33 km","02:19","—","—","永安漁港","接上比賽路線 45K","night",0],
-    ["43 km","02:42","10","02:52","新豐休息站","24h","night",0],
-    ["95 km","04:58","10","05:08","7-11 白沙屯","24h","night",0],
-    ["121 km","06:11","25","06:36","大安休息站","早餐 · 日出 05:55","",0],
-    ["169 km","08:31","15","08:46","7-11 管興","24h","",0],
-    ["181 km","09:15","10","09:25","王功 福海宮","CP2 打卡","",0],
-    ["199 km","10:08","15","10:23","新吉社區旅人驛站","24h","",0],
-    ["231 km","11:40","25","12:05","口湖休息站","大休 · 切出路線","",0],
-    ["268 km","13:34","—","—","台鐵嘉義站","內陸 37.1 km","key",1]
+    [0,0,"楊梅車站","大成路256號 · 區公所地下停車場",0],
+    [20.7,10,"新豐休息站","24h · 接上比賽路線 54.6K",0],
+    [73.1,10,"7-11 白沙屯","24h",0],
+    [99.1,25,"大安休息站","早餐",0],
+    [147.1,15,"7-11 管興","24h",0],
+    [159.1,10,"王功 福海宮","CP2 · 切出路線",0],
+    [185.2,0,"台鐵員林站","內陸 26.1 km",1]
    ],
+   trains:[{n:"自強 109 次",d:"11:02",a:"12:28",q:10,kind:"對號"},{n:"自強 115 次",d:"11:53",a:"13:25",q:9,kind:"對號"}],
    notes:[
-    {k:"bad",i:"NO EXPRESS",h:"<b>南下的對號人車同行搭不到。</b>109 次 11:46、115 次 12:43 就過嘉義了，都比 13:34 抵達早 —— 全台南下只有這兩班對號能帶整車，這條路線接不上。"},
-    {k:"warn",i:"LOCAL ONLY",h:"只能改搭<b>區間車人車同行</b>：<b>區間 3207　嘉義 13:54 → 臺南 14:56</b>（額度 8，留 20 分）。23 km/h 的話改 3217（14:43 → 15:47）。車資每人 <b>$131 ＋ 自行車 $66 ＝ $197</b>，比員林那條便宜 $459。"},
-    {k:"warn",i:"COUNTER",h:"區間車<b>不能線上訂</b>，限乘車日前 4 日內臨櫃 → <b>10/14 起</b>才買得到。等於去程回程都要跑窗口。"},
-    {k:"info",i:"COST",h:"多騎 <b>61 km</b>、晚 <b>1.5 小時</b>到臺南（約 15:10 進旅館），換到的是更完整的路線演練 —— 多跑了新吉、口湖兩個比賽補給點，涵蓋到比賽的 243K。"}
+    {k:"good",i:"TRAIN",h:"<b>109 次 11:02 → 臺南 12:28</b>（額度 10）或 <b>115 次 11:53 → 13:25</b>（額度 9）。都是對號、線上可訂。車資每人 <b>$437 ＋ 自行車 $219 ＝ $656</b>。"}
+   ]},
+ { id:"cy", name:"台鐵嘉義站", sub:"口湖休息站轉進 37.1 km", badge:"246 km",
+   map: MB+"/23.80039,120.27965/23.56822,120.15573/23.479075,120.441209/data=!4m2!4m1!3e9",
+   mapS:"9 個導航點 · 機車模式 · Google 246 km / 5h05",
+   legs:[
+    [0,0,"楊梅車站","大成路256號 · 區公所地下停車場",0],
+    [20.7,10,"新豐休息站","24h · 接上比賽路線 54.6K",0],
+    [73.1,10,"7-11 白沙屯","24h",0],
+    [99.1,25,"大安休息站","早餐",0],
+    [147.1,15,"7-11 管興","24h",0],
+    [159.1,10,"王功 福海宮","CP2 打卡",0],
+    [177.1,15,"新吉社區旅人驛站","24h",0],
+    [209.1,25,"口湖休息站","大休",0],
+    [246.2,0,"台鐵嘉義站","內陸 37.1 km",1]
+   ],
+   trains:[{n:"區間 3201",d:"13:05",a:"14:23",q:8,kind:"非對號"},{n:"區間 3207",d:"13:54",a:"14:56",q:8,kind:"非對號"}],
+   notes:[
+    {k:"bad",i:"NO EXPRESS",h:"<b>對號人車同行接不上。</b>115 次 12:43 過嘉義，正常配速根本來不及。"},
+    {k:"warn",i:"LOCAL ONLY",h:"只能搭<b>區間車人車同行</b>（額度 8）。車資每人 <b>$131 ＋ 自行車 $66 ＝ $197</b>，但<b>不能線上訂</b>，10/14 起臨櫃。"}
+   ]},
+ { id:"tn", name:"台南車站（騎到底）", sub:"全程不搭車", badge:"283 km",
+   map: MB+"/23.80039,120.27965/23.56822,120.15573/23.27736,120.12894/22.99709,120.21298/data=!4m2!4m1!3e9",
+   mapS:"10 個導航點 · 機車模式 · Google 284 km / 5h49",
+   legs:[
+    [0,0,"楊梅車站","大成路256號 · 區公所地下停車場",0],
+    [20.7,10,"新豐休息站","24h · 接上比賽路線 54.6K",0],
+    [73.1,10,"7-11 白沙屯","24h",0],
+    [99.1,25,"大安休息站","早餐",0],
+    [147.1,15,"7-11 管興","24h",0],
+    [159.1,10,"王功 福海宮","CP2 打卡",0],
+    [177.1,15,"新吉社區旅人驛站","24h",0],
+    [209.1,25,"口湖休息站","大休",0],
+    [246.1,15,"7-11 南鯤鯓","24h",0],
+    [279.6,0,"旗哥牛肉湯","比賽正餐點",0],
+    [283.1,0,"台南車站","終點 · 旅館 570 m",1]
+   ],
+   trains:[],
+   notes:[
+    {k:"good",i:"NO TRAIN",h:"<b>週六完全不用搭車。</b>沒有額度、不必臨櫃、不用配合發車時間。旅館離台南車站 570 m。"},
+    {k:"warn",i:"VOLUME",h:"<b>283 km 是比賽全程的 79%</b>。離 11/13 剩四週，當唯一一次長途練習偏重，恢復會吃掉後面兩週。"},
+    {k:"info",i:"FULL",h:"但這是唯一能把<b>全部補給點（含南鯤鯓、旗哥牛肉湯）跑過一遍</b>的版本。"}
    ]}
 ];
-var routeId = "yl";
+var routeId = "tz";
+var START = 60;      /* 01:00 */
+var SPEED = 25;
 
 var MODES = [
-  { id:"roll", name:"台鐵・人車同行", nameEn:"TRA · roll-on",
-    sub:"整車上車，不摺不裝袋", subEn:"Whole bike, no bagging",
-    tool:"不用拆輪", toolEn:"No wheels off", toolOk:true,
+  { id:"roll", name:"台鐵・人車同行", sub:"整車上車，直達楊梅",
+    tool:"不用拆輪", toolOk:true, ride:0, build:false,
     deps:[
-      {id:"r1",label:"08:06",train:"區間快 1006",dep:"08:06",arr:"12:43",dur:"4h37",quota:12,fare:532,bike:266,via:"海線直達"},
-      {id:"r2",label:"15:50",train:"區間快 1038",dep:"15:50",arr:"20:56",dur:"5h06",quota:2,fare:532,bike:266,via:"海線直達"},
-      {id:"r3",label:"16:09",train:"自強 138",dep:"16:09",arr:"19:54",dur:"3h45",quota:0,fare:826,bike:413,via:"山線"}
+      {id:"r1",label:"08:06",train:"區間快 1006",dep:"08:06",arr:"12:21",dur:"4h15",quota:12,fare:502,bike:251,via:"海線直達楊梅"},
+      {id:"r2",label:"15:50",train:"區間快 1038",dep:"15:50",arr:"20:27",dur:"4h37",quota:2,fare:502,bike:251,via:"海線直達楊梅"}
     ]},
-  { id:"bag", name:"台鐵・攜車袋", nameEn:"TRA · bagged",
-    sub:"自強號，不限額度", subEn:"Any Tze-Chiang, no quota",
-    tool:"要拆前後輪", toolEn:"Both wheels off", toolOk:false,
+  { id:"bag", name:"台鐵・攜車袋", sub:"自強到中壢，轉區間車",
+    tool:"要拆前後輪", toolOk:false, ride:0, build:false, xfer:true,
     deps:[
-      {id:"b1",label:"11:45",train:"自強",dep:"11:45",arr:"15:15",dur:"3h30",fare:826,bike:0,via:"山線"},
-      {id:"b2",label:"12:22",train:"自強",dep:"12:22",arr:"16:18",dur:"3h56",fare:826,bike:0,via:"山線"},
-      {id:"b3",label:"12:34",train:"自強 122",dep:"12:34",arr:"16:32",dur:"3h58",fare:826,bike:0,via:"山線"},
-      {id:"b4",label:"13:25",train:"自強 176",dep:"13:25",arr:"17:16",dur:"3h51",fare:826,bike:0,via:"山線"},
-      {id:"b5",label:"14:06",train:"自強 128",dep:"14:06",arr:"17:51",dur:"3h45",fare:826,bike:0,via:"山線"},
-      {id:"b6",label:"15:06",train:"自強 134",dep:"15:06",arr:"19:09",dur:"4h03",fare:826,bike:0,via:"山線"},
-      {id:"b7",label:"16:09",train:"自強 138",dep:"16:09",arr:"19:54",dur:"3h45",fare:826,bike:0,via:"山線"},
-      {id:"b8",label:"16:26",train:"自強 136",dep:"16:26",arr:"19:26",dur:"3h00",fare:826,bike:0,via:"全日最快"}
+      {id:"b1",label:"11:45",train:"自強",dep:"11:45",arr:"15:06",dur:"3h21",fare:803,bike:0,via:"中壢轉乘"},
+      {id:"b2",label:"12:22",train:"自強",dep:"12:22",arr:"16:08",dur:"3h46",fare:803,bike:0,via:"中壢轉乘"},
+      {id:"b3",label:"12:34",train:"自強 122",dep:"12:34",arr:"16:22",dur:"3h48",fare:803,bike:0,via:"中壢轉乘"},
+      {id:"b4",label:"13:25",train:"自強 176",dep:"13:25",arr:"17:01",dur:"3h36",fare:803,bike:0,via:"中壢轉乘"},
+      {id:"b5",label:"14:06",train:"自強 128",dep:"14:06",arr:"17:37",dur:"3h31",fare:803,bike:0,via:"中壢轉乘"},
+      {id:"b6",label:"15:06",train:"自強 134",dep:"15:06",arr:"18:58",dur:"3h52",fare:803,bike:0,via:"中壢轉乘"},
+      {id:"b7",label:"16:09",train:"自強 138",dep:"16:09",arr:"19:43",dur:"3h34",fare:803,bike:0,via:"中壢轉乘"},
+      {id:"b8",label:"16:47",train:"自強 142",dep:"16:47",arr:"20:25",dur:"3h38",fare:803,bike:0,via:"中壢轉乘"}
     ]},
-  { id:"hsr", name:"高鐵（先搭沙崙線）", nameEn:"HSR (via Shalun line)",
-    sub:"台南車站 → 沙崙 → 高鐵", subEn:"Tainan → Shalun → HSR",
-    tool:"要拆前後輪", toolEn:"Both wheels off", toolOk:false,
+  { id:"hsr", name:"高鐵（先搭沙崙線）", sub:"青埔下車再騎 15.8 km",
+    tool:"要拆前後輪", toolOk:false, ride:15.8, build:true,
     deps:[
       {id:"h1",label:"11:13",train:"高鐵 0630",dep:"11:13",arr:"12:36",dur:"1h23",fare:1190,bike:0,via:"標準車廂"},
       {id:"h2",label:"11:41",train:"高鐵 0822",dep:"11:41",arr:"13:18",dur:"1h37",fare:1190,bike:0,via:"標準車廂"},
@@ -726,132 +789,171 @@ function build(){
   if(!d) d=mode.deps[0];
 
   var steps=[], notes=[], feeder=null;
-  var bikeFare=d.bike||0, baseFare=d.fare, extra=0;
+  var bikeFare=d.bike||0, extra=0;
   var needWheels=!mode.toolOk;
-  var rideKm = mode.id==="hsr" ? KM_HSR : KM_TRA;
-  var rideMin = rideKm/RIDE_KMH*60;
+  var rideKm=mode.ride||0, rideMin=rideKm/RIDE_KMH*60;
 
-  // --- work backwards to hotel departure ---
-  var boardT = m2(d.dep);
-  var leaveHotel;
+  var boardT=m2(d.dep), leaveHotel;
   if(mode.id==="hsr"){
-    // pick latest Shalun train arriving >= BUF_HSR before HSR departure
-    for(var i=0;i<SHALUN.length;i++){
-      if(m2(SHALUN[i].arr) <= boardT - BUF_HSR) feeder = SHALUN[i];
-    }
-    if(!feeder){ feeder = SHALUN[0]; }
-    extra = 37;
-    leaveHotel = m2(feeder.dep) - HOTEL_WALK - BUF_BOARD;
+    for(var i=0;i<SHALUN.length;i++){ if(m2(SHALUN[i].arr)<=boardT-BUF_HSR) feeder=SHALUN[i]; }
+    if(!feeder) feeder=SHALUN[0];
+    extra=37;
+    leaveHotel=m2(feeder.dep)-HOTEL_WALK-BUF_BOARD;
   } else {
-    leaveHotel = boardT - HOTEL_WALK - BUF_BOARD;
+    leaveHotel=boardT-HOTEL_WALK-BUF_BOARD;
   }
-  var wakeT = leaveHotel - (needWheels ? T_PACK : 0);
+  var wakeT=leaveHotel-(needWheels?T_PACK:0);
 
-  // --- chain ---
-  if(needWheels){
-    steps.push({t:hm(wakeT),cls:"wait",w:"旅館拆車 · 裝袋",d:"前後輪都拆，四台 · 抓 "+T_PACK+" 分"});
-  }
+  if(needWheels) steps.push({t:hm(wakeT),cls:"wait",w:"旅館拆車 · 裝袋",d:"前後輪都拆，四台 · 抓 "+T_PACK+" 分"});
   steps.push({t:hm(leaveHotel),cls:"",w:"休日公園台南旅店 出發",d:"台南市北區公園路128號"});
   steps.push({t:hm(leaveHotel+HOTEL_WALK),cls:"walk",w:"步行 570 m 到台南車站",d:"約 "+HOTEL_WALK+" 分　＋進站緩衝 "+BUF_BOARD+" 分"});
 
+  var endT;
   if(mode.id==="hsr"){
     steps.push({t:feeder.dep,cls:"",w:"沙崙線 區間 "+feeder.no,d:"臺南 "+feeder.dep+" → 沙崙 "+feeder.arr+"　<b>$37</b>"});
-    var wait = boardT - m2(feeder.arr);
+    var wait=boardT-m2(feeder.arr);
     steps.push({t:feeder.arr,cls:"wait",w:"沙崙站 → 高鐵台南站",d:"同站轉乘，候車 "+wait+" 分"+(wait<15?"　（帶四個車袋偏趕）":"")});
-    steps.push({t:d.dep,cls:"",w:d.train,d:"台南 "+d.dep+" → 桃園 "+d.arr+"　"+d.dur+"　<b>"+money(d.fare)+"</b>"});
+    steps.push({t:d.dep,cls:"",w:d.train,d:"台南 "+d.dep+" → 桃園（青埔）"+d.arr+"　"+d.dur+"　<b>"+money(d.fare)+"</b>"});
+    endT=m2(d.arr);
+  } else if(mode.xfer){
+    steps.push({t:d.dep,cls:"",w:d.train,d:"臺南 "+d.dep+" → 中壢 "+d.arr+"　"+d.dur+"　<b>"+money(d.fare)+"</b>"});
+    var t1=m2(d.arr)+XFER_WAIT;
+    steps.push({t:d.arr,cls:"wait",w:"中壢換區間車",d:"候車抓 "+XFER_WAIT+" 分（每 15–25 分一班）"});
+    steps.push({t:hm(t1),cls:"",w:"區間車 中壢 → 楊梅",d:"11 分　<b>"+money(LOCAL_FARE)+"</b>"});
+    endT=t1+LOCAL_MIN; extra=LOCAL_FARE;
   } else {
-    steps.push({t:d.dep,cls:"",w:d.train,d:"臺南 "+d.dep+" → 桃園 "+d.arr+"　"+d.dur+"　<b>"+money(d.fare)+(bikeFare?" ＋自行車 "+money(bikeFare):"")+"</b>"});
+    steps.push({t:d.dep,cls:"",w:d.train,d:"臺南 "+d.dep+" → 楊梅 "+d.arr+"　"+d.dur+"　<b>"+money(d.fare)+(bikeFare?" ＋自行車 "+money(bikeFare):"")+"</b>"});
+    endT=m2(d.arr);
   }
 
-  var atStation = m2(d.arr);
-  var t = atStation;
-  if(needWheels){
+  var t=endT;
+  if(mode.build){
     steps.push({t:hm(t),cls:"wait",w:"站內組裝自行車",d:"裝回前後輪 · 抓 "+T_BUILD+" 分"});
-    t += T_BUILD;
+    t+=T_BUILD;
+    steps.push({t:hm(t),cls:"ride",w:"騎 "+rideKm.toFixed(1)+" km 到楊梅",d:"高鐵桃園站（青埔）→ 楊梅車站　假設 "+RIDE_KMH+" km/h ≈ "+Math.round(rideMin)+" 分"});
+    t+=rideMin;
   }
-  steps.push({t:hm(t),cls:"ride",w:"騎 "+rideKm.toFixed(1)+" km 回家",d:(mode.id==="hsr"?"高鐵桃園站（青埔）":"台鐵桃園站")+" → 福鄉匯　假設 "+RIDE_KMH+" km/h ≈ "+Math.round(rideMin)+" 分"});
-  t += rideMin;
-  steps.push({t:hm(t),cls:"end",w:"福鄉匯　抵達",d:"八德區長興二路30號"});
+  steps.push({t:hm(t),cls:"end",w:"楊梅車站　抵達",d:mode.build?"騎到楊梅，車上架":(mode.toolOk?"整車牽出站，直接上車":"車袋直接丟後車廂，不用組裝")});
 
-  var total = t - wakeT;
-  var perHead = baseFare + bikeFare + extra;
+  var total=t-wakeT, perHead=d.fare+bikeFare+extra;
 
-  /* --- notes --- */
-  if(d.quota===0){
-    notes.push({k:"bad",i:"SOLD OUT",h:"<b>這班的自行車額度已經是 0</b>，四台一台都上不去。留在這裡只是當對照用。"});
-  } else if(typeof d.quota==="number" && d.quota<4){
-    notes.push({k:"bad",i:"QUOTA "+d.quota,h:"額度只剩 <b>"+d.quota+" 個</b>，裝不下四台。要嘛拆成兩批走不同班次，要嘛改方案。"});
-  } else if(typeof d.quota==="number"){
-    notes.push({k:"good",i:"QUOTA "+d.quota,h:"自行車額度 <b>"+d.quota+" 個</b>，四台放得下。整車推上指定車廂的駐車架，<b>完全不用拆輪</b>。"});
+  if(typeof d.quota==="number"){
+    if(d.quota<4) notes.push({k:"bad",i:"QUOTA "+d.quota,h:"額度只剩 <b>"+d.quota+" 個</b>，裝不下四台。"});
+    else notes.push({k:"good",i:"QUOTA "+d.quota,h:"自行車額度 <b>"+d.quota+" 個</b>，四台放得下。整車推上指定車廂駐車架，<b>完全不用拆輪</b>，<b>直達楊梅</b>，下車就是停車場。"});
   }
-
-  if(leaveHotel < CHECKOUT){
-    notes.push({k:"warn",i:"EARLY",h:"要在 <b>"+hm(leaveHotel)+"</b> 離開旅館，比 11:00 的退房時間早 <b>"+dur(CHECKOUT-leaveHotel)+"</b>。得前一晚先跟櫃檯講，週日早上台南沒有行程空間。"});
-  }
-
-  if(needWheels){
-    notes.push({k:"warn",i:"WHEELS",h:"四台都要<b>拆前後輪</b>裝袋。表上已經含拆裝各 "+T_PACK+"／"+T_BUILD+" 分，但那是四個人同時動手的樂觀值。"});
-  }
-
+  if(leaveHotel<CHECKOUT)
+    notes.push({k:"warn",i:"EARLY",h:"要在 <b>"+hm(leaveHotel)+"</b> 離開旅館，比 11:00 退房早 <b>"+dur(CHECKOUT-leaveHotel)+"</b>。前一晚先跟櫃檯說，週日早上台南沒有行程空間。"});
+  if(needWheels)
+    notes.push({k:"warn",i:"WHEELS",h:"四台都要<b>拆前後輪</b>裝袋（抓 "+T_PACK+" 分）。好消息是車停在楊梅，<b>到站後不用組裝</b>，車袋直接進後車廂。"});
+  if(mode.xfer)
+    notes.push({k:"info",i:"TRANSFER",h:"<b>臺南→楊梅沒有自強號。</b>只能搭到中壢再轉區間車（11 分、$22、每 15–25 分一班）。這是選楊梅當起點的代價。"});
   if(mode.id==="hsr"){
-    notes.push({k:"info",i:"HSR RULE",h:"高鐵攜車袋每人限一件，須放各車廂前後端大型行李空間 —— <b>四個袋子要分散訂在不同車廂</b>，單一車廂塞不下。尺寸限單邊 150 cm、三邊和 220 cm。"});
-    notes.push({k:"info",i:"LAST LEG",h:"青埔到福鄉匯是 <b>14.6 km</b>，比台鐵桃園站的 8.6 km 多 6 km —— 拆完車、裝回去，還要多騎這段。"});
+    notes.push({k:"info",i:"HSR RULE",h:"高鐵攜車袋每人限一件，須放各車廂前後端大型行李空間 —— <b>四個袋子分散訂不同車廂</b>。尺寸限單邊 150 cm、三邊和 220 cm。"});
+    notes.push({k:"bad",i:"WORST",h:"青埔到楊梅還有 <b>15.8 km</b> 要騎，所以得先組裝回去。三種方式裡最貴、最麻煩 —— 除非你很在意早點到家，否則沒有理由選它。"});
   }
-
-  if(mode.id==="roll" && d.id==="r1"){
-    notes.push({k:"warn",i:"COUNTER",h:"區間快<b>不能線上訂</b>，只能臨櫃，而且限乘車日前 4 日內 → <b>10/15 起</b>才買得到。任一台鐵車站都可以，不必跑台南。"});
-    notes.push({k:"info",i:"SEATING",h:"非對號車沒有劃位，4 小時 37 分可能要站。臺南是早班車、上車人少，搶位子相對容易。"});
+  if(mode.id==="roll"&&d.id==="r1"){
+    notes.push({k:"warn",i:"COUNTER",h:"區間快<b>不能線上訂</b>，限乘車日前 4 日內臨櫃 → <b>10/15 起</b>。任一台鐵車站都可以買。"});
+    notes.push({k:"info",i:"SEATING",h:"非對號沒有劃位，4 小時 15 分可能要站。臺南是早班車、上車人少，搶位子相對容易。"});
   }
-  if(mode.id==="bag"){
-    notes.push({k:"good",i:"NO QUOTA",h:"攜車袋視同隨身行李，<b>所有列車皆可乘車、不限車廂、免費</b>，也沒有額度問題 —— 班次完全自由。"});
-  }
-
   return {mode:mode,dep:d,steps:steps,notes:notes,total:total,perHead:perHead,
-          wake:wakeT,home:t,needWheels:needWheels,rideKm:rideKm};
+          wake:wakeT,home:t,needWheels:needWheels};
 }
 
+/* ═════════ RENDER OUTBOUND (computed) ═════════ */
+function clk(m){m=Math.round(m);m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");}
 
-/* ═════════ RENDER OUTBOUND ═════════ */
+function computeRoute(R){
+  var t=START, prev=0, rows=[], move=0, hold=0;
+  R.legs.forEach(function(L,i){
+    var km=L[0], stop=L[1], run=(km-prev)/SPEED*60;
+    t+=run; move+=run;
+    var arr=t; t+=stop; hold+=stop;
+    rows.push({km:km,arr:arr,dep:stop?t:null,stop:stop,place:L[2],note:L[3],key:L[4],
+               gap:i>0?km-R.legs[i-1][0]:null});
+    prev=km;
+  });
+  return {rows:rows,finish:rows[rows.length-1].arr,move:move,hold:hold,total:rows[rows.length-1].arr-START};
+}
+
 function renderRoute(){
-  var R = ROUTES.filter(function(x){return x.id===routeId;})[0];
-  var g = document.getElementById("routeGrid"); g.innerHTML="";
+  var R=ROUTES.filter(function(x){return x.id===routeId;})[0];
+  var g=document.getElementById("routeGrid"); g.innerHTML="";
   ROUTES.forEach(function(r){
     var b=el("button","mode-btn"); b.type="button";
-    b.setAttribute("aria-pressed", r.id===routeId ? "true":"false");
-    b.innerHTML='<div class="mt">'+r.name+'</div><div class="ms">'+r.sub+'</div>'+
-                '<span class="tool'+(r.id==="yl"?" no":"")+'">'+r.badge+'</span>';
+    b.setAttribute("aria-pressed", r.id===routeId?"true":"false");
+    b.innerHTML='<div class="mt">'+r.name+'</div><div class="ms">'+r.sub+'</div><span class="tool no">'+r.badge+'</span>';
     b.addEventListener("click",function(){ routeId=r.id; renderRoute(); });
     g.appendChild(b);
   });
 
-  document.getElementById("routeFig").innerHTML =
-    'Fig. 01 · 去程時刻鏈　均速 25 km/h　23 km/h → '+R.arr23+
-    '　<span style="color:var(--ink-5)">DRAWING-NO. TBA360-OUT-'+(R.id==="yl"?"01":"02")+'</span>';
+  var C=computeRoute(R);
+  document.getElementById("startOut").textContent=clk(START);
+  document.getElementById("speedOut").textContent=SPEED.toFixed(1)+" km/h";
+
+  var mx=0; C.rows.forEach(function(r){ if(r.gap&&r.gap>mx) mx=r.gap; });
+  document.getElementById("routeFig").innerHTML=
+    'Fig. '+String(ROUTES.indexOf(R)+1).padStart(2,"0")+' · 去程時刻鏈　'+clk(START)+' 出發 @ '+SPEED.toFixed(1)+' km/h'+
+    '　<span style="color:var(--accent)">抵達 '+clk(C.finish)+' · 最長間隔 '+Math.round(mx)+' km</span>'+
+    '　<span style="color:var(--ink-5)">DRAWING-NO. TBA360-OUT-'+String(ROUTES.indexOf(R)+1).padStart(2,"0")+'</span>';
 
   var t=document.getElementById("routeTable");
-  t.innerHTML='<div class="leg-row head"><div class="lc">里程</div><div class="lc">抵達</div><div class="lc">地點</div><div class="lc note">備註</div></div>';
-  R.legs.forEach(function(L){
-    var cls = L[7] ? "key" : (L[6]==="night" ? "night" : "");
-    var stop = (L[2]==="—") ? "" : '　<span style="color:var(--ink-4);font-size:12.5px">停 '+L[2]+' 分 → '+L[3]+'</span>';
+  t.innerHTML='<div class="leg-row head"><div class="lc">里程<span class="gap">間隔</span></div><div class="lc">抵達</div><div class="lc">地點</div><div class="lc note">備註</div></div>';
+  C.rows.forEach(function(r){
+    var cls=r.key?"key":(r.arr<SUNRISE?"night":"");
+    var stop=r.stop?'　<span style="color:var(--ink-4);font-size:12.5px">停 '+r.stop+' 分 → '+clk(r.dep)+'</span>':'';
+    var gap=r.gap==null?'<span class="gap">起點</span>':'<span class="gap">+'+Math.round(r.gap)+' km</span>';
     t.insertAdjacentHTML("beforeend",
-      '<div class="leg-row '+cls+'"><div class="lc km">'+L[0]+'</div><div class="lc tm">'+L[1]+'</div>'+
-      '<div class="lc"><span class="place">'+L[4]+'</span>'+stop+'</div>'+
-      '<div class="lc note">'+L[5]+'</div></div>');
+      '<div class="leg-row '+cls+'"><div class="lc km">'+Math.round(r.km)+' km'+gap+'</div>'+
+      '<div class="lc tm">'+clk(r.arr)+'</div>'+
+      '<div class="lc"><span class="place">'+r.place+'</span>'+stop+'</div>'+
+      '<div class="lc note">'+r.note+'</div></div>');
   });
 
-  var a=document.getElementById("mapLink");
-  a.href=R.map;
+  /* 接駁車班次檢查 */
+  var tc=document.getElementById("trainCheck"); tc.innerHTML="";
+  if(R.trains.length){
+    var any=false;
+    R.trains.forEach(function(tr){
+      var buf=m2(tr.d)-C.finish;
+      var kind = buf>=25 ? "good" : (buf>=0 ? "warn" : "bad");
+      if(buf>=25) any=true;
+      var msg = buf<0
+        ? '<b>趕不上。</b>抵站 '+clk(C.finish)+'，'+tr.n+' '+tr.d+' 已經開走 '+dur(-buf)+'。'
+        : (buf<25
+          ? '<b>太趕。</b>抵站 '+clk(C.finish)+'，距 '+tr.n+' '+tr.d+' 只剩 <b>'+Math.round(buf)+' 分</b> —— 四台車牽上月台不夠用。'
+          : '抵站 '+clk(C.finish)+'，距 '+tr.n+' '+tr.d+' 還有 <b>'+dur(buf)+'</b>　→ 臺南 '+tr.a+'　（'+tr.kind+'，額度 '+tr.q+'）');
+      tc.insertAdjacentHTML("beforeend",
+        '<div class="pnote '+kind+'" style="margin-top:12px"><div class="pi">'+(buf<0?"MISSED":(buf<25?"TIGHT":"OK"))+'</div><div>'+msg+'</div></div>');
+    });
+    if(!any) tc.insertAdjacentHTML("beforeend",
+      '<div class="pnote bad" style="margin-top:10px"><div class="pi">RETHINK</div><div>這個出發時間／配速接不上任何一班人車同行列車。<b>提早出發或提高均速</b>，不然就得改終點。</div></div>');
+  } else {
+    tc.insertAdjacentHTML("beforeend",
+      '<div class="pnote good" style="margin-top:12px"><div class="pi">NO TRAIN</div><div>全程騎乘，<b>'+clk(C.finish)+'</b> 抵達台南車站。移動 '+dur(C.move)+'、停留 '+dur(C.hold)+'、門到門 '+dur(C.total)+'。</div></div>');
+  }
+
+  var a=document.getElementById("mapLink"); a.href=R.map;
   document.getElementById("mapS").textContent=R.mapS;
 
   var n=document.getElementById("routeNotes"); n.innerHTML="";
   n.insertAdjacentHTML("beforeend",
     '<div class="pnote info" style="margin-top:14px"><div class="pi">MAP</div><div>'+
-    '地圖是在這些點之間讓 Google 自己走道路最佳解，所以它的里程比 GPX 實測少 3–4 km（沿海幾段彎被拉直）。<b>導航可用，里程以表上的為準。</b></div></div>');
+    '地圖是在這些點之間讓 Google 自己走道路最佳解，里程比 GPX 實測少 0–1 km。<b>導航可用，里程以表上的為準。</b></div></div>');
   R.notes.forEach(function(x){
     n.insertAdjacentHTML("beforeend",
       '<div class="pnote '+x.k+'" style="margin-top:10px"><div class="pi">'+x.i+'</div><div>'+x.h+'</div></div>');
   });
 }
+
+/* 滑桿 */
+(function(){
+  var sr=document.getElementById("startRange"), vr=document.getElementById("speedRange");
+  sr.addEventListener("input",function(){ START=+sr.value; renderRoute(); });
+  vr.addEventListener("input",function(){ SPEED=+vr.value; renderRoute(); });
+  document.getElementById("varReset").addEventListener("click",function(){
+    START=60; SPEED=25; sr.value=60; vr.value=25; renderRoute();
+  });
+})();
 
 /* ═════════ RENDER (PLANNER) ═════════ */
 function renderModes(){
@@ -888,11 +990,11 @@ function renderDeps(){
 function renderResult(){
   var r=build();
   var s=document.getElementById("pstats"); s.innerHTML="";
-  [["到家時間",hm(r.home),"福鄉匯",true],
-   ["門到門總耗時",dur(r.total).replace(" 小時","h").replace(" 分","m"),"含拆裝與末段騎乘",false],
+  [["到家時間",hm(r.home),"楊梅車站",true],
+   ["門到門總耗時",dur(r.total).replace(" 小時","h").replace(" 分","m"),"含拆裝與轉乘",false],
    ["每人車資",money(r.perHead),"全票",false],
    ["4 人合計",money(r.perHead*4),"不含飲食",false],
-   ["拆前後輪",r.needWheels?"要":"不用",r.needWheels?"四台 × 兩端":"整車上車",false]
+   ["拆前後輪",r.needWheels?"要":"不用",r.needWheels?"四台，僅出發端":"整車上車",false]
   ].forEach(function(x){
     var d=el("div","pstat"+(x[3]?" hl":""));
     d.innerHTML='<div class="k">'+x[0]+'</div><div class="v">'+x[1]+'</div><div class="u">'+x[2]+'</div>';

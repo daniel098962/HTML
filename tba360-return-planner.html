@@ -138,6 +138,9 @@ section[id]{scroll-margin-top:84px}
   .lc.note{display:none}
 }
 
+.route-grid{grid-template-columns:1fr 1fr!important}
+@media(max-width:820px){.route-grid{grid-template-columns:1fr!important}}
+
 /* ═══════════ MAP LINK ═══════════ */
 .maplink{display:inline-flex;align-items:center;gap:12px;margin-top:18px;padding:13px 20px;border:1.5px solid var(--rule);border-radius:10px;background:var(--bg-card);color:var(--ink);text-decoration:none;transition:.15s;font-size:14px}
 .maplink:hover{border-color:var(--accent);background:var(--accent-bg)}
@@ -324,8 +327,8 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
     <div class="summary-cards">
       <div class="scard">
         <div class="lbl" data-i18n="hero.c1.lbl">去程里程</div>
-        <div class="val" data-i18n="hero.c1.val">207 km</div>
-        <div class="sub" data-i18n="hero.c1.sub">福鄉匯 → 員林站</div>
+        <div class="val" data-i18n="hero.c1.val">207 / 268 km</div>
+        <div class="sub" data-i18n="hero.c1.sub">員林站 ／ 嘉義站</div>
       </div>
       <div class="scard">
         <div class="lbl" data-i18n="hero.c2.lbl">回程方式</div>
@@ -351,42 +354,24 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
   <div class="wrap">
     <div class="section-head">
       <div class="num">§ 01</div>
-      <h2 data-i18n="s1.title">去程（固定）</h2>
-      <div class="meta" data-i18n="s1.meta">Saturday 10/17 · 207 km</div>
+      <h2 data-i18n="s1.title">去程路線</h2>
+      <div class="meta" data-i18n="s1.meta">Saturday 10/17 · 2 options</div>
     </div>
-    <div class="fig" data-i18n="s1.fig">Fig. 01 · 去程時刻鏈　均速 25 km/h　<span style="color:var(--ink-5)">DRAWING-NO. TBA360-OUT-01</span></div>
-    <div class="leg-table">
-      <div class="leg-row head"><div class="lc">里程</div><div class="lc">時刻</div><div class="lc">地點</div><div class="lc note">備註</div></div>
-      <div class="leg-row night"><div class="lc km">0 km</div><div class="lc tm">01:00</div><div class="lc"><span class="place">福鄉匯</span>　八德區長興二路30號</div><div class="lc note">出發</div></div>
-      <div class="leg-row night"><div class="lc km">33 km</div><div class="lc tm">02:19</div><div class="lc">永安漁港　<span style="color:var(--ink-4)">接上比賽路線 45K</span></div><div class="lc note">接駁段結束</div></div>
-      <div class="leg-row night"><div class="lc km">43 km</div><div class="lc tm">02:42</div><div class="lc"><span class="place">新豐休息站</span>　停 10 分</div><div class="lc note">24h</div></div>
-      <div class="leg-row night"><div class="lc km">95 km</div><div class="lc tm">04:58</div><div class="lc"><span class="place">7-11 白沙屯</span>　停 10 分</div><div class="lc note">24h</div></div>
-      <div class="leg-row"><div class="lc km">121 km</div><div class="lc tm">06:11</div><div class="lc"><span class="place">大安休息站</span>　停 25 分・早餐</div><div class="lc note">日出 05:55</div></div>
-      <div class="leg-row"><div class="lc km">169 km</div><div class="lc tm">08:31</div><div class="lc"><span class="place">7-11 管興</span>　停 15 分</div><div class="lc note">24h</div></div>
-      <div class="leg-row"><div class="lc km">181 km</div><div class="lc tm">09:15</div><div class="lc"><span class="place">王功 福海宮</span>　CP2・停 10 分</div><div class="lc note">切出路線</div></div>
-      <div class="leg-row key"><div class="lc km">207 km</div><div class="lc tm">10:27</div><div class="lc"><span class="place">台鐵員林站</span>　內陸接駁 26.1 km</div><div class="lc note">23 km/h → 11:11</div></div>
-    </div>
-    <a class="maplink" id="mapLink" target="_blank" rel="noopener"
-       href="https://www.google.com/maps/dir/24.93225,121.28040/24.98710,121.02025/24.91581,120.97196/24.56976,120.71294/24.37636,120.59111/24.02710,120.41146/23.95203,120.33429/23.95939,120.56953/data=!4m2!4m1!3e9">
+    <div class="ctl-label" style="margin-bottom:10px" data-i18n="ctl.route">① 去程終點</div>
+    <div class="mode-grid route-grid" id="routeGrid" role="group" aria-label="去程路線"></div>
+
+    <div class="fig" id="routeFig" style="margin-top:26px"></div>
+    <div class="leg-table" id="routeTable"></div>
+    <a class="maplink" id="mapLink" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       <span>
-        <span class="ml-t" data-i18n="map.t">在 Google 地圖開啟去程路線</span>
-        <span class="ml-s" data-i18n="map.s">8 個導航點 · 機車模式 · 203 km / 4h23</span>
+        <span class="ml-t" id="mapT">在 Google 地圖開啟去程路線</span>
+        <span class="ml-s" id="mapS"></span>
       </span>
-      <span class="ml-go">OPEN →</span>
+      <span class="ml-go">OPEN &rarr;</span>
     </a>
-
-    <div class="pnote info" style="margin-top:14px">
-      <div class="pi">MAP</div>
-      <div>地圖是用 <b>福鄉匯 → 永安漁港 → 新豐 → 白沙屯 → 大安 → 管興 → 王功 → 員林站</b> 這 8 個點串的，Google 會在點與點之間自己走道路最佳解。因此它顯示 <b>203 km</b>，比 GPX 實測的 207 km 少 4 km —— 差在沿海幾段實際軌跡的彎被拉直了。導航可用，里程以 207 km 為準。</div>
-    </div>
-
-    <div class="pnote good" style="margin-top:10px">
-      <div class="pi">TRAIN</div>
-      <div><b>員林 → 臺南　自強 115 次　11:53 → 13:25</b>（人車同行，額度 9）。抵站 10:27 留 86 分鐘緩衝；掉到 23 km/h 的 11:11 也還有 42 分鐘。<br/>更早的 <b>109 次 11:02</b> 開（額度 10）只有 35 分緩衝，慢一點就錯過 —— 不建議賭。下車走 570 m 到休日行旅。</div>
-    </div>
-  </div>
-</section>
+    <div id="routeNotes"></div>
+  </section>
 
 <!-- ───────── §02 回程規劃器 ───────── -->
 <section class="s" id="section-02">
@@ -575,11 +560,11 @@ window.I18N = {
     "hero.eyebrow":"Training Ride · Return Planner",
     "hero.h1":"台南練習騎<br/><span class=\"accent\">回程方案</span>規劃器",
     "hero.lede":"去程固定：<strong>福鄉匯 01:00 出發，207 km 騎到員林搭車進台南</strong>。回程才是變數 —— 台鐵還是高鐵、幾點走、花多少、四台車要不要拆輪。在下面選一選，整條動線就出來。",
-    "hero.c1.lbl":"去程里程","hero.c1.val":"207 km","hero.c1.sub":"福鄉匯 → 員林站",
+    "hero.c1.lbl":"去程里程","hero.c1.val":"207 / 268 km","hero.c1.sub":"員林站 ／ 嘉義站",
     "hero.c2.lbl":"回程方式","hero.c2.val":"3 種","hero.c2.sub":"人車同行／攜車袋／高鐵",
     "hero.c3.lbl":"車輛","hero.c3.val":"4 台","hero.c3.sub":"額度門檻 = 4",
     "hero.c4.lbl":"關鍵變數","hero.c4.val":"拆不拆輪","hero.c4.sub":"高鐵強制拆前後輪",
-    "s1.title":"去程（固定）","s1.meta":"Saturday 10/17 · 207 km",
+    "s1.title":"去程路線","s1.meta":"Saturday 10/17 · 2 options",
     "s1.fig":"Fig. 01 · 去程時刻鏈　均速 25 km/h　<span style=\"color:var(--ink-5)\">DRAWING-NO. TBA360-OUT-01</span>",
     "s2.title":"回程規劃器","s2.meta":"Sunday 10/18 · Interactive",
     "s2.fig":"Fig. 02 · 選方式 → 選班次 → 看完整動線　<span style=\"color:var(--ink-5)\">NOT TO SCALE</span>",
@@ -587,7 +572,7 @@ window.I18N = {
     "s3.fig":"Fig. 03 · 各方式最佳班次比較（綠＝該列最優）",
     "s4.title":"限制與風險","s4.meta":"Constraints · Verified 2026-10-12",
     "s5.title":"購票行動清單","s5.meta":"Action Items",
-    "ctl.mode":"① 回程方式","ctl.dep":"② 班次",
+    "ctl.route":"① 去程終點","ctl.mode":"① 回程方式","ctl.dep":"② 班次",
     "map.t":"在 Google 地圖開啟去程路線","map.s":"8 個導航點 · 機車模式 · 203 km / 4h23",
     "footer.title":"回程只有一個真正的取捨：<span class=\"accent\">拆輪，還是早起</span>",
     "footer.sub":"區間快 1006 讓四台車整車上路、最便宜、最早到家，代價是週日七點半就得離開旅館。其他每一個方案，都要四個人把前後輪拆下來再裝回去。"
@@ -600,11 +585,11 @@ window.I18N = {
     "hero.eyebrow":"Training Ride · Return Planner",
     "hero.h1":"Tainan Training Ride<br/><span class=\"accent\">Return Trip</span> Planner",
     "hero.lede":"The outbound leg is fixed: <strong>leave Fuxianghui at 01:00, ride 207 km to Yuanlin, train into Tainan</strong>. The return is the open question — TRA or HSR, what time, what it costs, and whether four bikes get their wheels pulled. Pick below and the whole chain falls out.",
-    "hero.c1.lbl":"Outbound","hero.c1.val":"207 km","hero.c1.sub":"Fuxianghui → Yuanlin",
+    "hero.c1.lbl":"Outbound","hero.c1.val":"207 / 268 km","hero.c1.sub":"Yuanlin / Chiayi",
     "hero.c2.lbl":"Return modes","hero.c2.val":"3","hero.c2.sub":"Roll-on / bagged / HSR",
     "hero.c3.lbl":"Bikes","hero.c3.val":"4","hero.c3.sub":"quota threshold = 4",
     "hero.c4.lbl":"Key variable","hero.c4.val":"Wheels off?","hero.c4.sub":"HSR mandates both wheels",
-    "s1.title":"Outbound (fixed)","s1.meta":"Saturday 10/17 · 207 km",
+    "s1.title":"Outbound Route","s1.meta":"Saturday 10/17 · 2 options",
     "s1.fig":"Fig. 01 · Outbound chain at 25 km/h　<span style=\"color:var(--ink-5)\">DRAWING-NO. TBA360-OUT-01</span>",
     "s2.title":"Return Planner","s2.meta":"Sunday 10/18 · Interactive",
     "s2.fig":"Fig. 02 · Pick mode → pick departure → read the chain　<span style=\"color:var(--ink-5)\">NOT TO SCALE</span>",
@@ -612,7 +597,7 @@ window.I18N = {
     "s3.fig":"Fig. 03 · Best option per mode (green = best in row)",
     "s4.title":"Constraints & Risks","s4.meta":"Constraints · Verified 2026-10-12",
     "s5.title":"Ticket Actions","s5.meta":"Action Items",
-    "ctl.mode":"① Return mode","ctl.dep":"② Departure",
+    "ctl.route":"① Outbound finish","ctl.mode":"① Return mode","ctl.dep":"② Departure",
     "map.t":"Open the outbound route in Google Maps","map.s":"8 waypoints · scooter mode · 203 km / 4h23",
     "footer.title":"One real trade-off: <span class=\"accent\">pull the wheels, or get up early</span>",
     "footer.sub":"Local Express 1006 takes all four bikes intact, costs least and gets you home first — but you leave the hotel at 07:30. Every other option means four people stripping and refitting both wheels."
@@ -639,6 +624,54 @@ var SHALUN = [ // 臺南 → 沙崙（高鐵台南站）$37
   {no:"3733",dep:"12:24",arr:"12:55"},{no:"3735",dep:"12:55",arr:"13:18"},
   {no:"3737",dep:"13:36",arr:"14:00"},{no:"3741",dep:"14:07",arr:"14:31"}
 ];
+
+/* ═════════ OUTBOUND ROUTES ═════════ */
+var MAP_BASE = "https://www.google.com/maps/dir/24.93225,121.28040/24.98710,121.02025/24.91581,120.97196/24.56976,120.71294/24.37636,120.59111/24.02710,120.41146/23.95203,120.33429";
+var ROUTES = [
+ { id:"yl", name:"台鐵員林站", nameEn:"TRA Yuanlin",
+   sub:"王功 CP2 轉進 26.1 km", subEn:"Turn inland 26.1 km at Wanggong",
+   badge:"207 km", arr:"10:27", arr23:"11:11",
+   map: MAP_BASE + "/23.95939,120.56953/data=!4m2!4m1!3e9",
+   mapS:"8 個導航點 · 機車模式 · Google 203 km / 4h23",
+   legs:[
+    ["0 km","01:00","—","—","福鄉匯","八德區長興二路30號","night",0],
+    ["33 km","02:19","—","—","永安漁港","接上比賽路線 45K","night",0],
+    ["43 km","02:42","10","02:52","新豐休息站","24h","night",0],
+    ["95 km","04:58","10","05:08","7-11 白沙屯","24h","night",0],
+    ["121 km","06:11","25","06:36","大安休息站","早餐 · 日出 05:55","",0],
+    ["169 km","08:31","15","08:46","7-11 管興","24h","",0],
+    ["181 km","09:15","10","09:25","王功 福海宮","CP2 · 切出路線","",0],
+    ["207 km","10:27","—","—","台鐵員林站","內陸 26.1 km","key",1]
+   ],
+   notes:[
+    {k:"good",i:"TRAIN",h:"<b>員林 → 臺南　自強 115 次　11:53 → 13:25</b>（對號人車同行，額度 9，<b>線上可訂</b>）。抵站 10:27 留 86 分緩衝；掉到 23 km/h 的 11:11 也還有 42 分。<br/>車資每人 <b>$437 ＋ 自行車 $219 ＝ $656</b>。更早的 109 次 11:02 開只有 35 分緩衝，不建議賭。"},
+    {k:"good",i:"ARRIVE",h:"13:25 到臺南，走 570 m 進旅館 —— <b>整個週六下午加晚上都是空的</b>。"}
+   ]},
+ { id:"cy", name:"台鐵嘉義站", nameEn:"TRA Chiayi",
+   sub:"口湖休息站轉進 37.1 km", subEn:"Turn inland 37.1 km at Kouhu",
+   badge:"268 km", arr:"13:34", arr23:"14:30",
+   map: MAP_BASE + "/23.80039,120.27965/23.56822,120.15573/23.479075,120.441209/data=!4m2!4m1!3e9",
+   mapS:"10 個導航點 · 機車模式 · Google 265 km / 5h35",
+   legs:[
+    ["0 km","01:00","—","—","福鄉匯","八德區長興二路30號","night",0],
+    ["33 km","02:19","—","—","永安漁港","接上比賽路線 45K","night",0],
+    ["43 km","02:42","10","02:52","新豐休息站","24h","night",0],
+    ["95 km","04:58","10","05:08","7-11 白沙屯","24h","night",0],
+    ["121 km","06:11","25","06:36","大安休息站","早餐 · 日出 05:55","",0],
+    ["169 km","08:31","15","08:46","7-11 管興","24h","",0],
+    ["181 km","09:15","10","09:25","王功 福海宮","CP2 打卡","",0],
+    ["199 km","10:08","15","10:23","新吉社區旅人驛站","24h","",0],
+    ["231 km","11:40","25","12:05","口湖休息站","大休 · 切出路線","",0],
+    ["268 km","13:34","—","—","台鐵嘉義站","內陸 37.1 km","key",1]
+   ],
+   notes:[
+    {k:"bad",i:"NO EXPRESS",h:"<b>南下的對號人車同行搭不到。</b>109 次 11:46、115 次 12:43 就過嘉義了，都比 13:34 抵達早 —— 全台南下只有這兩班對號能帶整車，這條路線接不上。"},
+    {k:"warn",i:"LOCAL ONLY",h:"只能改搭<b>區間車人車同行</b>：<b>區間 3207　嘉義 13:54 → 臺南 14:56</b>（額度 8，留 20 分）。23 km/h 的話改 3217（14:43 → 15:47）。車資每人 <b>$131 ＋ 自行車 $66 ＝ $197</b>，比員林那條便宜 $459。"},
+    {k:"warn",i:"COUNTER",h:"區間車<b>不能線上訂</b>，限乘車日前 4 日內臨櫃 → <b>10/14 起</b>才買得到。等於去程回程都要跑窗口。"},
+    {k:"info",i:"COST",h:"多騎 <b>61 km</b>、晚 <b>1.5 小時</b>到臺南（約 15:10 進旅館），換到的是更完整的路線演練 —— 多跑了新吉、口湖兩個比賽補給點，涵蓋到比賽的 243K。"}
+   ]}
+];
+var routeId = "yl";
 
 var MODES = [
   { id:"roll", name:"台鐵・人車同行", nameEn:"TRA · roll-on",
@@ -777,7 +810,50 @@ function build(){
           wake:wakeT,home:t,needWheels:needWheels,rideKm:rideKm};
 }
 
-/* ═════════ RENDER ═════════ */
+
+/* ═════════ RENDER OUTBOUND ═════════ */
+function renderRoute(){
+  var R = ROUTES.filter(function(x){return x.id===routeId;})[0];
+  var g = document.getElementById("routeGrid"); g.innerHTML="";
+  ROUTES.forEach(function(r){
+    var b=el("button","mode-btn"); b.type="button";
+    b.setAttribute("aria-pressed", r.id===routeId ? "true":"false");
+    b.innerHTML='<div class="mt">'+r.name+'</div><div class="ms">'+r.sub+'</div>'+
+                '<span class="tool'+(r.id==="yl"?" no":"")+'">'+r.badge+'</span>';
+    b.addEventListener("click",function(){ routeId=r.id; renderRoute(); });
+    g.appendChild(b);
+  });
+
+  document.getElementById("routeFig").innerHTML =
+    'Fig. 01 · 去程時刻鏈　均速 25 km/h　23 km/h → '+R.arr23+
+    '　<span style="color:var(--ink-5)">DRAWING-NO. TBA360-OUT-'+(R.id==="yl"?"01":"02")+'</span>';
+
+  var t=document.getElementById("routeTable");
+  t.innerHTML='<div class="leg-row head"><div class="lc">里程</div><div class="lc">抵達</div><div class="lc">地點</div><div class="lc note">備註</div></div>';
+  R.legs.forEach(function(L){
+    var cls = L[7] ? "key" : (L[6]==="night" ? "night" : "");
+    var stop = (L[2]==="—") ? "" : '　<span style="color:var(--ink-4);font-size:12.5px">停 '+L[2]+' 分 → '+L[3]+'</span>';
+    t.insertAdjacentHTML("beforeend",
+      '<div class="leg-row '+cls+'"><div class="lc km">'+L[0]+'</div><div class="lc tm">'+L[1]+'</div>'+
+      '<div class="lc"><span class="place">'+L[4]+'</span>'+stop+'</div>'+
+      '<div class="lc note">'+L[5]+'</div></div>');
+  });
+
+  var a=document.getElementById("mapLink");
+  a.href=R.map;
+  document.getElementById("mapS").textContent=R.mapS;
+
+  var n=document.getElementById("routeNotes"); n.innerHTML="";
+  n.insertAdjacentHTML("beforeend",
+    '<div class="pnote info" style="margin-top:14px"><div class="pi">MAP</div><div>'+
+    '地圖是在這些點之間讓 Google 自己走道路最佳解，所以它的里程比 GPX 實測少 3–4 km（沿海幾段彎被拉直）。<b>導航可用，里程以表上的為準。</b></div></div>');
+  R.notes.forEach(function(x){
+    n.insertAdjacentHTML("beforeend",
+      '<div class="pnote '+x.k+'" style="margin-top:10px"><div class="pi">'+x.i+'</div><div>'+x.h+'</div></div>');
+  });
+}
+
+/* ═════════ RENDER (PLANNER) ═════════ */
 function renderModes(){
   var g=document.getElementById("modeGrid"); g.innerHTML="";
   MODES.forEach(function(m){
@@ -891,7 +967,7 @@ navLinks.forEach(function(a){
   });
 });
 
-applyI18n(); renderAll(); spy();
+applyI18n(); renderRoute(); renderAll(); spy();
 })();
 </script>
 

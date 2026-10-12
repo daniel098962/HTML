@@ -338,12 +338,12 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
   <div class="wrap">
     <div class="eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Training Ride · Return Planner</span></div>
     <h1 data-i18n="hero.h1">台南練習騎<br/><span class="accent">回程方案</span>規劃器</h1>
-    <p class="lede" data-i18n="hero.lede"><strong>楊梅車站 01:00 出發</strong>，接 20.7 km 上比賽路線。終點挑 4 個、回程挑 3 種 —— 車停楊梅，火車也回楊梅，下車就是車。在下面選一選，整條動線、費用、拆不拆輪就出來。</p>
+    <p class="lede" data-i18n="hero.lede">起點挑<strong>楊梅車站</strong>或<strong>八里廖添丁廟</strong>（大會正式起點），終點 4 個、回程 3 種 —— 車停楊梅，火車也回楊梅，下車就是車。在下面選一選，整條動線、費用、拆不拆輪就出來。</p>
     <div class="summary-cards">
       <div class="scard">
         <div class="lbl" data-i18n="hero.c1.lbl">去程里程</div>
-        <div class="val" data-i18n="hero.c1.val">185–283 km</div>
-        <div class="sub" data-i18n="hero.c1.sub">楊梅出發 · 4 個終點</div>
+        <div class="val" data-i18n="hero.c1.val">185–317 km</div>
+        <div class="sub" data-i18n="hero.c1.sub">2 起點 × 4 終點</div>
       </div>
       <div class="scard">
         <div class="lbl" data-i18n="hero.c2.lbl">回程方式</div>
@@ -370,12 +370,15 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
     <div class="section-head">
       <div class="num">§ 01</div>
       <h2 data-i18n="s1.title">去程路線</h2>
-      <div class="meta" data-i18n="s1.meta">Saturday 10/17 · 4 options</div>
+      <div class="meta" data-i18n="s1.meta">Saturday 10/17 · 2 × 4</div>
     </div>
-    <div class="ctl-label" style="margin-bottom:10px" data-i18n="ctl.route">① 去程終點</div>
-    <div class="mode-grid route-grid" id="routeGrid" role="group" aria-label="去程路線"></div>
+    <div class="ctl-label" style="margin-bottom:10px" data-i18n="ctl.start">① 起點</div>
+    <div class="mode-grid route-grid" id="startGrid" role="group" aria-label="起點"></div>
 
-    <div class="ctl-label" style="margin-top:22px;margin-bottom:10px" data-i18n="ctl.var">② 出發時間 × 均速</div>
+    <div class="ctl-label" style="margin-top:22px;margin-bottom:10px" data-i18n="ctl.route">② 去程終點</div>
+    <div class="mode-grid route-grid" id="routeGrid" role="group" aria-label="去程終點"></div>
+
+    <div class="ctl-label" style="margin-top:22px;margin-bottom:10px" data-i18n="ctl.var">③ 出發時間 × 均速</div>
     <div class="varbox">
       <div class="varctl">
         <div class="vl"><span>出發時間</span><output id="startOut" class="vv">01:00</output></div>
@@ -589,12 +592,12 @@ window.I18N = {
     "nav.s1":"去程","nav.s2":"回程規劃器","nav.s3":"方案對照","nav.s4":"限制與風險","nav.s5":"購票清單",
     "hero.eyebrow":"Training Ride · Return Planner",
     "hero.h1":"台南練習騎<br/><span class=\"accent\">回程方案</span>規劃器",
-    "hero.lede":"<strong>楊梅車站 01:00 出發</strong>，接 20.7 km 上比賽路線。終點挑 4 個、回程挑 3 種 —— 車停楊梅，火車也回楊梅，下車就是車。在下面選一選，整條動線、費用、拆不拆輪就出來。",
-    "hero.c1.lbl":"去程里程","hero.c1.val":"185–283 km","hero.c1.sub":"楊梅出發 · 4 個終點",
+    "hero.lede":"起點挑<strong>楊梅車站</strong>或<strong>八里廖添丁廟</strong>（大會正式起點），終點 4 個、回程 3 種 —— 車停楊梅，火車也回楊梅，下車就是車。在下面選一選，整條動線、費用、拆不拆輪就出來。",
+    "hero.c1.lbl":"去程里程","hero.c1.val":"185–317 km","hero.c1.sub":"2 起點 × 4 終點",
     "hero.c2.lbl":"回程方式","hero.c2.val":"3 種","hero.c2.sub":"人車同行／攜車袋／高鐵",
     "hero.c3.lbl":"車輛","hero.c3.val":"4 台","hero.c3.sub":"額度門檻 = 4",
     "hero.c4.lbl":"關鍵變數","hero.c4.val":"拆不拆輪","hero.c4.sub":"高鐵強制拆前後輪",
-    "s1.title":"去程路線","s1.meta":"Saturday 10/17 · 4 options",
+    "s1.title":"去程路線","s1.meta":"Saturday 10/17 · 2 × 4",
     "s1.fig":"Fig. 01 · 去程時刻鏈　均速 25 km/h　<span style=\"color:var(--ink-5)\">DRAWING-NO. TBA360-OUT-01</span>",
     "s2.title":"回程規劃器","s2.meta":"Sunday 10/18 · Interactive",
     "s2.fig":"Fig. 02 · 選方式 → 選班次 → 看完整動線　<span style=\"color:var(--ink-5)\">NOT TO SCALE</span>",
@@ -602,7 +605,7 @@ window.I18N = {
     "s3.fig":"Fig. 03 · 各方式最佳班次比較（綠＝該列最優）",
     "s4.title":"限制與風險","s4.meta":"Constraints · Verified 2026-10-12",
     "s5.title":"購票行動清單","s5.meta":"Action Items",
-    "ctl.route":"① 去程終點","ctl.var":"② 出發時間 × 均速","ctl.mode":"① 回程方式","ctl.dep":"② 班次",
+    "ctl.start":"① 起點","ctl.route":"② 去程終點","ctl.var":"③ 出發時間 × 均速","ctl.mode":"① 回程方式","ctl.dep":"② 班次",
     "map.t":"在 Google 地圖開啟去程路線","map.s":"8 個導航點 · 機車模式 · 203 km / 4h23",
     "footer.title":"回程只有一個真正的取捨：<span class=\"accent\">拆輪，還是早起</span>",
     "footer.sub":"區間快 1006 讓四台車整車上路、最便宜、12:21 就回到楊梅停車場，代價是週日七點四十三分就得離開旅館。其他每一個方案，都要四個人把前後輪拆下來。"
@@ -615,11 +618,11 @@ window.I18N = {
     "hero.eyebrow":"Training Ride · Return Planner",
     "hero.h1":"Tainan Training Ride<br/><span class=\"accent\">Return Trip</span> Planner",
     "hero.lede":"<strong>Leave Yangmei station at 01:00</strong>, 20.7 km to join the race route. Four finishes, three ways back — TRA or HSR, what time, what it costs, and whether four bikes get their wheels pulled. Pick below and the whole chain falls out.",
-    "hero.c1.lbl":"Outbound","hero.c1.val":"185–283 km","hero.c1.sub":"from Yangmei · 4 finishes",
+    "hero.c1.lbl":"Outbound","hero.c1.val":"185–317 km","hero.c1.sub":"2 starts × 4 finishes",
     "hero.c2.lbl":"Return modes","hero.c2.val":"3","hero.c2.sub":"Roll-on / bagged / HSR",
     "hero.c3.lbl":"Bikes","hero.c3.val":"4","hero.c3.sub":"quota threshold = 4",
     "hero.c4.lbl":"Key variable","hero.c4.val":"Wheels off?","hero.c4.sub":"HSR mandates both wheels",
-    "s1.title":"Outbound Route","s1.meta":"Saturday 10/17 · 4 options",
+    "s1.title":"Outbound Route","s1.meta":"Saturday 10/17 · 2 × 4",
     "s1.fig":"Fig. 01 · Outbound chain at 25 km/h　<span style=\"color:var(--ink-5)\">DRAWING-NO. TBA360-OUT-01</span>",
     "s2.title":"Return Planner","s2.meta":"Sunday 10/18 · Interactive",
     "s2.fig":"Fig. 02 · Pick mode → pick departure → read the chain　<span style=\"color:var(--ink-5)\">NOT TO SCALE</span>",
@@ -627,7 +630,7 @@ window.I18N = {
     "s3.fig":"Fig. 03 · Best option per mode (green = best in row)",
     "s4.title":"Constraints & Risks","s4.meta":"Constraints · Verified 2026-10-12",
     "s5.title":"Ticket Actions","s5.meta":"Action Items",
-    "ctl.route":"① Outbound finish","ctl.var":"② Start time × average speed","ctl.mode":"① Return mode","ctl.dep":"② Departure",
+    "ctl.start":"① Start","ctl.route":"② Finish","ctl.var":"③ Start time × average speed","ctl.mode":"① Return mode","ctl.dep":"② Departure",
     "map.t":"Open the outbound route in Google Maps","map.s":"8 waypoints · scooter mode · 203 km / 4h23",
     "footer.title":"One real trade-off: <span class=\"accent\">pull the wheels, or get up early</span>",
     "footer.sub":"Local Express 1006 takes all four bikes intact, costs least and gets you home first — but you leave the hotel at 07:30. Every other option means four people stripping and refitting both wheels."
@@ -656,88 +659,46 @@ var SHALUN = [ // 臺南 → 沙崙（高鐵台南站）$37
   {no:"3737",dep:"13:36",arr:"14:00"},{no:"3741",dep:"14:07",arr:"14:31"}
 ];
 
-/* ═════════ OUTBOUND ROUTES — 楊梅車站 起點 ═════════ */
-/* legs: [累計km, 停留分, 地點, 備註, 是否終點] */
-var MB = "https://www.google.com/maps/dir/24.91355,121.14578/24.91581,120.97196/24.56976,120.71294/24.37636,120.59111/24.02710,120.41146/23.95203,120.33429";
+/* ═════════ 起點 × 終點（共用比賽路線補給點） ═════════ */
 var SUNRISE = 5*60+55;
-var ROUTES = [
- { id:"tz", name:"台鐵田中站", sub:"王功 CP2 轉進 33.6 km", badge:"193 km",
-   map: MB+"/23.85837,120.59157/data=!4m2!4m1!3e9",
-   mapS:"7 個導航點 · 機車模式 · Google 193 km / 4h04",
-   legs:[
-    [0,0,"楊梅車站","大成路256號 · 區公所地下停車場",0],
-    [20.7,10,"新豐休息站","24h · 接上比賽路線 54.6K",0],
-    [73.1,10,"7-11 白沙屯","24h",0],
-    [99.1,25,"大安休息站","早餐",0],
-    [147.1,15,"7-11 管興","24h",0],
-    [159.1,10,"王功 福海宮","CP2 · 切出路線",0],
-    [192.7,0,"台鐵田中站","內陸 33.6 km",1]
-   ],
-   trains:[{n:"自強 115 次",d:"12:02",a:"13:25",q:9,kind:"對號"}],
-   notes:[
-    {k:"good",i:"TRAIN",h:"<b>田中 → 臺南　自強 115 次　12:02 → 13:25</b>（對號人車同行，額度 9，<b>線上可訂</b>）。車資每人 <b>$364 ＋ 自行車 $182 ＝ $546</b>。"},
-    {k:"good",i:"WHY HERE",h:"<b>員林以南唯一還有對號人車同行的站。</b>109 次跳過社頭／田中／二水直奔斗六，只有 115 次停田中。二水 198 km 更貼近 200，但沒有對號。"}
-   ]},
- { id:"yl", name:"台鐵員林站", sub:"王功 CP2 轉進 26.1 km", badge:"185 km",
-   map: MB+"/23.95939,120.56953/data=!4m2!4m1!3e9",
-   mapS:"7 個導航點 · 機車模式 · Google 185 km / 3h55",
-   legs:[
-    [0,0,"楊梅車站","大成路256號 · 區公所地下停車場",0],
-    [20.7,10,"新豐休息站","24h · 接上比賽路線 54.6K",0],
-    [73.1,10,"7-11 白沙屯","24h",0],
-    [99.1,25,"大安休息站","早餐",0],
-    [147.1,15,"7-11 管興","24h",0],
-    [159.1,10,"王功 福海宮","CP2 · 切出路線",0],
-    [185.2,0,"台鐵員林站","內陸 26.1 km",1]
-   ],
-   trains:[{n:"自強 109 次",d:"11:02",a:"12:28",q:10,kind:"對號"},{n:"自強 115 次",d:"11:53",a:"13:25",q:9,kind:"對號"}],
-   notes:[
-    {k:"good",i:"TRAIN",h:"<b>109 次 11:02 → 臺南 12:28</b>（額度 10）或 <b>115 次 11:53 → 13:25</b>（額度 9）。都是對號、線上可訂。車資每人 <b>$437 ＋ 自行車 $219 ＝ $656</b>。"}
-   ]},
- { id:"cy", name:"台鐵嘉義站", sub:"口湖休息站轉進 37.1 km", badge:"246 km",
-   map: MB+"/23.80039,120.27965/23.56822,120.15573/23.479075,120.441209/data=!4m2!4m1!3e9",
-   mapS:"9 個導航點 · 機車模式 · Google 246 km / 5h05",
-   legs:[
-    [0,0,"楊梅車站","大成路256號 · 區公所地下停車場",0],
-    [20.7,10,"新豐休息站","24h · 接上比賽路線 54.6K",0],
-    [73.1,10,"7-11 白沙屯","24h",0],
-    [99.1,25,"大安休息站","早餐",0],
-    [147.1,15,"7-11 管興","24h",0],
-    [159.1,10,"王功 福海宮","CP2 打卡",0],
-    [177.1,15,"新吉社區旅人驛站","24h",0],
-    [209.1,25,"口湖休息站","大休",0],
-    [246.2,0,"台鐵嘉義站","內陸 37.1 km",1]
-   ],
-   trains:[{n:"區間 3201",d:"13:05",a:"14:23",q:8,kind:"非對號"},{n:"區間 3207",d:"13:54",a:"14:56",q:8,kind:"非對號"}],
-   notes:[
-    {k:"bad",i:"NO EXPRESS",h:"<b>對號人車同行接不上。</b>115 次 12:43 過嘉義，正常配速根本來不及。"},
-    {k:"warn",i:"LOCAL ONLY",h:"只能搭<b>區間車人車同行</b>（額度 8）。車資每人 <b>$131 ＋ 自行車 $66 ＝ $197</b>，但<b>不能線上訂</b>，10/14 起臨櫃。"}
-   ]},
- { id:"tn", name:"台南車站（騎到底）", sub:"全程不搭車", badge:"283 km",
-   map: MB+"/23.80039,120.27965/23.56822,120.15573/23.27736,120.12894/22.99709,120.21298/data=!4m2!4m1!3e9",
-   mapS:"10 個導航點 · 機車模式 · Google 284 km / 5h49",
-   legs:[
-    [0,0,"楊梅車站","大成路256號 · 區公所地下停車場",0],
-    [20.7,10,"新豐休息站","24h · 接上比賽路線 54.6K",0],
-    [73.1,10,"7-11 白沙屯","24h",0],
-    [99.1,25,"大安休息站","早餐",0],
-    [147.1,15,"7-11 管興","24h",0],
-    [159.1,10,"王功 福海宮","CP2 打卡",0],
-    [177.1,15,"新吉社區旅人驛站","24h",0],
-    [209.1,25,"口湖休息站","大休",0],
-    [246.1,15,"7-11 南鯤鯓","24h",0],
-    [279.6,0,"旗哥牛肉湯","比賽正餐點",0],
-    [283.1,0,"台南車站","終點 · 旅館 570 m",1]
-   ],
-   trains:[],
-   notes:[
-    {k:"good",i:"NO TRAIN",h:"<b>週六完全不用搭車。</b>沒有額度、不必臨櫃、不用配合發車時間。旅館離台南車站 570 m。"},
-    {k:"warn",i:"VOLUME",h:"<b>283 km 是比賽全程的 79%</b>。離 11/13 剩四週，當唯一一次長途練習偏重，恢復會吃掉後面兩週。"},
-    {k:"info",i:"FULL",h:"但這是唯一能把<b>全部補給點（含南鯤鯓、旗哥牛肉湯）跑過一遍</b>的版本。"}
-   ]}
+/* 比賽路線補給點：[路線K, 停留分, 地點, 備註, 地圖座標] */
+var STOPS = [
+  [54.6,10,"新豐休息站","24h","24.91581,120.97196"],
+  [107,10,"7-11 白沙屯","24h","24.56976,120.71294"],
+  [133,25,"大安休息站","早餐","24.37636,120.59111"],
+  [181,15,"7-11 管興","24h","24.02710,120.41146"],
+  [193,10,"王功 福海宮","CP2","23.95203,120.33429"],
+  [211,15,"新吉社區旅人驛站","24h","23.80039,120.27965"],
+  [243,25,"口湖休息站","大休","23.56822,120.15573"],
+  [280,15,"7-11 南鯤鯓","24h","23.27736,120.12894"],
+  [313.5,0,"旗哥牛肉湯","比賽正餐點",null]
 ];
-var routeId = "tz";
-var START = 60;      /* 01:00 */
+var STARTS = [
+  { id:"bl", name:"八里 廖添丁廟", sub:"比賽正式起點 · 路線 0K", connect:0, join:0,
+    note:"GPX 0K · 大會起點", xy:"25.14350,121.39679",
+    warn:{k:"warn",i:"LOGISTICS",h:"<b>這是大會起點，不是車站。</b>車停八里的話，回程的區間快 1006 是開到<b>楊梅</b>，車跟人會對不上 —— 要嘛改搭到台北再往回、要嘛請人接駁。純粹想演練完整賽道才選這個。"} },
+  { id:"ym", name:"楊梅車站", sub:"接駁 20.7 km 到新豐休息站", connect:20.7, join:54.6,
+    note:"大成路256號 · 區公所地下停車場", xy:"24.91355,121.14578",
+    warn:null }
+];
+var FINISH = [
+  { id:"tz", name:"台鐵田中站", exit:193, inland:33.6, xy:"23.85837,120.59157", tag:"王功轉進 33.6 km",
+    trains:[{n:"自強 115 次",d:"12:02",a:"13:25",q:9,kind:"對號"}],
+    notes:[{k:"good",i:"TRAIN",h:"<b>自強 115 次 12:02 → 臺南 13:25</b>（對號人車同行，額度 9，<b>線上可訂</b>）。車資每人 <b>$364 ＋ 自行車 $182 ＝ $546</b>。"},
+           {k:"good",i:"WHY HERE",h:"<b>員林以南唯一還有對號人車同行的站。</b>109 次跳過社頭／田中／二水，只有 115 次停田中。二水更貼近 200 km 但沒有對號。"}]},
+  { id:"yl", name:"台鐵員林站", exit:193, inland:26.1, xy:"23.95939,120.56953", tag:"王功轉進 26.1 km",
+    trains:[{n:"自強 109 次",d:"11:02",a:"12:28",q:10,kind:"對號"},{n:"自強 115 次",d:"11:53",a:"13:25",q:9,kind:"對號"}],
+    notes:[{k:"good",i:"TRAIN",h:"<b>109 次 11:02 → 12:28</b>（額度 10）或 <b>115 次 11:53 → 13:25</b>（額度 9）。都是對號、線上可訂。車資每人 <b>$437 ＋ 自行車 $219 ＝ $656</b>。"}]},
+  { id:"cy", name:"台鐵嘉義站", exit:243, inland:37.1, xy:"23.479075,120.441209", tag:"口湖轉進 37.1 km",
+    trains:[{n:"區間 3201",d:"13:05",a:"14:23",q:8,kind:"非對號"},{n:"區間 3207",d:"13:54",a:"14:56",q:8,kind:"非對號"}],
+    notes:[{k:"warn",i:"LOCAL ONLY",h:"對號的 115 次 12:43 就過嘉義，正常配速接不上。只能搭<b>區間車人車同行</b>（額度 8），每人 <b>$131 ＋ 自行車 $66 ＝ $197</b>，但<b>不能線上訂</b>，10/14 起臨櫃。"}]},
+  { id:"tn", name:"台南車站（騎到底）", exit:313.6, inland:3.5, xy:"22.99709,120.21298", tag:"全程不搭車",
+    trains:[],
+    notes:[{k:"good",i:"NO TRAIN",h:"<b>週六完全不用搭車。</b>沒有額度、不必臨櫃、不用配合發車時間。旅館離台南車站 570 m。"},
+           {k:"info",i:"FULL",h:"唯一能把<b>全部補給點（含南鯤鯓、旗哥牛肉湯）跑過一遍</b>的版本。"}]}
+];
+var startId = "ym", finishId = "tz";
+var START = 60;
 var SPEED = 25;
 
 var MODES = [
@@ -861,40 +822,68 @@ function build(){
 
 /* ═════════ RENDER OUTBOUND (computed) ═════════ */
 function clk(m){m=Math.round(m);m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");}
+function S(){return STARTS.filter(function(x){return x.id===startId;})[0];}
+function F(){return FINISH.filter(function(x){return x.id===finishId;})[0];}
 
-function computeRoute(R){
-  var t=START, prev=0, rows=[], move=0, hold=0;
-  R.legs.forEach(function(L,i){
-    var km=L[0], stop=L[1], run=(km-prev)/SPEED*60;
-    t+=run; move+=run;
-    var arr=t; t+=stop; hold+=stop;
-    rows.push({km:km,arr:arr,dep:stop?t:null,stop:stop,place:L[2],note:L[3],key:L[4],
-               gap:i>0?km-R.legs[i-1][0]:null});
-    prev=km;
+function legsOf(){
+  var st=S(), fi=F(), out=[];
+  out.push({km:0,stop:0,place:st.name,note:st.note,key:0});
+  STOPS.forEach(function(p){
+    if(p[0]<st.join) return;
+    if(p[0]>fi.exit) return;
+    out.push({km:st.connect+(p[0]-st.join),stop:p[1],place:p[2],note:p[3],key:0});
+  });
+  out.push({km:st.connect+(fi.exit-st.join)+fi.inland,stop:0,place:fi.name,
+            note:fi.inland>5?("內陸 "+fi.inland+" km"):("終點 · 旅館 570 m"),key:1});
+  return out;
+}
+function mapPts(){
+  var st=S(), fi=F(), pts=[st.xy];
+  STOPS.forEach(function(p){ if(p[0]>=st.join && p[0]<=fi.exit && p[4] && p[4]!==st.xy) pts.push(p[4]); });
+  pts.push(fi.xy);
+  while(pts.length>10) pts.splice(2,1);
+  return pts;
+}
+function computeRoute(legs){
+  var t=START,prev=0,rows=[],move=0,hold=0;
+  legs.forEach(function(L,i){
+    var run=(L.km-prev)/SPEED*60; t+=run; move+=run;
+    var arr=t; t+=L.stop; hold+=L.stop;
+    rows.push({km:L.km,arr:arr,dep:L.stop?t:null,stop:L.stop,place:L.place,note:L.note,key:L.key,
+               gap:i>0?L.km-legs[i-1].km:null});
+    prev=L.km;
   });
   return {rows:rows,finish:rows[rows.length-1].arr,move:move,hold:hold,total:rows[rows.length-1].arr-START};
 }
 
 function renderRoute(){
-  var R=ROUTES.filter(function(x){return x.id===routeId;})[0];
-  var g=document.getElementById("routeGrid"); g.innerHTML="";
-  ROUTES.forEach(function(r){
+  var st=S(), fi=F();
+  var sg=document.getElementById("startGrid"); sg.innerHTML="";
+  STARTS.forEach(function(x){
+    var tot=x.connect+(fi.exit-x.join)+fi.inland;
     var b=el("button","mode-btn"); b.type="button";
-    b.setAttribute("aria-pressed", r.id===routeId?"true":"false");
-    b.innerHTML='<div class="mt">'+r.name+'</div><div class="ms">'+r.sub+'</div><span class="tool no">'+r.badge+'</span>';
-    b.addEventListener("click",function(){ routeId=r.id; renderRoute(); });
+    b.setAttribute("aria-pressed", x.id===startId?"true":"false");
+    b.innerHTML='<div class="mt">'+x.name+'</div><div class="ms">'+x.sub+'</div><span class="tool no">'+Math.round(tot)+' km</span>';
+    b.addEventListener("click",function(){ startId=x.id; renderRoute(); });
+    sg.appendChild(b);
+  });
+  var g=document.getElementById("routeGrid"); g.innerHTML="";
+  FINISH.forEach(function(x){
+    var tot=st.connect+(x.exit-st.join)+x.inland;
+    var b=el("button","mode-btn"); b.type="button";
+    b.setAttribute("aria-pressed", x.id===finishId?"true":"false");
+    b.innerHTML='<div class="mt">'+x.name+'</div><div class="ms">'+x.tag+'</div><span class="tool no">'+Math.round(tot)+' km</span>';
+    b.addEventListener("click",function(){ finishId=x.id; renderRoute(); });
     g.appendChild(b);
   });
 
-  var C=computeRoute(R);
+  var legs=legsOf(), C=computeRoute(legs);
   document.getElementById("startOut").textContent=clk(START);
   document.getElementById("speedOut").textContent=SPEED.toFixed(1)+" km/h";
-
   var mx=0; C.rows.forEach(function(r){ if(r.gap&&r.gap>mx) mx=r.gap; });
   document.getElementById("routeFig").innerHTML=
-    'Fig. '+String(ROUTES.indexOf(R)+1).padStart(2,"0")+' · 去程時刻鏈　'+clk(START)+' 出發 @ '+SPEED.toFixed(1)+' km/h'+
-    '　<span style="color:var(--accent)">抵達 '+clk(C.finish)+' · 最長間隔 '+Math.round(mx)+' km</span>'+
-    '　<span style="color:var(--ink-5)">DRAWING-NO. TBA360-OUT-'+String(ROUTES.indexOf(R)+1).padStart(2,"0")+'</span>';
+    'Fig. 01 · '+st.name+' → '+fi.name+'　'+clk(START)+' 出發 @ '+SPEED.toFixed(1)+' km/h'+
+    '　<span style="color:var(--accent)">'+Math.round(C.rows[C.rows.length-1].km)+' km · 抵達 '+clk(C.finish)+' · 最長間隔 '+Math.round(mx)+' km</span>';
 
   var t=document.getElementById("routeTable");
   t.innerHTML='<div class="leg-row head"><div class="lc">里程<span class="gap">間隔</span></div><div class="lc">抵達</div><div class="lc">地點</div><div class="lc note">備註</div></div>';
@@ -909,43 +898,41 @@ function renderRoute(){
       '<div class="lc note">'+r.note+'</div></div>');
   });
 
-  /* 接駁車班次檢查 */
   var tc=document.getElementById("trainCheck"); tc.innerHTML="";
-  if(R.trains.length){
+  if(st.warn) tc.insertAdjacentHTML("beforeend",
+    '<div class="pnote '+st.warn.k+'" style="margin-top:12px"><div class="pi">'+st.warn.i+'</div><div>'+st.warn.h+'</div></div>');
+  if(fi.trains.length){
     var any=false;
-    R.trains.forEach(function(tr){
+    fi.trains.forEach(function(tr){
       var buf=m2(tr.d)-C.finish;
-      var kind = buf>=25 ? "good" : (buf>=0 ? "warn" : "bad");
-      if(buf>=25) any=true;
-      var msg = buf<0
-        ? '<b>趕不上。</b>抵站 '+clk(C.finish)+'，'+tr.n+' '+tr.d+' 已經開走 '+dur(-buf)+'。'
-        : (buf<25
-          ? '<b>太趕。</b>抵站 '+clk(C.finish)+'，距 '+tr.n+' '+tr.d+' 只剩 <b>'+Math.round(buf)+' 分</b> —— 四台車牽上月台不夠用。'
-          : '抵站 '+clk(C.finish)+'，距 '+tr.n+' '+tr.d+' 還有 <b>'+dur(buf)+'</b>　→ 臺南 '+tr.a+'　（'+tr.kind+'，額度 '+tr.q+'）');
+      var kind=buf>=25?"good":(buf>=0?"warn":"bad"); if(buf>=25) any=true;
+      var msg = buf<0 ? '<b>趕不上。</b>抵站 '+clk(C.finish)+'，'+tr.n+' '+tr.d+' 已經開走 '+dur(-buf)+'。'
+        : (buf<25 ? '<b>太趕。</b>抵站 '+clk(C.finish)+'，距 '+tr.n+' '+tr.d+' 只剩 <b>'+Math.round(buf)+' 分</b>。'
+        : '抵站 '+clk(C.finish)+'，距 '+tr.n+' '+tr.d+' 還有 <b>'+dur(buf)+'</b>　→ 臺南 '+tr.a+'　（'+tr.kind+'，額度 '+tr.q+'）');
       tc.insertAdjacentHTML("beforeend",
-        '<div class="pnote '+kind+'" style="margin-top:12px"><div class="pi">'+(buf<0?"MISSED":(buf<25?"TIGHT":"OK"))+'</div><div>'+msg+'</div></div>');
+        '<div class="pnote '+kind+'" style="margin-top:10px"><div class="pi">'+(buf<0?"MISSED":(buf<25?"TIGHT":"OK"))+'</div><div>'+msg+'</div></div>');
     });
     if(!any) tc.insertAdjacentHTML("beforeend",
       '<div class="pnote bad" style="margin-top:10px"><div class="pi">RETHINK</div><div>這個出發時間／配速接不上任何一班人車同行列車。<b>提早出發或提高均速</b>，不然就得改終點。</div></div>');
   } else {
     tc.insertAdjacentHTML("beforeend",
-      '<div class="pnote good" style="margin-top:12px"><div class="pi">NO TRAIN</div><div>全程騎乘，<b>'+clk(C.finish)+'</b> 抵達台南車站。移動 '+dur(C.move)+'、停留 '+dur(C.hold)+'、門到門 '+dur(C.total)+'。</div></div>');
+      '<div class="pnote good" style="margin-top:10px"><div class="pi">NO TRAIN</div><div>全程騎乘，<b>'+clk(C.finish)+'</b> 抵達。移動 '+dur(C.move)+'、停留 '+dur(C.hold)+'、門到門 '+dur(C.total)+'。</div></div>');
   }
 
-  var a=document.getElementById("mapLink"); a.href=R.map;
-  document.getElementById("mapS").textContent=R.mapS;
+  var pts=mapPts();
+  document.getElementById("mapLink").href="https://www.google.com/maps/dir/"+pts.join("/")+"/data=!4m2!4m1!3e9";
+  document.getElementById("mapS").textContent=
+    pts.length+" 個導航點 · 機車模式 · "+Math.round(C.rows[C.rows.length-1].km)+" km";
 
   var n=document.getElementById("routeNotes"); n.innerHTML="";
   n.insertAdjacentHTML("beforeend",
-    '<div class="pnote info" style="margin-top:14px"><div class="pi">MAP</div><div>'+
-    '地圖是在這些點之間讓 Google 自己走道路最佳解，里程比 GPX 實測少 0–1 km。<b>導航可用，里程以表上的為準。</b></div></div>');
-  R.notes.forEach(function(x){
+    '<div class="pnote info" style="margin-top:14px"><div class="pi">MAP</div><div>地圖是在這些點之間讓 Google 自己走道路最佳解，里程會比表上的 GPX 實測少 0–1 km。<b>導航可用，里程以表上的為準。</b></div></div>');
+  fi.notes.forEach(function(x){
     n.insertAdjacentHTML("beforeend",
       '<div class="pnote '+x.k+'" style="margin-top:10px"><div class="pi">'+x.i+'</div><div>'+x.h+'</div></div>');
   });
 }
 
-/* 滑桿 */
 (function(){
   var sr=document.getElementById("startRange"), vr=document.getElementById("speedRange");
   sr.addEventListener("input",function(){ START=+sr.value; renderRoute(); });

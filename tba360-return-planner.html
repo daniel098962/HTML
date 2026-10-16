@@ -416,6 +416,14 @@ footer .meta{padding:16px 0 0;margin-top:16px;display:flex;justify-content:space
       </span>
       <span class="ml-go">GPX &darr;</span>
     </button>
+    <button type="button" class="maplink gpxbtn" id="tcxBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+      <span>
+        <span class="ml-t">下載 TCX 給 Garmin</span>
+        <span class="ml-s" id="tcxS"></span>
+      </span>
+      <span class="ml-go">TCX &darr;</span>
+    </button>
     <div id="routeNotes"></div>
   </section>
 
@@ -950,6 +958,18 @@ function renderRoute(){
     '<b>比賽路線那一段直接取自大會的 <code>北高360.gpx</code></b>（原始 7,918 點，簡化後與原軌跡偏離 ≤3 m）—— 完全貼齊台61／台17，不是點對點連直線。'+
     '兩端的接駁段用實際道路幾何，所以 GPX 量到的里程會跟表上差 0.3–1.9 km（接駁段的選路和 Google 不完全一樣）。'+
     '已把最大點距壓在 500 m 內，Garmin／Wahoo 都吃得下。</div></div>');
+  n.insertAdjacentHTML("beforeend",
+    '<div class="pnote warn" style="margin-top:10px"><div class="pi">IMPORT</div><div>'+
+    '<b>Garmin 用 TCX，其他平台用 GPX。</b><br/>'+
+    '<b>Garmin</b>：下載 TCX，走 <b><a href="https://connect.garmin.com/modern/courses" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700">Garmin Connect → 訓練與規劃 → 路線（Courses）→ 匯入</a></b>。'+
+    '<b>不要用首頁雲朵圖示的 <code>Import Data</code></b> —— 那是匯入「已完成的活動」，活動必須有時間戳記，路線檔丟進去一定跳「An error occurred with your upload」。<br/>'+
+    '<b>Wahoo</b>：ELEMNT App → Routes → 匯入 GPX。<b>Strava</b>：Routes → Upload GPX。'+
+    '</div></div>');
+  n.insertAdjacentHTML("beforeend",
+    '<div class="pnote good" style="margin-top:10px"><div class="pi">TCX</div><div>'+
+    'TCX 多了 <b>CoursePoint</b>：每個補給點會變成車錶上的<b>提示點</b>，騎到前面會跳出「大安休息站 99km 停25分」。'+
+    'GPX 的 <code>&lt;wpt&gt;</code> 匯進 Garmin 路線時會被丟掉，看不到補給點 —— 這是兩者最大的差別。'+
+    '檔案已對 Garmin 官方 <code>TrainingCenterDatabasev2.xsd</code> 驗證通過（課程名 ≤15 字、提示點名 ≤10 字的限制都有處理）。</div></div>');
   fi.notes.forEach(function(x){
     n.insertAdjacentHTML("beforeend",
       '<div class="pnote '+x.k+'" style="margin-top:10px"><div class="pi">'+x.i+'</div><div>'+x.h+'</div></div>');
@@ -1032,14 +1052,18 @@ function buildGpx(){
   });
   var seg=pts.map(function(q){return '<trkpt lat="'+q[0]+'" lon="'+q[1]+'"/>';}).join("");
   return '<?xml version="1.0" encoding="UTF-8"?>\n'+
-    '<gpx version="1.1" creator="TBA360 Planner" xmlns="http://www.topografix.com/GPX/1/1">\n'+
+    '<gpx version="1.1" creator="TBA360 Planner" xmlns="http://www.topografix.com/GPX/1/1" '+
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '+
+    'xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">\n'+
     '<metadata><name>'+esc(name)+'</name><desc>'+esc(Math.round(C.rows[C.rows.length-1].km)+" km · "+clk(START)+" 出發 @ "+SPEED.toFixed(1)+" km/h · 比賽路線貼合台61/台17")+'</desc></metadata>\n'+
     w.join("\n")+'\n<trk><name>'+esc(name)+'</name><trkseg>'+seg+'</trkseg></trk>\n</gpx>\n';
 }
 function updateGpxLabel(){
   var pts=gpxPoints(), km=gpxLen(pts);
   document.getElementById("gpxS").textContent=
-    pts.length.toLocaleString("en-US")+" 軌跡點 · "+km.toFixed(1)+" km · 含補給點標記";
+    pts.length.toLocaleString("en-US")+" 軌跡點 · "+km.toFixed(1)+" km · Wahoo／Strava 通用";
+  document.getElementById("tcxS").textContent=
+    "補給點會變成車錶提示 · "+legsOf().length+" 個 CoursePoint";
 }
 document.getElementById("gpxBtn").addEventListener("click",function(){
   var st=S(), fi=F(), legs=legsOf();
@@ -1047,6 +1071,75 @@ document.getElementById("gpxBtn").addEventListener("click",function(){
   var a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
   a.download="TBA360-"+st.id+"-"+fi.id+"-"+Math.round(legs[legs.length-1].km)+"km.gpx";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
+});
+
+/* ═════════ TCX Course 匯出（Garmin 專用，補給點會變成車錶提示） ═════════ */
+function cutName(x,n){ return x.length<=n ? x : x.slice(0,n); }
+function isoAt(minFromMidnight){
+  /* 乘車日 2026/10/17 台灣時間（UTC+8）→ UTC ISO */
+  var base=Date.UTC(2026,9,17,0,0,0)-8*3600*1000;
+  return new Date(base+Math.round(minFromMidnight*60000)).toISOString().replace(/\.\d{3}Z$/,"Z");
+}
+function buildTcx(){
+  var st=S(), fi=F(), legs=legsOf(), C=computeRoute(legs), pts=gpxPoints();
+  /* 每個軌跡點的累積距離 */
+  var cum=[0];
+  for(var i=1;i<pts.length;i++){
+    var a=pts[i-1],b=pts[i];
+    var kx=111.32*Math.cos((a[0]+b[0])/2*Math.PI/180);
+    cum.push(cum[i-1]+Math.hypot((b[1]-a[1])*kx,(b[0]-a[0])*110.57));
+  }
+  /* 距離 → 預計時刻（含已經過的停留） */
+  function tAt(km){
+    var hold=0;
+    legs.forEach(function(L){ if(L.km<km-0.001) hold+=L.stop; });
+    return START+km/SPEED*60+hold;
+  }
+  var tp=pts.map(function(q,i){
+    return '<Trackpoint><Time>'+isoAt(tAt(cum[i]))+'</Time>'+
+           '<Position><LatitudeDegrees>'+q[0]+'</LatitudeDegrees><LongitudeDegrees>'+q[1]+'</LongitudeDegrees></Position>'+
+           '<DistanceMeters>'+Math.round(cum[i]*1000)+'</DistanceMeters></Trackpoint>';
+  }).join("");
+  var cp=legs.map(function(L,i){
+    var ll, rk;
+    if(i===0) ll=pts[0];
+    else if(i===legs.length-1) ll=pts[pts.length-1];
+    else {
+      rk=st.join+(L.km-st.connect);
+      var c=trackCum(),bi=0,bd=1e9;
+      for(var j=0;j<c.length;j++){var dd=Math.abs(c[j]-rk); if(dd<bd){bd=dd;bi=j;}}
+      ll=TRACK[bi];
+    }
+    var r=C.rows[i];
+    var type=(i===0||i===legs.length-1)?"Generic":(L.stop>=20?"Water":"Food");
+    var nm=cutName(String(i+1).padStart(2,"0")+L.place,10);
+    var notes=Math.round(L.km)+"km "+clk(r.arr)+(L.stop?(" 停"+L.stop+"分→"+clk(r.dep)):"")+(L.note?(" "+L.note):"");
+    return '<CoursePoint><Name>'+esc(nm)+'</Name><Time>'+isoAt(r.arr)+'</Time>'+
+           '<Position><LatitudeDegrees>'+ll[0]+'</LatitudeDegrees><LongitudeDegrees>'+ll[1]+'</LongitudeDegrees></Position>'+
+           '<PointType>'+type+'</PointType><Notes>'+esc(cutName(notes,60))+'</Notes></CoursePoint>';
+  }).join("");
+  var total=cum[cum.length-1];
+  return '<?xml version="1.0" encoding="UTF-8"?>\n'+
+  '<TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2" '+
+  'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '+
+  'xsi:schemaLocation="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 https://www8.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd">\n'+
+  '<Courses><Course>\n'+
+  '<Name>'+esc(cutName("TBA360 "+st.id.toUpperCase()+"-"+fi.id.toUpperCase(),15))+'</Name>\n'+
+  '<Lap><TotalTimeSeconds>'+Math.round(C.total*60)+'</TotalTimeSeconds>'+
+  '<DistanceMeters>'+Math.round(total*1000)+'</DistanceMeters>'+
+  '<BeginPosition><LatitudeDegrees>'+pts[0][0]+'</LatitudeDegrees><LongitudeDegrees>'+pts[0][1]+'</LongitudeDegrees></BeginPosition>'+
+  '<EndPosition><LatitudeDegrees>'+pts[pts.length-1][0]+'</LatitudeDegrees><LongitudeDegrees>'+pts[pts.length-1][1]+'</LongitudeDegrees></EndPosition>'+
+  '<Intensity>Active</Intensity></Lap>\n'+
+  '<Track>'+tp+'</Track>\n'+cp+'\n</Course></Courses>\n</TrainingCenterDatabase>\n';
+}
+document.getElementById("tcxBtn").addEventListener("click",function(){
+  var st=S(), fi=F(), legs=legsOf();
+  var blob=new Blob([buildTcx()],{type:"application/vnd.garmin.tcx+xml"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="TBA360-"+st.id+"-"+fi.id+"-"+Math.round(legs[legs.length-1].km)+"km.tcx";
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
 });

@@ -960,9 +960,9 @@ function renderRoute(){
     '已把最大點距壓在 500 m 內，Garmin／Wahoo 都吃得下。</div></div>');
   n.insertAdjacentHTML("beforeend",
     '<div class="pnote warn" style="margin-top:10px"><div class="pi">IMPORT</div><div>'+
+    '<b>⚠ 千萬不要用首頁雲朵圖示的 <code>Import Data</code>。</b>那頁只收「已完成的<b>活動</b>」—— 活動要有時間戳記，而且 TCX 必須是 <code>&lt;Activities&gt;</code> 格式。我們做的是 <code>&lt;Courses&gt;</code> 路線檔，<b>丟進那頁永遠會失敗</b>，換什麼格式都一樣。<br/>'+
     '<b>Garmin 用 TCX，其他平台用 GPX。</b><br/>'+
-    '<b>Garmin</b>：下載 TCX，走 <b><a href="https://connect.garmin.com/modern/courses" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700">Garmin Connect → 訓練與規劃 → 路線（Courses）→ 匯入</a></b>。'+
-    '<b>不要用首頁雲朵圖示的 <code>Import Data</code></b> —— 那是匯入「已完成的活動」，活動必須有時間戳記，路線檔丟進去一定跳「An error occurred with your upload」。<br/>'+
+    '<b>Garmin</b>：下載 TCX，走 <b><a href="https://connect.garmin.com/app/courses" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700">Garmin Connect → 訓練與規劃 → 路線（Courses）→ 清單最下方的「匯入」</a></b>。手機版：Garmin Connect App → 更多 → 訓練與規劃 → 路線 → 右上「+」→ 匯入。'+
     '<b>Wahoo</b>：ELEMNT App → Routes → 匯入 GPX。<b>Strava</b>：Routes → Upload GPX。'+
     '</div></div>');
   n.insertAdjacentHTML("beforeend",

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="2026 北高 360 出發前接駁：11/13 一台車一趟，從楊梅到臺北車站西三門接補給人員，再到八里廖添丁廟。">
+<meta name="color-scheme" content="light dark">
+<title>北高360 接駁計畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* 版面：工程紙本（沿用北高360 作戰圖），單欄 + 一張時間軸；11/08 會議後改成單趟 */
+:root{
+  --paper:#F1EDE3; --card:#F8F5EE; --ink:#1B1E24; --muted:#615C52; --rule:#CFC7B6;
+  --amber:#B8541A; --amber-soft:#EBD3BF; --forest:#2F5D4F; --forest-soft:#C8D9D1;
+  --stop:#9C9484; --warn:#9A2B1E;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --sans:"Noto Sans TC","PingFang TC","Heiti TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#16181D; --card:#1E2128; --ink:#E8E4DA; --muted:#A39D90; --rule:#3A3D45;
+  --amber:#E08A4F; --amber-soft:#4A3122; --forest:#74B49F; --forest-soft:#22382F;
+  --stop:#6E6A61; --warn:#F08C7A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#16181D; --card:#1E2128; --ink:#E8E4DA; --muted:#A39D90; --rule:#3A3D45;
+  --amber:#E08A4F; --amber-soft:#4A3122; --forest:#74B49F; --forest-soft:#22382F;
+  --stop:#6E6A61; --warn:#F08C7A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:880px;margin:0 auto;padding-block:28px 56px;display:grid;gap:36px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(26px,5vw,36px);font-weight:900;line-height:1.2;margin:4px 0 6px;text-wrap:balance}
+h2{font-size:19px;font-weight:700;margin:0;display:flex;gap:10px;align-items:baseline;text-wrap:balance}
+h2 .no{font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:.08em}
+.lede{color:var(--muted);margin:0;max-width:62ch}
+section{display:grid;gap:14px;min-width:0}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px}
+
+/* 結論 */
+.answer{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.answer div{background:var(--card);padding:14px 16px;display:grid;gap:2px;align-content:start}
+.answer .k{font-size:12px;color:var(--muted)}
+.answer .v{font-family:var(--mono);font-size:26px;font-weight:600;line-height:1.2}
+.answer .s{font-size:13px;color:var(--muted)}
+.answer .lead .v{color:var(--amber)}
+
+/* 時間軸 */
+.gantt{position:relative;padding:26px 0 46px;min-width:560px}
+.g-over{position:absolute;top:0;bottom:0;left:52px;right:0;pointer-events:none}
+.tick{position:absolute;top:0;bottom:0;border-left:1px dashed var(--rule)}
+.tick i{position:absolute;top:4px;left:4px;font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.g-mark{position:absolute;top:22px;bottom:0;border-left:2px solid var(--warn)}
+.g-mark.goal{border-left-style:dashed}
+.g-mark b{position:absolute;right:6px;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--warn);white-space:nowrap}
+.g-mark.goal b{bottom:22px}
+.g-mark.start b{bottom:4px}
+.g-row{position:relative;display:grid;grid-template-columns:52px 1fr;align-items:center;height:34px}
+.g-lab{font-size:13px;font-weight:700}
+.g-track{position:relative;height:16px;background:color-mix(in srgb,var(--rule) 35%,transparent)}
+.seg{position:absolute;top:0;bottom:0}
+.seg.drive.t1{background:var(--amber)}
+.seg.drive.t2{background:var(--forest)}
+.seg.stop{background:repeating-linear-gradient(135deg,var(--stop) 0 2px,transparent 2px 5px)}
+.g-end{position:absolute;top:50%;transform:translate(6px,-50%);font-family:var(--mono);font-size:12px;font-weight:600;white-space:nowrap;background:var(--card);padding:0 3px}
+.gantt-box{overflow-x:auto;border:1px solid var(--rule);background:var(--card);padding:0 16px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:18px;height:10px;display:inline-block}
+.sw.t1{background:var(--amber)} .sw.t2{background:var(--forest)}
+.sw.st{background:repeating-linear-gradient(135deg,var(--stop) 0 2px,transparent 2px 5px)}
+
+/* 表格 */
+.tbl{overflow-x:auto;border:1px solid var(--rule);background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule)}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--paper)}
+tr:last-child td{border-bottom:0}
+td.t{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.t .w{color:var(--warn)}
+.trip{font-family:var(--mono);font-size:11px;font-weight:600;padding:1px 6px;white-space:nowrap}
+.trip.t1{background:var(--amber-soft);color:var(--amber)}
+.trip.t2{background:var(--forest-soft);color:var(--forest)}
+.place{font-weight:700}
+.sub{display:block;font-size:12.5px;color:var(--muted)}
+tr.arrive td{background:color-mix(in srgb,var(--forest-soft) 55%,transparent)}
+.tell{font-size:13.5px}
+
+/* 規則與待確認 */
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.rule{border-top:2px solid var(--ink);padding-top:8px;display:grid;gap:4px}
+.rule .k{font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:.06em}
+.rule p{margin:0;font-size:14px}
+ol.todo{margin:0;padding:0;list-style:none;display:grid;gap:0;border:1px solid var(--rule);background:var(--card)}
+ol.todo li{display:grid;grid-template-columns:34px 1fr;gap:8px;padding:12px 14px;border-bottom:1px solid var(--rule)}
+ol.todo li:last-child{border-bottom:0}
+ol.todo .n{font-family:var(--mono);font-size:13px;color:var(--amber);font-weight:600}
+ol.todo b{display:block}
+ol.todo p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+ol.todo a,ul.done a{color:inherit}
+.warn{border-left:3px solid var(--warn);padding:10px 14px;background:var(--card)}
+.warn b{color:var(--warn)}
+.warn p{margin:4px 0 0;font-size:14px}
+ul.done{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+ul.done li{background:var(--card);padding:12px 14px;display:grid;gap:2px;align-content:start}
+ul.done b{display:flex;gap:8px;align-items:baseline}
+ul.done b::before{content:"✓";font-family:var(--mono);color:var(--forest)}
+ul.done span{font-size:13.5px;color:var(--muted);padding-left:20px}
+.alt{border:1px dashed var(--forest);padding:14px 16px;background:color-mix(in srgb,var(--forest-soft) 40%,transparent)}
+.alt b{color:var(--forest)}
+.alt p{margin:4px 0 0;font-size:14px}
+footer{font-size:12.5px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px}
+@media (max-width:480px){.answer .v{font-size:22px}}
+tr.pick td{background:color-mix(in srgb,var(--amber-soft) 60%,transparent);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">TBA360 · 2026/11/13（五）· 出發前接駁</div>
+    <h1>北高360 接駁計畫</h1>
+    <p class="lede">一台車跑一趟：從揚昇載你、女朋友和 2 台腳踏車出發，到臺北車站<b>西三門接送區</b>接 3 位補給人員，再一起到八里廖添丁廟。<b>最晚 22:30 到</b>，23:00 起跑。</p>
+  </header>
+
+  <section>
+    <div class="answer">
+      <div class="lead"><span class="k">揚昇出發</span><span class="v">20:30</span><span class="s">最晚 20:45（塞車版 22:30 到）</span></div>
+      <div><span class="k">西三門接人</span><span class="v">21:20</span><span class="s">順 21:10 · 塞車 21:30</span></div>
+      <div><span class="k">揚昇→北車→八里</span><span class="v">抓 1h45</span><span class="s">一般 1h28 · 順 1h10</span></div>
+      <div><span class="k">到八里</span><span class="v">≤ 22:15</span><span class="s">一般 21:58 · 順 21:40</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">TIMELINE</span>20:30 出發的三種路況</h2>
+    <div class="gantt-box"><div class="gantt"><div class="g-over"><span class="tick" style="left:0.00%"><i>20:00</i></span><span class="tick" style="left:33.33%"><i>21:00</i></span><span class="tick" style="left:66.67%"><i>22:00</i></span><span class="tick" style="left:100.00%"><i>23:00</i></span><div class="g-mark goal" style="left:83.33%"><b>22:30 最晚到</b></div><div class="g-mark start" style="left:100.00%"><b>23:00 起跑</b></div></div><div class="g-row"><div class="g-lab">順</div><div class="g-track"><span class="seg drive t1" style="left:16.67%;width:22.22%" title="揚昇→北車 20:30–21:10"></span><span class="seg stop" style="left:38.89%;width:5.56%" title="西三門接人 21:10–21:20"></span><span class="seg drive t1" style="left:44.44%;width:11.11%" title="北車→八里 21:20–21:40"></span><span class="g-end" style="left:55.56%">21:40</span></div></div><div class="g-row"><div class="g-lab">一般</div><div class="g-track"><span class="seg drive t1" style="left:16.67%;width:27.78%" title="揚昇→北車 20:30–21:20"></span><span class="seg stop" style="left:44.44%;width:5.56%" title="西三門接人 21:20–21:30"></span><span class="seg drive t1" style="left:50.00%;width:15.56%" title="北車→八里 21:30–21:58"></span><span class="g-end" style="left:65.56%">21:58</span></div></div><div class="g-row"><div class="g-lab">塞車</div><div class="g-track"><span class="seg drive t1" style="left:16.67%;width:33.33%" title="揚昇→北車 20:30–21:30"></span><span class="seg stop" style="left:50.00%;width:5.56%" title="西三門接人 21:30–21:40"></span><span class="seg drive t1" style="left:55.56%;width:19.44%" title="北車→八里 21:40–22:15"></span><span class="g-end" style="left:75.00%">22:15</span></div></div></div></div>
+    <div class="legend">
+      <span><i class="sw t1"></i>行車</span>
+      <span><i class="sw st"></i>西三門接人</span>
+    </div>
+    <p class="lede">「塞車」用的是 Google 地圖週五該時段預估的上限，不是平均。就算兩段都碰到最塞，22:15 也到了，比 22:30 早 15 分。</p>
+  </section>
+
+  <section>
+    <h2><span class="no">STOPS</span>每一站的時間與要交代的事</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>地點</th><th>做什麼</th><th>一般<br>到／走</th><th>塞車<br>到／走</th><th>先跟對方說</th></tr></thead>
+      <tbody>
+        <tr><td><span class="place">揚昇高爾夫球場</span><span class="sub">桃園楊梅</span></td><td>在楊梅吃完晚餐；你＋女朋友上車，2 台車上車頂架</td><td class="t">— ／20:30</td><td class="t">— ／20:30</td><td class="tell">出發時傳 LINE 給三位補給人員</td></tr>
+        <tr><td><span class="place">臺北車站 西三門接送區</span><span class="sub">北平西路1號 · 車站西側平面黃線臨停 · 24 小時</span></td><td>接 3 位補給人員</td><td class="t">21:20／21:30</td><td class="t">21:30／21:40</td><td class="tell">21:10 前在西三門門口等，車到就上</td></tr>
+        <tr class="arrive"><td><span class="place">八里 廖添丁廟</span><span class="sub">大會起點</span></td><td>全員到齊</td><td class="t">21:58</td><td class="t">22:15</td><td class="tell">從車頂卸車、整車</td></tr>
+      </tbody>
+    </table></div>
+    <div class="warn"><b>車頂載車，注意限高</b><p>兩台車架在車頂時，車高會超過一般地下停車場的限高。北車的地下停車場、K 區停車場都不要進；西三門接送區是地面的黃線臨停車道，沒有這個問題。</p></div>
+  </section>
+
+  <section>
+    <h2><span class="no">OPTIONS</span>換個出發時間會怎樣</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>揚昇出發</th><th>西三門接人</th><th>到八里 順</th><th>一般</th><th>塞車</th><th>備註</th></tr></thead>
+      <tbody><tr><td class="t">19:30</td><td class="t">20:10–20:30</td><td class="t">20:40</td><td class="t">20:58</td><td class="t">21:15</td><td></td></tr><tr><td class="t">20:00</td><td class="t">20:40–21:00</td><td class="t">21:10</td><td class="t">21:28</td><td class="t">21:45</td><td></td></tr><tr><td class="t">20:15</td><td class="t">20:55–21:15</td><td class="t">21:25</td><td class="t">21:42</td><td class="t">22:00</td><td></td></tr><tr class="pick"><td class="t">20:30</td><td class="t">21:10–21:30</td><td class="t">21:40</td><td class="t">21:58</td><td class="t">22:15</td><td>建議</td></tr><tr><td class="t">20:45</td><td class="t">21:25–21:45</td><td class="t">21:55</td><td class="t">22:12</td><td class="t">22:30</td><td>最晚</td></tr><tr><td class="t">21:00</td><td class="t">21:40–22:00</td><td class="t">22:10</td><td class="t">22:28</td><td class="t">22:45 <span class="w">超過 22:30</span></td><td></td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2><span class="no">BUFFER</span>緩衝是怎麼抓的</h2>
+    <div class="rules">
+      <div class="rule"><span class="k">行車時間取上限</span><p>兩段都用 Google 地圖週五該時段預估範圍的上限排計畫，不用平均值。</p></div>
+      <div class="rule"><span class="k">接人另計 10 分</span><p>黃線臨停，三個人上車、放好行李就走。</p></div>
+      <div class="rule"><span class="k">晚出發不會比較慢</span><p>19:30 以後揚昇到北車都是 40 到 60 分；17:00 到 18:30 是下班尖峰，要 50 到 100 分。</p></div>
+      <div class="rule"><span class="k">最晚 22:30 到</span><p>不用報到。20:30 出發的塞車版 22:15 到，離 22:30 還有 15 分，離 23:00 起跑 45 分。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="no">LEGS</span>各段車程（Google 地圖，11/13 週五預估）</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>段</th><th>距離</th><th>出發時段</th><th>Google 預估</th><th>備註</th></tr></thead>
+      <tbody>
+        <tr><td>揚昇 → 臺北車站 西三門</td><td class="t">51.2 km</td><td class="t">17:00–17:30<br>18:00<br>18:30<br>19:00<br>19:30–21:00</td><td class="t"><span class="w">50–100 分</span><br>50–85 分<br>45–75 分<br>40–65 分<br>40–60 分</td><td>走國道1號</td></tr>
+        <tr><td>臺北車站 西三門 → 八里</td><td class="t">19.5 km</td><td class="t">21:15<br>21:45</td><td class="t">20–35 分<br>20–35 分</td><td>走台64</td></tr>
+      </tbody>
+    </table></div>
+    <p class="lede mono" style="font-size:13px">合計約 71 km · 車上時間約 1 小時 10 分到 1 小時 45 分</p>
+  </section>
+
+  <section>
+    <h2><span class="no">CONFIRMED</span>已確認</h2>
+    <ul class="done">
+      <li><b>單趟</b><span>11/08 會議決定，福鄉一琚、板橋都不去。</span></li>
+      <li><b>最晚 22:30 到</b><span>不用報到，23:00 起跑前到就好。</span></li>
+      <li><b>北車在西三門上車</b><span>北平西路1號，車站西側的黃線臨停區。</span></li>
+      <li><b>在楊梅吃晚餐</b><span>20:30 出發前吃完。</span></li>
+      <li><b>腳踏車放車頂</b><span>車頂兩個攜車架，載 2 台。</span></li>
+      <li><b>黃氏夫妻與板橋朋友</b><span>自己到八里，他們已經知道。</span></li>
+      <li><b>起跑後的支援車</b><span>補給團隊照<a href="https://daniel098962.github.io/HTML/tba360-supply-plan.html" target="_blank" rel="noopener noreferrer">補給作戰圖</a>再討論。</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="no">ON THE DAY</span>當天注意</h2>
+    <ol class="todo">
+      <li><span class="n">01</span><div><b>出發就傳 LINE</b><p>從揚昇出發時告訴三位補給人員，請他們 21:10 前到西三門門口。</p></div></li>
+      <li><span class="n">02</span><div><b>導航設「台北車站西三門接送區」</b><p>會從忠孝西路轉進北平西路。只能黃線臨停，人到才停、上車就走，不要停著等人。</p></div></li>
+    </ol>
+  </section>
+
+  <footer>車程來源：Google 地圖路線規劃，出發時間設為 2026/11/13（五）各時段，2026/11/08 查詢。西三門接送區的狀況來自 Google 地圖評論與相片，當天以現場標示為準。</footer>
+</div>
+</body>
+</html>

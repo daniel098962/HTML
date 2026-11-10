@@ -887,6 +887,118 @@ section.s{scroll-margin-top:82px;}
 .insight-table.t-cut{min-width:760px;}
 .insight-table.t-cut .r{grid-template-columns:236px 88px 148px 132px 1fr;}
 
+
+/* ═══════════════ DASHBOARD TABS ═══════════════ */
+.tabs { display:flex; gap:4px; flex:1; flex-wrap:wrap; }
+.tabs button {
+  font-family: var(--font-mono); font-size:12px; font-weight:600;
+  color: var(--ink-3); background:transparent; border:1px solid transparent;
+  padding:6px 11px; border-radius:6px; letter-spacing:.04em;
+  white-space:nowrap; cursor:pointer; transition:.15s;
+}
+.tabs button:hover { background:var(--paper-2); color:var(--ink); }
+.tabs button.is-on { background:var(--accent); color:#fff; border-color:var(--accent); }
+.view { display:none; }
+.view.is-on { display:block; }
+
+/* ── 停點照片卡 ── */
+.spotgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:14px; }
+.spot { background:var(--bg-card); border:1px solid var(--rule-2); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; }
+.spot figure { margin:0; position:relative; background:var(--paper-2); cursor:zoom-in; }
+.spot img { display:block; width:100%; height:165px; object-fit:cover; }
+.spot .tag {
+  position:absolute; left:8px; top:8px; font-family:var(--font-mono); font-size:11px; font-weight:700;
+  background:rgba(13,17,23,.82); color:#fff; padding:3px 8px; border-radius:4px; letter-spacing:.04em;
+}
+.spot .body { padding:11px 13px 13px; display:flex; flex-direction:column; gap:6px; }
+.spot h4 { margin:0; font-size:14.5px; font-weight:700; color:var(--ink); line-height:1.35; }
+.spot .when { font-family:var(--font-mono); font-size:12px; color:var(--ink-3); letter-spacing:.02em; }
+.spot .when b { color:var(--accent); font-weight:700; }
+.spot .how { font-size:12.5px; color:var(--ink-2); line-height:1.55; background:var(--warn-bg); border-left:2px solid var(--warn-3); padding:5px 9px; border-radius:0 4px 4px 0; }
+.spot .how.plain { background:var(--paper-2); border-left-color:var(--rule); color:var(--ink-3); }
+.spot .go { margin-top:auto; padding-top:4px; }
+.spot .go a { font-family:var(--font-mono); font-size:11.5px; font-weight:600; color:var(--accent); text-decoration:none; letter-spacing:.04em; }
+.spot .go a:hover { text-decoration:underline; }
+
+/* ── 清單（補給車 / 隨身） ── */
+.packgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:14px; }
+.pack { background:var(--bg-card); border:1px solid var(--rule-2); border-radius:var(--radius); overflow:hidden; }
+.pack > header {
+  display:flex; align-items:baseline; justify-content:space-between; gap:8px;
+  padding:9px 13px; background:var(--paper-2); border-bottom:1px solid var(--rule-2);
+}
+.pack > header b { font-size:13.5px; color:var(--ink); letter-spacing:.01em; }
+.pack > header span { font-family:var(--font-mono); font-size:11px; color:var(--ink-4); }
+.pack ul { list-style:none; margin:0; padding:5px 0; }
+.pack li { display:flex; align-items:flex-start; gap:9px; padding:5px 13px; font-size:13px; line-height:1.5; }
+.pack li + li { border-top:1px solid var(--rule-3); }
+.pack li .nm { flex:1; color:var(--ink-2); }
+.pack li .nm em { font-style:normal; font-size:11.5px; color:var(--ink-4); display:block; margin-top:1px; }
+.pack li .qty { font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3); white-space:nowrap; }
+.who { font-family:var(--font-mono); font-size:10.5px; font-weight:700; letter-spacing:.03em;
+  padding:1px 6px; border-radius:3px; white-space:nowrap; background:var(--accent-soft); color:var(--accent); }
+.who.w2 { background:var(--ok-soft); color:var(--ok); }
+.who.w3 { background:var(--warn-soft); color:var(--warn); }
+.who.w4 { background:var(--paper-3); color:var(--ink-3); }
+
+/* ── 勾選清單 ── */
+.chk { display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto;
+  width:17px; height:17px; margin-top:1px; border:1.5px solid var(--rule); border-radius:4px;
+  background:var(--bg-elev); cursor:pointer; transition:.12s; }
+.chk svg { width:11px; height:11px; opacity:0; stroke:#fff; stroke-width:3.2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+li.done .chk { background:var(--ok-2); border-color:var(--ok-2); }
+li.done .chk svg { opacity:1; }
+li.done .nm { color:var(--ink-5); text-decoration:line-through; }
+.packbar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px;
+  font-family:var(--font-mono); font-size:12px; color:var(--ink-3); }
+.packbar .pct { font-weight:700; color:var(--ink); }
+.packbar button { font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3);
+  background:var(--bg-card); border:1px solid var(--rule); border-radius:5px; padding:4px 10px; cursor:pointer; }
+.packbar button:hover { background:var(--paper-2); color:var(--ink); }
+.bar { flex:1; min-width:120px; height:5px; background:var(--paper-3); border-radius:3px; overflow:hidden; }
+.bar i { display:block; height:100%; background:var(--ok-2); width:0; transition:width .2s; }
+
+/* ── 守則卡 ── */
+.brief { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:14px; }
+.bcard { background:var(--bg-card); border:1px solid var(--rule-2); border-left:3px solid var(--accent); border-radius:var(--radius); padding:13px 15px; }
+.bcard.w { border-left-color:var(--warn-3); }
+.bcard.d { border-left-color:var(--danger); }
+.bcard.g { border-left-color:var(--ok-2); }
+.bcard h4 { margin:0 0 8px; font-size:14px; font-weight:700; color:var(--ink); }
+.bcard ul { margin:0; padding-left:17px; }
+.bcard li { font-size:13px; line-height:1.68; color:var(--ink-2); margin-bottom:3px; }
+.bcard li b { color:var(--ink); }
+.bcard .num { font-family:var(--font-mono); font-weight:700; color:var(--accent); }
+.yn { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px; }
+.yn > div { border-radius:6px; padding:9px 11px; }
+.yn .y { background:var(--ok-soft); }
+.yn .n { background:var(--warn-soft); }
+.yn h5 { margin:0 0 5px; font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; }
+.yn .y h5 { color:var(--ok); } .yn .n h5 { color:var(--warn); }
+.yn p { margin:0; font-size:12.5px; line-height:1.6; color:var(--ink-2); }
+.src { margin-top:14px; font-size:12px; color:var(--ink-4); }
+.src a { color:var(--accent); }
+@media (max-width:640px){
+  .spot img { height:140px; }
+  .yn { grid-template-columns:1fr; }
+}
+
+/* 窄螢幕：標題列拆兩行，分頁列獨佔第二行並可橫向捲動 */
+@media (max-width:900px){
+  .topbar-inner { flex-wrap:wrap; row-gap:9px; column-gap:14px; padding:12px 18px; }
+  .brand { flex:1 1 auto; min-width:0; }
+  .brand-text { min-width:0; }
+  .brand-text b, .brand-text span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .topbar-right { flex:0 0 auto; }
+  .tabs { order:3; flex:1 0 100%; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+          scrollbar-width:none; margin:0 -2px; padding:0 2px 2px; }
+  .tabs::-webkit-scrollbar { display:none; }
+}
+@media (max-width:430px){
+  .brand-text span { display:none; }
+  .brand-text b { font-size:13px; }
+  .tabs button { font-size:11.5px; padding:5px 9px; }
+}
 </style>
 </head>
 <body>
@@ -900,10 +1012,11 @@ section.s{scroll-margin-top:82px;}
         <span data-i18n="brand.sub">2026 / 11 / 13 23:00 → 11 / 14 · 八里 → 左營</span>
       </div>
     </div>
-    <nav class="nav">
-      <a href="#section-01" data-i18n="nav.s1">路線圖</a>
-      <a href="#section-02" data-i18n="nav.s2">時刻表</a>
-      <a href="#section-03" data-i18n="nav.s3">關門</a>
+    <nav class="tabs" id="tabs" role="tablist">
+      <button type="button" data-view="ride" class="is-on" data-i18n="tab.ride">騎乘計畫</button>
+      <button type="button" data-view="van" data-i18n="tab.van">補給車</button>
+      <button type="button" data-view="gear" data-i18n="tab.gear">隨身裝備</button>
+      <button type="button" data-view="brief" data-i18n="tab.brief">騎乘守則</button>
     </nav>
     <div class="topbar-right">
       <div class="lang-toggle" role="group" aria-label="Language">
@@ -920,6 +1033,7 @@ section.s{scroll-margin-top:82px;}
   </div>
 </header>
 
+<div class="view is-on" id="view-ride">
 <!-- ═══════════════ § 01 · 路線圖 ═══════════════ -->
 <section class="s" id="section-01" style="padding-top:34px">
   <div class="wrap">
@@ -1247,6 +1361,10 @@ section.s{scroll-margin-top:82px;}
         <div class="dlrow"><a class="dl" href="TBA360-official-course.tcx" download>TCX 課程（Garmin Courses）<span class="sz">400 KB</span></a><a class="dl" href="TBA360-official-route.gpx" download>GPX 路線<span class="sz">287 KB</span></a></div>
         <span style="margin-top:7px">TCX 內含 12 個 CoursePoint（補給點會在車錶上跳提示），匯入位置是 Garmin Connect 的 <b>Courses（課程）</b> → <code>connect.garmin.com/modern/courses</code> → Import。<b>不是</b> Import Data 那頁，那頁只收活動檔。Wahoo／Bryton 兩種格式都能吃，GPX 較通用。</span>
       </div>
+      <div class="note" style="border-left-color:var(--ok)">
+        <b>新增三個分頁（2026-11-10）</b>
+        <span>補給團隊那份 Google 雲端資料已整合進來：<b>補給車</b>分頁有 8 個停點的現場街景與停車方式、46 項車上準備清單；<b>隨身裝備</b>是可勾選的打包清單（勾選會存在你這台裝置）；<b>騎乘守則</b>是大會參考指南的當日重點摘要。切換在最上面那排。</span>
+      </div>
       <div class="note" style="border-left-color:var(--warn)">
         <b>三個停點到站時沒有店家可用</b>
         <span>臺鹽通霄（03:13，園區未營業）、油籽學堂（07:25，09:00 才開）、台電布袋（11:00，週六休息）—— 這三站本來就是挑來給補給車停的，水和食物從車上拿。<b>要上廁所或臨時補貨，表上「備援」那一行是最近的 24 小時商店。</b>萬一跟補給車脫隊，直接騎到備援點。</span>
@@ -1266,6 +1384,415 @@ section.s{scroll-margin-top:82px;}
     </div>
   </div>
 </section>
+
+</div><!-- /view-ride -->
+
+<div class="view" id="view-van">
+
+<section class="s" style="padding-top:34px">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-no">06</div>
+      <div>
+        <h2>補給車停留點</h2>
+        <div class="meta">Support Van · 8 stops · 現場街景</div>
+      </div>
+    </div>
+    <div class="notes" style="margin-bottom:16px">
+      <div class="note">
+        <b>這 8 張是補給團隊實地查過的停車位置</b>
+        <span>照片與停法來自補給組的點位表，時間是照 25 km/h 均速推算的到站時刻。起點廖添丁廟沒有照片。<b>騎士的停點就是這幾個位置</b>，物資從車上拿。</span>
+      </div>
+    </div>
+    <div class="spotgrid">
+      <div class="spot">
+        <figure data-full="img/tba360/s1-tongxiao.jpg"><img src="img/tba360/s1-tongxiao.jpg" alt="臺鹽通霄觀光園區 現場街景" loading="lazy"><span class="tag">S1</span></figure>
+        <div class="body">
+          <h4>臺鹽通霄觀光園區</h4>
+          <div class="when">105 K · 到 <b>03:13</b> · 走 <b>03:33</b></div>
+          <div class="how">停門口的空位</div>
+          <div class="go"><a href="https://www.google.com/maps/search/?api=1&amp;query=臺鹽通霄觀光園區" target="_blank" rel="noopener noreferrer">在 Google 地圖開啟 →</a></div>
+        </div>
+      </div>
+      <div class="spot">
+        <figure data-full="img/tba360/s2-longjing.jpg"><img src="img/tba360/s2-longjing.jpg" alt="全家 龍井麗水店 現場街景" loading="lazy"><span class="tag">S2</span></figure>
+        <div class="body">
+          <h4>全家 龍井麗水店</h4>
+          <div class="when">153 K · 到 <b>05:26</b> · 走 <b>05:46</b></div>
+          <div class="how">可以停門口，或是旁邊的 24 小時洗車場（假裝洗車或直接洗車）</div>
+          <div class="go"><a href="https://www.google.com/maps/search/?api=1&amp;query=全家便利商店 龍井麗水店" target="_blank" rel="noopener noreferrer">在 Google 地圖開啟 →</a></div>
+        </div>
+      </div>
+      <div class="spot">
+        <figure data-full="img/tba360/s3-youzi.jpg"><img src="img/tba360/s3-youzi.jpg" alt="油籽學堂門市體驗館 現場街景" loading="lazy"><span class="tag">S3</span></figure>
+        <div class="body">
+          <h4>油籽學堂門市體驗館</h4>
+          <div class="when">194 K · 到 <b>07:25</b> · 走 <b>07:45</b></div>
+          <div class="how">停在門口白線處，充分利用門口騎樓</div>
+          <div class="go"><a href="https://www.google.com/maps/search/?api=1&amp;query=油籽學堂門市體驗館" target="_blank" rel="noopener noreferrer">在 Google 地圖開啟 →</a></div>
+        </div>
+      </div>
+      <div class="spot">
+        <figure data-full="img/tba360/s4-lincuo.jpg"><img src="img/tba360/s4-lincuo.jpg" alt="7-11 林厝門市 現場街景" loading="lazy"><span class="tag">S4</span></figure>
+        <div class="body">
+          <h4>7-11 林厝門市</h4>
+          <div class="when">228 K · 到 <b>09:08</b> · 走 <b>09:18</b></div>
+          <div class="how plain">表上沒寫停法 —— 超商自有停車空間，門口暫停即可。</div>
+          <div class="go"><a href="https://www.google.com/maps/search/?api=1&amp;query=7-ELEVEN 林厝門市" target="_blank" rel="noopener noreferrer">在 Google 地圖開啟 →</a></div>
+        </div>
+      </div>
+      <div class="spot">
+        <figure data-full="img/tba360/s5-budai.jpg"><img src="img/tba360/s5-budai.jpg" alt="台灣電力公司布袋服務所 現場街景" loading="lazy"><span class="tag">S5</span></figure>
+        <div class="body">
+          <h4>台灣電力公司布袋服務所</h4>
+          <div class="when">271 K · 到 <b>11:00</b> · 走 <b>11:10</b></div>
+          <div class="how">利用台電公司門口當補給</div>
+          <div class="go"><a href="https://www.google.com/maps/search/?api=1&amp;query=台灣電力公司布袋服務所" target="_blank" rel="noopener noreferrer">在 Google 地圖開啟 →</a></div>
+        </div>
+      </div>
+      <div class="spot">
+        <figure data-full="img/tba360/s6-porkknuckle.jpg"><img src="img/tba360/s6-porkknuckle.jpg" alt="國姓土豆豬腳 現場街景" loading="lazy"><span class="tag">餐</span></figure>
+        <div class="body">
+          <h4>國姓土豆豬腳</h4>
+          <div class="when">301 K · 到 <b>12:22</b> · 走 <b>13:07</b></div>
+          <div class="how">吃個豬腳飯吧 —— 全程唯一一餐，停 45 分</div>
+          <div class="go"><a href="https://www.google.com/maps/search/?api=1&amp;query=國姓土豆豬腳" target="_blank" rel="noopener noreferrer">在 Google 地圖開啟 →</a></div>
+        </div>
+      </div>
+      <div class="spot">
+        <figure data-full="img/tba360/s7-xingda.jpg"><img src="img/tba360/s7-xingda.jpg" alt="興達港情人碼頭停車場 現場街景" loading="lazy"><span class="tag">S6</span></figure>
+        <div class="body">
+          <h4>興達港情人碼頭停車場</h4>
+          <div class="when">330 K · 到 <b>14:16</b> · 走 <b>14:26</b></div>
+          <div class="how">有停車場</div>
+          <div class="go"><a href="https://www.google.com/maps/search/?api=1&amp;query=興達港情人碼頭停車場" target="_blank" rel="noopener noreferrer">在 Google 地圖開啟 →</a></div>
+        </div>
+      </div>
+      <div class="spot">
+        <figure data-full="img/tba360/s8-pingshan.jpg"><img src="img/tba360/s8-pingshan.jpg" alt="屏山運動公園 現場街景" loading="lazy"><span class="tag">終</span></figure>
+        <div class="body">
+          <h4>屏山運動公園</h4>
+          <div class="when">354 K · 到 <b>15:25</b> · 終點</div>
+          <div class="how">終點站對面的公園，可以繞一下公園找停車位</div>
+          <div class="go"><a href="https://www.google.com/maps/search/?api=1&amp;query=屏山運動公園" target="_blank" rel="noopener noreferrer">在 Google 地圖開啟 →</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-no">07</div>
+      <div>
+        <h2>補給車準備清單</h2>
+        <div class="meta">Van Checklist · 46 items</div>
+      </div>
+    </div>
+    <div class="notes" style="margin-bottom:16px">
+      <div class="note" style="border-left-color:var(--warn)">
+        <b>「鹹食：洋芋片、茶葉蛋」這一項，大會指南建議留到騎完再吃</b>
+        <span>兩樣都是高脂肪／高蛋白、消化慢，在高強度騎乘中容易引起腸胃不適。<b>車上留著沒問題，但騎乘途中優先給飯糰、香蕉、果膠、運動飲料。</b>詳見「騎乘守則」分頁。</span>
+      </div>
+      <div class="note">
+        <b>回報機制</b>
+        <span>每小時以制式格式回報一次：<b>人／車／時間</b>。LINE 群組與 Google 定位出發前就要建好並確認每個人都加入。</span>
+      </div>
+    </div>
+    <div class="packgrid">
+    <div class="pack">
+      <header><b>車輛與人員</b><span>8 項</span></header>
+      <ul>
+        <li><span class="nm">備用車</span></li>
+        <li><span class="nm">備用輪組</span></li>
+        <li><span class="nm">行動電源</span></li>
+        <li><span class="nm">地圖</span></li>
+        <li><span class="nm">建立 LINE 群組</span></li>
+        <li><span class="nm">建立 Google 定位</span></li>
+        <li><span class="nm">定點補給點設置</span></li>
+        <li><span class="nm">定期回報時間<em>每小時制式格式回報（人／車／時間）</em></span></li>
+      </ul>
+    </div>
+    <div class="pack">
+      <header><b>補給品</b><span>11 項</span></header>
+      <ul>
+        <li><span class="nm">水<em>一般瓶裝</em></span><span class="qty">12</span><span class="who w2">馬芸</span></li>
+        <li><span class="nm">電解質<em>沿路買</em></span><span class="who ">以婷</span></li>
+        <li><span class="nm">冰塊<em>沿路買</em></span><span class="who ">以婷</span></li>
+        <li><span class="nm">飯糰<em>沿路買</em></span><span class="who ">以婷</span></li>
+        <li><span class="nm">香蕉<em>沿路買</em></span><span class="who ">以婷</span></li>
+        <li><span class="nm">果膠<em>沿路買</em></span><span class="who ">以婷</span></li>
+        <li><span class="nm">能量飲<em>威德</em></span><span class="qty">8</span><span class="who w2">馬芸</span></li>
+        <li><span class="nm">鹹食<em>洋芋片、茶葉蛋</em></span></li>
+        <li><span class="nm">咖啡因<em>貝納頌</em></span><span class="qty">8</span><span class="who w2">馬芸</span></li>
+        <li><span class="nm">可樂<em>可口可樂</em></span><span class="qty">8</span><span class="who w2">馬芸</span></li>
+        <li><span class="nm">衣物包<em>騎士替換用</em></span></li>
+      </ul>
+    </div>
+    <div class="pack">
+      <header><b>維修備援</b><span>8 項</span></header>
+      <ul>
+        <li><span class="nm">落地式打氣筒</span></li>
+        <li><span class="nm">內胎</span></li>
+        <li><span class="nm">外胎</span></li>
+        <li><span class="nm">補胎工具<em>挖胎棒</em></span></li>
+        <li><span class="nm">鍊條油<em>清潔劑／潤滑油</em></span></li>
+        <li><span class="nm">備用車燈</span></li>
+        <li><span class="nm">充電線<em>Type-C</em></span><span class="who w3">廷洋</span></li>
+        <li><span class="nm">充電器<em>充電頭、行動電源</em></span><span class="who w3">廷洋</span></li>
+      </ul>
+    </div>
+    <div class="pack">
+      <header><b>醫療安全</b><span>9 項</span></header>
+      <ul>
+        <li><span class="nm">急救包<em>整箱</em></span><span class="qty">1</span><span class="who ">以婷</span></li>
+        <li><span class="nm">止痛消炎藥<em>普拿疼／IBU</em></span><span class="who w2">馬芸</span></li>
+        <li><span class="nm">痠痛噴劑</span><span class="qty">1</span><span class="who ">以婷</span></li>
+        <li><span class="nm">防曬乳</span><span class="qty">2</span><span class="who ">以婷</span></li>
+        <li><span class="nm">凡士林／屁屁膏</span></li>
+        <li><span class="nm">警示三腳架<em>車上應該有</em></span></li>
+        <li><span class="nm">毛巾</span><span class="qty">2</span><span class="who ">以婷</span></li>
+        <li><span class="nm">雨衣</span><span class="qty">1-2</span><span class="who w4">草</span></li>
+        <li><span class="nm">冰敷袋</span><span class="qty">1</span><span class="who w2">馬芸</span></li>
+      </ul>
+    </div>
+    <div class="pack">
+      <header><b>行政</b><span>6 項</span></header>
+      <ul>
+        <li><span class="nm">路線表</span></li>
+        <li><span class="nm">補給點時間表</span></li>
+        <li><span class="nm">緊急聯絡人<em>LINE</em></span></li>
+        <li><span class="nm">現金</span></li>
+        <li><span class="nm">信用卡</span></li>
+        <li><span class="nm">住宿確認<em>放門口</em></span><span class="who ">以婷</span></li>
+      </ul>
+    </div>
+    <div class="pack">
+      <header><b>其他</b><span>4 項</span></header>
+      <ul>
+        <li><span class="nm">保冰桶</span><span class="qty">1</span><span class="who w2">馬芸</span></li>
+        <li><span class="nm">快樂的心</span><span class="qty">4</span><span class="who w4">補給組</span></li>
+        <li><span class="nm">很累的身體</span><span class="qty">4</span><span class="who w4">騎車組</span></li>
+        <li><span class="nm">露營椅</span></li>
+      </ul>
+    </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /view-van -->
+
+<div class="view" id="view-gear">
+
+<section class="s" style="padding-top:34px">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-no">08</div>
+      <div>
+        <h2>騎士隨身攜帶</h2>
+        <div class="meta">Rider Kit · 21 items · 勾選會存在這台裝置</div>
+      </div>
+    </div>
+    <div class="packbar" data-scope="kit">
+      <span>打包進度</span><span class="pct">0 / 21</span>
+      <span class="bar"><i></i></span>
+      <button type="button" data-reset="kit">全部清除</button>
+    </div>
+    <div class="packgrid">
+    <div class="pack">
+      <header><b>車上</b><span>10 項</span></header>
+      <ul>
+        <li data-k="bike-0"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">水壺</span></li>
+        <li data-k="bike-1"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">打氣瓶／打氣筒</span></li>
+        <li data-k="bike-2"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">備用內胎<em>指南建議至少 2 條</em></span></li>
+        <li data-k="bike-3"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">挖胎棒</span></li>
+        <li data-k="bike-4"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">補胎片</span></li>
+        <li data-k="bike-5"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">多功能工具</span></li>
+        <li data-k="bike-6"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">鍊條扣</span></li>
+        <li data-k="bike-7"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">電火布</span></li>
+        <li data-k="bike-8"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">前後車燈<em>尾燈建議閃爍模式</em></span></li>
+        <li data-k="bike-9"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">反光裝置<em>反光背心是大會強制要求</em></span></li>
+      </ul>
+    </div>
+    <div class="pack">
+      <header><b>身上</b><span>5 項</span></header>
+      <ul>
+        <li data-k="body-0"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">手機<em>存大會與緊急聯絡人號碼</em></span></li>
+        <li data-k="body-1"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">行動電源<em>夜騎 7 小時，車燈可能要中途補電</em></span></li>
+        <li data-k="body-2"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">少量現金</span></li>
+        <li data-k="body-3"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">能量果膠／能量棒<em>每小時 30–60 g 醣</em></span></li>
+        <li data-k="body-4"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">運動耳機</span></li>
+      </ul>
+    </div>
+    <div class="pack">
+      <header><b>裝備</b><span>6 項</span></header>
+      <ul>
+        <li data-k="gear-0"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">安全帽<em>號碼貼紙內有計時晶片</em></span></li>
+        <li data-k="gear-1"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">手套</span></li>
+        <li data-k="gear-2"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">袖套</span></li>
+        <li data-k="gear-3"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">眼鏡</span></li>
+        <li data-k="gear-4"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">襪子</span></li>
+        <li data-k="gear-5"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">濕紙巾</span></li>
+      </ul>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-no">09</div>
+      <div>
+        <h2>出發前 2–3 小時車檢</h2>
+        <div class="meta">Pre-ride Check · 10 items</div>
+      </div>
+    </div>
+    <div class="notes" style="margin-bottom:16px">
+      <div class="note">
+        <b>23:00 開賽，目標 22:00 前到起點</b>
+        <span>大會指南建議至少提早 60 分鐘到起點區。車檢在出發前 2–3 小時做完，不要留到現場。最後 60 分鐘：換裝、貼號碼牌、再上一次廁所、15–30 分鐘輕鬆踩一下熱身（不要做靜態伸展）。</span>
+      </div>
+    </div>
+    <div class="packbar" data-scope="pre">
+      <span>車檢進度</span><span class="pct">0 / 10</span>
+      <span class="bar"><i></i></span>
+      <button type="button" data-reset="pre">全部清除</button>
+    </div>
+    <div class="packgrid">
+    <div class="pack">
+      <header><b>出發前車檢</b><span>10 項</span></header>
+      <ul>
+        <li data-k="pre-0"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">輪胎<em>胎壓正確？有無割傷、嵌入碎屑</em></span></li>
+        <li data-k="pre-1"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">煞車<em>作動正常？煞車皮還夠</em></span></li>
+        <li data-k="pre-2"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">鍊條<em>清潔並上油</em></span></li>
+        <li data-k="pre-3"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">快拆／貫通軸<em>確實鎖緊</em></span></li>
+        <li data-k="pre-4"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">把手、龍頭、座管螺絲<em>鎖緊但不過度</em></span></li>
+        <li data-k="pre-5"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">車燈<em>頭燈尾燈都亮，備用電源帶了</em></span></li>
+        <li data-k="pre-6"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">碼表<em>開機、收到 GPS、路線已載入</em></span></li>
+        <li data-k="pre-7"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">水壺裝滿</span></li>
+        <li data-k="pre-8"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">前幾小時的補給放口袋</span></li>
+        <li data-k="pre-9"><span class="chk" role="checkbox" tabindex="0" aria-checked="false"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg></span><span class="nm">計時晶片貼好<em>貼在安全帽上</em></span></li>
+      </ul>
+    </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /view-gear -->
+
+<div class="view" id="view-brief">
+
+<section class="s" style="padding-top:34px">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-no">10</div>
+      <div>
+        <h2>騎乘守則</h2>
+        <div class="meta">Race-day Brief · 整理自大會參考指南</div>
+      </div>
+    </div>
+
+    <div class="notes" style="margin-bottom:16px">
+      <div class="note">
+        <b>這頁是摘要，不是全文</b>
+        <span>只留下當天能照著做的數字與動作。完整內容（含訓練、肌力、賽後恢復、附錄）在<a href="https://sustainabullfitness.wixsite.com/twb360guide/zh" target="_blank" rel="noopener noreferrer">大會參考指南</a>，作者 Edward Shen, ACE CPT。</span>
+      </div>
+    </div>
+
+    <div class="brief">
+
+      <div class="bcard">
+        <h4>配速 —— 全程只有一個目標</h4>
+        <ul>
+          <li>維持 <b>Z2／「能講完整句子」</b>的強度，體感 <span class="num">RPE 3–4</span>（滿分 10）。喘到聊不了天就是太用力。</li>
+          <li>開頭刻意放慢。<b>一開始應該覺得太輕鬆</b> —— 那才對。</li>
+          <li>別為了跟集團而超出自己的配速，這是跑不完的頭號原因。配速合就跟，不合就讓他走。</li>
+          <li>爬坡換輕齒比維持穩定出力，下坡滑行恢復。</li>
+          <li>狀態低潮是必然的，<b>先檢查三件事</b>：多久沒吃？多久沒喝？是不是不小心騎太快？</li>
+        </ul>
+      </div>
+
+      <div class="bcard g">
+        <h4>補給節奏 —— 照表吃，不要等餓</h4>
+        <ul>
+          <li>醣類：<span class="num">每小時 30–60 g 以上</span>（約 1–2 包能量膠、或 1 瓶運動飲料、或 1 包能量軟糖）。</li>
+          <li>水分：<span class="num">每小時 500–750 ml</span>（約一個標準水壺），持續小口喝。</li>
+          <li><b>第一個小時內就要開始吃喝</b>，之後每 30–60 分鐘一次。</li>
+          <li>吃果膠一定配水，否則吸收差又傷胃。</li>
+          <li>一、兩小時後開始補電解質（運動飲料或電解質錠），<b>只喝白開水會出事</b>。</li>
+        </ul>
+      </div>
+
+      <div class="bcard">
+        <h4>超商買什麼</h4>
+        <div class="yn">
+          <div class="y">
+            <h5>可以</h5>
+            <p>御飯糰（原味鹽、鮪魚、梅子）· 香蕉 · 烤地瓜（去皮、適量）· 原味麵包 · 運動飲料</p>
+          </div>
+          <div class="n">
+            <h5>留到賽後</h5>
+            <p>茶葉蛋 · 洋芋片、餅乾 · 泡麵 · 炸雞等油炸物 · 奶油麵包、甜點 · 香腸、肉包 · 珍奶</p>
+          </div>
+        </div>
+        <ul style="margin-top:9px">
+          <li>右欄不是難吃，是<b>高脂肪／高蛋白／高纖，消化慢</b>。高強度騎乘時血流離開腸胃，容易脹氣絞痛。</li>
+          <li>比賽當天不要試沒吃過的東西。</li>
+        </ul>
+      </div>
+
+      <div class="bcard d">
+        <h4>抽筋與疲勞 —— 三個可控原因</h4>
+        <ul>
+          <li><b>脫水</b> —— 血液量下降，送不了氧和燃料。天冷、天黑一樣在流汗。</li>
+          <li><b>電解質失衡</b> —— 尤其是鈉。流汗流掉卻只補白開水，神經訊號會亂，嚴重會低血鈉。</li>
+          <li><b>肝醣耗盡</b> —— 就是撞牆。</li>
+          <li><b>早期徵兆就處理</b>：肌肉開始跳動、異常緊繃、力量突然掉 → 立刻檢查上次喝水／電解質／吃醣是什麼時候。</li>
+          <li>車衣上有鹽結晶的人要特別補鈉。</li>
+        </ul>
+      </div>
+
+      <div class="bcard w">
+        <h4>夜騎（23:00 → 06:00，共 7 小時）</h4>
+        <ul>
+          <li><b>夜裡速度感會變快</b> —— 視野被車燈限縮，大腦少了周邊參照。別被騙去加速，看碼表或靠體感。</li>
+          <li>單一光源會把路面壓平，<b>坑洞和碎石的深度判斷會失準</b>。下坡與陌生路段要更保守，視線放遠並左右掃。</li>
+          <li>西濱有長段完全沒路燈，<b>你的車燈就是唯一光源</b>。備用燈或行動電源是必需品，不是加分項。</li>
+          <li>反光背心是大會強制要求。安全帽、車鞋、四肢再加反光元素更好。</li>
+        </ul>
+      </div>
+
+      <div class="bcard d">
+        <h4>安全與機械</h4>
+        <ul>
+          <li><b>假設駕駛看不到你。</b>路線可預測、意圖要明確、路口先對上眼神。機車特別多。</li>
+          <li>爆胎是最常見的問題 —— <b>至少 2 條內胎</b>＋挖胎棒＋打氣筒／CO2，而且要事先練過換胎。</li>
+          <li>緊急電話：<span class="num">119</span> 消防／醫療、<span class="num">110</span> 警察。</li>
+          <li><b>劇痛不要硬撐。</b>尖銳、局部、持續惡化的痛就是停下來的訊號，跟一般疲勞不一樣。</li>
+          <li>熱衰竭徵兆：頭暈、噁心、意識混亂、不出汗 → 停下、降溫、求援。</li>
+          <li>低血鈉徵兆：噁心、頭痛、意識混亂、虛弱（常見於只灌白開水）→ 補電解質或鹹食，減少白開水。</li>
+        </ul>
+      </div>
+
+      <div class="bcard g">
+        <h4>完賽後的第一小時</h4>
+        <ul>
+          <li><b>先補水</b>，含電解質的運動飲料比純水好，之後幾小時持續小口喝。</li>
+          <li><b>30–60 分鐘內進食</b>（黃金期）：醣類 <span class="num">每公斤體重 1.0–1.5 g</span>、蛋白質 <span class="num">0.3–0.5 g</span>。70 kg 約 70–105 g 醣、20–35 g 蛋白。</li>
+          <li>簡單選擇：巧克力牛奶、御飯糰配瘦肉、香蕉配優格、恢復飲。這時避開高脂肪食物。</li>
+          <li>輕柔靜態伸展 20–30 秒，不要拉到痛。累到不想動就先躺著，補水和補食比伸展重要。</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="src">資料來源：<a href="https://sustainabullfitness.wixsite.com/twb360guide/zh" target="_blank" rel="noopener noreferrer">征服 TWB360 一日北高自行車挑戰 · 實證準備指南</a>（Edward Shen, ACE CPT）。該站中文版為機器翻譯，以上為重點整理，細節請以原文為準。</div>
+  </div>
+</section>
+
+</div><!-- /view-brief -->
 
 <footer>
   <div class="wrap">
@@ -1290,7 +1817,7 @@ section.s{scroll-margin-top:82px;}
   </div>
   <div class="wrap">
     <div class="meta">
-      <div data-i18n="footer.ml">DRAWING-NO. TBA360-2026-11 · REV.D · NOT TO SCALE</div>
+      <div data-i18n="footer.ml">DRAWING-NO. TBA360-2026-11 · REV.E · NOT TO SCALE</div>
       <div data-i18n="footer.mr">ISSUED 2026-11-10</div>
     </div>
   </div>
@@ -1308,6 +1835,10 @@ window.I18N = {
     "doc.title": "北高 360 補給作戰圖 · TBA360 2026",
     "brand.title": "北高 360 補給作戰圖",
     "brand.sub": "2026 / 11 / 13 23:00 → 11 / 14 · 八里 → 左營",
+    "tab.ride": "騎乘計畫",
+    "tab.van": "補給車",
+    "tab.gear": "隨身裝備",
+    "tab.brief": "騎乘守則",
     "nav.s1": "路線圖",
     "nav.s2": "時刻表",
     "nav.s3": "關門",
@@ -1361,7 +1892,7 @@ window.I18N = {
     "footer.c2": "終點 屏山國小 19:00",
     "footer.k1": "國姓土豆豬腳 0925-509-337",
     "footer.k2": "預計完賽 15:25",
-    "footer.ml": "DRAWING-NO. TBA360-2026-11 · REV.D · NOT TO SCALE",
+    "footer.ml": "DRAWING-NO. TBA360-2026-11 · REV.E · NOT TO SCALE",
     "footer.mr": "ISSUED 2026-11-10"
 },
   en: {
@@ -1369,6 +1900,10 @@ window.I18N = {
     "doc.title": "TBA 360 Supply Plan · Bali → Zuoying",
     "brand.title": "TBA 360 Supply Plan",
     "brand.sub": "2026 / 11 / 13 23:00 → 11 / 14 · Bali → Zuoying",
+    "tab.ride": "Ride Plan",
+    "tab.van": "Support Van",
+    "tab.gear": "Rider Kit",
+    "tab.brief": "Race Brief",
     "nav.s1": "Map",
     "nav.s2": "Schedule",
     "nav.s3": "Cutoffs",
@@ -1422,7 +1957,7 @@ window.I18N = {
     "footer.c2": "Finish Pingshan Elementary 19:00",
     "footer.k1": "Guoxing Pork Knuckle 0925-509-337",
     "footer.k2": "Projected finish 15:25",
-    "footer.ml": "DRAWING-NO. TBA360-2026-11 · REV.D · NOT TO SCALE",
+    "footer.ml": "DRAWING-NO. TBA360-2026-11 · REV.E · NOT TO SCALE",
     "footer.mr": "ISSUED 2026-11-10"
 }
 };
@@ -1922,5 +2457,98 @@ const ROUTE = [{"lat": 25.14106, "lon": 121.39471, "km": 0.0}, {"lat": 25.14234,
 })();
 </script>
 
+
+<script>
+/* ═══════════════ DASHBOARD : VIEW SWITCH + CHECKLISTS ═══════════════ */
+(function(){
+  'use strict';
+  const VIEWS=['ride','van','gear','brief'];
+  const tabs=document.getElementById('tabs');
+  if(!tabs) return;
+
+  function show(v, push){
+    if(VIEWS.indexOf(v)<0) v='ride';
+    VIEWS.forEach(n=>{
+      const el=document.getElementById('view-'+n);
+      if(el) el.classList.toggle('is-on', n===v);
+    });
+    tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('is-on', b.dataset.view===v));
+    try{ localStorage.setItem('tba360-view', v); }catch(e){}
+    if(push && location.hash.slice(1)!==v) history.replaceState(null,'','#'+v);
+    window.scrollTo({top:0,behavior:'auto'});
+    /* 地圖與剖面圖在隱藏時量不到寬度，切回來要重算一次 */
+    if(v==='ride') setTimeout(()=>window.dispatchEvent(new Event('resize')), 20);
+  }
+  tabs.addEventListener('click', e=>{
+    const b=e.target.closest('button[data-view]');
+    if(b) show(b.dataset.view, true);
+  });
+
+  let init=location.hash.slice(1);
+  if(VIEWS.indexOf(init)<0){ try{ init=localStorage.getItem('tba360-view')||'ride'; }catch(e){ init='ride'; } }
+  show(init,false);
+  window.addEventListener('hashchange',()=>{ const h=location.hash.slice(1); if(VIEWS.indexOf(h)>=0) show(h,false); });
+
+  /* ── 勾選清單（存在這台裝置） ── */
+  const KEY='tba360-pack';
+  let state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ state={}; }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+  function refresh(sec){
+    const items=[...sec.querySelectorAll('li[data-k]')];
+    const done=items.filter(li=>li.classList.contains('done')).length;
+    const bar=sec.querySelector('.packbar');
+    if(!bar) return;
+    bar.querySelector('.pct').textContent=done+' / '+items.length;
+    const fill=bar.querySelector('.bar i');
+    if(fill) fill.style.width=(items.length? done/items.length*100 : 0)+'%';
+  }
+  function toggle(li){
+    const k=li.dataset.k;
+    const on=!li.classList.contains('done');
+    li.classList.toggle('done', on);
+    const box=li.querySelector('.chk');
+    if(box) box.setAttribute('aria-checked', on?'true':'false');
+    if(on) state[k]=1; else delete state[k];
+    save();
+    const sec=li.closest('section'); if(sec) refresh(sec);
+  }
+  document.querySelectorAll('li[data-k]').forEach(li=>{
+    if(state[li.dataset.k]){
+      li.classList.add('done');
+      const box=li.querySelector('.chk'); if(box) box.setAttribute('aria-checked','true');
+    }
+    li.addEventListener('click', e=>{ if(!e.target.closest('a')) toggle(li); });
+    const box=li.querySelector('.chk');
+    if(box) box.addEventListener('keydown', e=>{
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(li); }
+    });
+  });
+  document.querySelectorAll('button[data-reset]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const sec=b.closest('section');
+      sec.querySelectorAll('li[data-k]').forEach(li=>{
+        li.classList.remove('done'); delete state[li.dataset.k];
+        const box=li.querySelector('.chk'); if(box) box.setAttribute('aria-checked','false');
+      });
+      save(); refresh(sec);
+    });
+  });
+  document.querySelectorAll('.packbar').forEach(bar=>{ const sec=bar.closest('section'); if(sec) refresh(sec); });
+
+  /* ── 停點照片放大 ── */
+  const lb=document.getElementById('lightbox'), lbImg=document.getElementById('lbImg');
+  document.querySelectorAll('.spot figure').forEach(f=>{
+    f.addEventListener('click', ()=>{
+      const img=f.querySelector('img');
+      if(!img||!lb) return;
+      lbImg.src=img.src; lbImg.alt=img.alt||'';
+      lb.classList.add('open');
+      document.body.style.overflow='hidden';
+    });
+  });
+})();
+</script>
 </body>
 </html>
